@@ -1,0 +1,3 @@
+SQLAlchemy==1.4.8
+convertdate == 2.3.2
+wxPython == 4.1.1
