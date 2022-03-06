@@ -6,6 +6,7 @@
 ##
 ## PLEASE DO *NOT* EDIT THIS FILE!
 ###########################################################################
+import os
 
 import wx
 import wx.xrc
@@ -48,8 +49,8 @@ class MyPanel1 ( wx.Panel ):
 		Vsz2.Add( self.Titr1, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
 		self.TLC1 = wx.dataview.TreeListCtrl( self.P1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.dataview.TL_DEFAULT_STYLE )
-		self.TLC1.AppendColumn( _(u"ID"), wx.COL_WIDTH_DEFAULT, wx.ALIGN_LEFT, wx.COL_RESIZABLE )
-		self.TLC1.AppendColumn( _(u"Name"), wx.COL_WIDTH_DEFAULT, wx.ALIGN_LEFT, wx.COL_RESIZABLE )
+		self.TLC1.AppendColumn( _(u"Name"), 200, wx.ALIGN_LEFT, wx.COL_RESIZABLE )
+		self.TLC1.AppendColumn( _(u"ID"), 25, wx.ALIGN_LEFT, wx.COL_RESIZABLE )
 
 		Vsz2.Add( self.TLC1, 1, wx.EXPAND |wx.ALL, 5 )
 
@@ -205,6 +206,8 @@ class MyPanel1 ( wx.Panel ):
 		self.Splt1.SplitVertically( self.P1, self.P2, 266 )
 		Vsz1.Add( self.Splt1, 1, wx.EXPAND, 5 )
 
+		self.filllist()
+
 
 		self.SetSizer( Vsz1 )
 		self.Layout()
@@ -228,6 +231,41 @@ class MyPanel1 ( wx.Panel ):
 
 
 	# Virtual event handlers, overide them in your derived class
+	def filllist(self):
+		Aroot = self.TLC1.GetRootItem()
+		self.root1 = self.TLC1.AppendItem(Aroot, "Free Programs you can Download")
+		self.root2 = self.TLC1.AppendItem(Aroot, "Programs in your Account")
+		self.root3 = self.TLC1.AppendItem(Aroot, "Programs you Upload for sell")
+		self.root4 = self.TLC1.AppendItem(Aroot, "Programs you downloaded")
+		self.root5 = self.TLC1.AppendItem(Aroot, "Programs file in your HDD ")
+
+		dirct = ['Free','Account','Uploads','Downloads']
+		roots = [self.root1,self.root2,self.root3,self.root4]
+		i=0
+		for d in dirct:
+			mylist = os.listdir(UTILITY_PATH+d+'\\')
+			for fil in mylist:
+				myfil = fil.replace(UTILITY_PATH+d+'\\','')
+				mychld = self.TLC1.AppendItem(roots[i],d)
+				self.TLC1.SetItemText(mychld,0,myfil)
+				self.TLC1.SetItemText(mychld,1,'>>>')
+			i += 1
+		dirdt2 = ['API','AUI','GUI','MLA','MLP','PRG']
+		dcods = {'API':6122,'AUI':6155,'PRG':6111,'GUI':6177,'MLA':6133,'MLP':6144}
+		for d in dirdt2:
+			mylist = os.listdir(UTILITY_PATH+'Fount\\'+d+'\\')
+			mychild = self.TLC1.AppendItem(self.root5, 'HardDisk')
+			self.TLC1.SetItemText(mychild, 0, d)
+			self.TLC1.SetItemText(mychild,1,str(dcods[d])[-3:])
+			for file in mylist:
+				if file != '__init__.py':
+					myfile = file.replace(UTILITY_PATH+'Fount\\'+d+'\\','')
+					#mychild = self.TLC1.AppendItem(self.root5, 'HardDisk')
+					child2 = self.TLC1.AppendItem(mychild, d)
+					self.TLC1.SetItemText(child2,0,myfile)
+					self.TLC1.SetItemText(child2,1,str(dcods[d]))
+
+
 	def consrv( self, event ):
 		event.Skip()
 
@@ -267,5 +305,6 @@ class MyPanel1 ( wx.Panel ):
 	def Splt1OnIdle( self, event ):
 		self.Splt1.SetSashPosition( 266 )
 		self.Splt1.Unbind( wx.EVT_IDLE )
+
 
 

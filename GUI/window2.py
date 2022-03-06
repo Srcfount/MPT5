@@ -2,6 +2,7 @@
 # Main Program Start
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import wx
 
 from Allimp import *
 
@@ -81,7 +82,6 @@ class MainWin(wx.Frame):
         self.Centre(wx.BOTH)
 
     def __del__(self):
-        self.timer.Stop()
         self.m_mgr.UnInit()
 
     def Notify(self):
@@ -127,7 +127,7 @@ class MainWin(wx.Frame):
     def setmenu(self, event):
         self.MnuDic = {1: [_(u'Menu Change'), 9999], 2: [_(u'Toolbar Change'), 9998], 3: [_(u'Panes Change'), 9997], 4: [u'', 0],
                        5: [_(u'Databases...'), 9996], 6: [_(u'Programs...'), 9995], 7: [_(u'Add Tools...'), 9994], 8: [u'', 0],
-                       9: [_(u'ML Design...'), 9993], 10: [u'', 0], 11: [_(u'Settings...'), 9992]}
+                       9: [_(u'MLA Design...'), 9993], 10: [u'', 0], 11: [_(u'Settings...'), 9992]}
         self.m1 = wx.Menu()
 
         self.itms = []
@@ -207,7 +207,7 @@ class MainWin(wx.Frame):
         ML = PA.MyLstPnl2()
 
         for pnl in ML.lstpnl:
-            #if pnl[1]+'.py' in ML.GetAuiPnl():
+            #if pnl[1]+'.py' in MLA.GetAuiPnl():
             if pnl[6] in ML.PrP.keys():
                 ii = importlib.import_module('Src.AUI.' +  ML.PrP[pnl[6]].replace('.py',''))
                 mp = ii.MyPanel1(self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)

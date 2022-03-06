@@ -36,7 +36,7 @@ def _displayHook(obj):
 DATABASE_PATH = os.path.join(MAP,opj(u'Database')+SLASH)
 
 AI_PATH       = os.path.join(MAP,opj(u'AI')+SLASH)
-ML_PATH       = os.path.join(AI_PATH,opj(u'ML')+SLASH)
+ML_PATH       = os.path.join(AI_PATH,opj(u'MLA')+SLASH)
 DL_PATH       = os.path.join(AI_PATH,opj(u'DL')+SLASH)
 DCC_PATH      = os.path.join(MAP,opj(u'DCC1')+SLASH)
 
@@ -65,6 +65,7 @@ TEMPS_PATH    = os.path.join(MAP,opj(u'Temps')+SLASH)
 #### Source pass for user
 Src_prg = os.path.join(SRC_PATH,opj(u'PRG')+SLASH)
 Src_api = os.path.join(SRC_PATH,opj(u'API')+SLASH)
+Src_gui = os.path.join(SRC_PATH,opj(u'GUI')+SLASH)
 Src_dbf = os.path.join(SRC_PATH,opj(u'DBF')+SLASH)
 Src_aui = os.path.join(SRC_PATH,opj(u'AUI')+SLASH)
 Src_mla = os.path.join(SRC_PATH,opj(u'MLA')+SLASH)

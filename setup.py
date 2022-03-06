@@ -4,6 +4,8 @@
 
 import os
 import sys
+import shutil
+import sqlite3
 import update
 
 main_direct = ['AI', 'Config', 'Database', 'DCC1', 'GUI', 'GUI\\Temp', 'GUI\\API', 'GUI\\AuiPanel', 'GUI\\Main',
@@ -11,7 +13,9 @@ main_direct = ['AI', 'Config', 'Database', 'DCC1', 'GUI', 'GUI\\Temp', 'GUI\\API
                'Logs', 'Res', 'Res\\Fonts', 'Res\\Icons', 'Res\\Icons\\Menu', 'Res\\Icons\\Toolbar',
                'Res\\Icons\\16x16', 'Res\\Icons\\32x32', 'Res\\Images', 'Res\\Pics', 'Res\\Splash',
                'Src', 'Src\\API', 'Src\\AUI', 'Src\\DBF', 'Src\\DBF\\sqls', 'Src\\GUI', 'Src\\MLA', 'Src\\MLP', 'Src\\PRG',
-               'Temps', 'Utility', 'Utility\\ML', 'Utility\\Pans', 'Utility\\Programs', 'Utility\\Tools', 'Utility\\UpdateApp'
+               'Temps', 'Utility', 'Utility\\Fount', 'Utility\\Fount\\GUI', 'Utility\\Fount\\MLA', 'Utility\\Fount\\MLP',
+               'Utility\\Fount\\AUI', 'Utility\\Fount\\PRG', 'Utility\\Fount\\API', 'Utility\\UpdateApp',
+               'Utility\\Free','Utility\\Account','Utility\\Uploads','Utility\\Downloads'
                ]
 
 main_file = {
@@ -33,47 +37,63 @@ creat_file = {
 	'..': ['Mainpro.py','update.py','requirements.txt','Allimp.py']
 }
 
-def create_this(file):
-	if file == 'Mainpro.py':
-		pass
-	if file == 'requirements.txt':
-		pass
-	if file == 'Allimp.py':
-		pass
-	if file == 'MLmethod.ini':
-		pass
-	if file == 'option.ini':
-		pass
-	if file == 'system1.ini':
-		pass
+def create_this(file,source,target):
 	if file == 'Menu2.db':
-		pass
+		print('.',end='')
+		connection = sqlite3.connect(target+file)
+		cursor = connection.cursor()
+		with open(source+'Createmenu.sql', 'r') as f:
+			cursor.executescript(f.read())
+		connection.commit()
+		connection.close()
+	else:
+		print('.', end='')
+		shutil.copyfile(source + file, target + file)
 
 
 def main():
-	mydir = input("Please write directory to like install program:[sample: c:\Temp5\] >>")
+	mydir = input("Please write directory to like install program:[sample: c:\Temp5\] >> ")
 	print(mydir)
-	print(os.path.isdir(mydir))
+	if mydir[-1] != '\\':
+		print('Write a correct directory format')
+		exit()
+
 	if not os.path.isdir(mydir):
 		os.mkdir(mydir)
 
 	os.chdir(mydir)
+
 	for dir in main_direct:
 		if not os.path.isdir(dir):
 			os.mkdir(dir)
-			if not os.path.isfile(dir+'\\'+'__init__.py'):
-				with open(dir+'\\'+'__init__.py','w') as f:
+			if not os.path.isfile(mydir+dir+'\\'+'__init__.py'):
+				with open(mydir +dir+'\\'+'__init__.py','w') as f:
 					f.write('')
-
 
 	for dir in main_file:
 		for fil in main_file[dir]:
-			if not os.path.isfile(fil):
-				with open(dir+'\\'+fil,'w') as f:
+			if not os.path.isfile(mydir+dir+'\\'+fil):
+				with open(mydir+dir+'\\'+fil,'w') as f:
 					f.write('')
 
-
+	for Dir in creat_file:
+	   for file in creat_file[Dir]:
+		   if Dir != '..':
+			   if not os.path.isfile(mydir+Dir+'\\'+file):
+				   with open(mydir+Dir+'\\'+file,'w') as f:
+					   f.write('')
+		   else:
+			   with open(mydir+ file, 'w') as f:
+				   f.write('')
 	update.main()
+	for Dir in creat_file:
+		for file in creat_file[Dir]:
+			if Dir != '..':
+				if os.stat(mydir+Dir+'\\'+file).st_size == 0:
+					create_this(file,'c:\\MPT5\\Fount\\',mydir+Dir+'\\')
+			else:
+				if os.stat(mydir+file).st_size == 0:
+					create_this(file,'c:\\MPT5\\Fount\\',mydir)
 
 
 if __name__ == '__main__':
