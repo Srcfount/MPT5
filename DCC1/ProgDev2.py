@@ -6,11 +6,13 @@
 ##
 ## PLEASE DO *NOT* EDIT THIS FILE!
 ###########################################################################
+import os
 
 import wx
 import wx.xrc
 import wx.dataview
 
+import AI.Analiz
 import AI.OpnSrc as OS
 from AI.Analiz import *
 from AI.Generats import *
@@ -425,7 +427,7 @@ class MyPanel1 ( wx.Panel ):
 			if 'aui' in txt:
 				self.Desc.SetValue(u"Here a list of files that contains a panel class that you like to select for AuiPane Develop")
 			if 'one import' in txt:
-				self.Desc.SetValue(u"Here a List of files that contains a import module in GUI\API directory and it open that file ")
+				self.Desc.SetValue(u"Here a List of files that contains a import module in Src\GUI directory and it open that file ")
 			if 'some import' in txt:
 				self.Desc.SetValue(u"Here a List of files with some imports that contain several file and command part")
 			if 'HDD' in txt:
@@ -445,7 +447,15 @@ class MyPanel1 ( wx.Panel ):
 		self.fld1.SetValue(str(data[0]))
 		self.fld2.SetValue(str(data[5]))
 		#AI.Analiz.GetImport
-		self.fld3.SetValue('')
+		if data[8] != '':
+			#print(MAP+data[8][2:]+SLASH+data[1]+'.py')
+			myimp = AI.Analiz.Anlzfil(MAP+data[8][2:]+SLASH+data[1]+'.py')
+			myimp.parsefil()
+			ii = myimp.getGUIfil()
+			iim = myimp.ishasimport()
+			iim2 = myimp.ishasfromim()
+			#print(ii,iim,iim2)
+		self.fld3.SetValue(Src_gui+'')
 		#Get Path From handler directory data[6]+data[1]
 		if data[8]!= '':
 			self.thsfile = MAP+data[8][2:]+SLASH+data[1]+'.py'
@@ -486,20 +496,28 @@ class MyPanel1 ( wx.Panel ):
 
 	def delit( self, event ):
 		if self.fld1.GetValue() == '':
-			wx.MessageBox(_("Do you like delete program file from path"))
-			hndlid = 0
+			answer = wx.MessageBox(_("Do you like delete program [%s] from HDD"%self.thsfile),style=wx.YES_NO)
+			#print(answer)
+			if answer == 2:
+				hndlid = 0
+				#print(self.thsfile)
+				if os.path.isfile(self.thsfile):
+					os.remove(self.thsfile)
+					wx.MessageBox(_("File Successfully Remove from HardDisk"))
+				else:
+					wx.MessageBox(_("File Open or dose not exist please close it or check Harddisk"))
+
 		else:
 			hndlid = self.fld1.GetValue()
-
-		# print(hndlid)
-		if len(self.getMData.AllHndl(u' where handler.handlerid = %d' % int(hndlid))) > 0:
-			self.setMDate.Table = u'handler'
-			self.setMDate.Delitem(u' handler.handlerid = %d' % int(hndlid))
-		if len(self.getMData.AllHndl(u' Join PrgDesc on handler.handlerid = PrgDesc.handlerid \
+			# print(hndlid)
+			if len(self.getMData.AllHndl(u' where handler.handlerid = %d' % int(hndlid))) > 0:
+			    self.setMDate.Table = u'handler'
+			    self.setMDate.Delitem(u' handler.handlerid = %d' % int(hndlid))
+			if len(self.getMData.AllHndl(u' Join PrgDesc on handler.handlerid = PrgDesc.handlerid \
 		                                             where handler.handlerid = %d' % int(hndlid))) > 0:
-			self.setMDate.Table = u'PrgDesc'
-			self.setMDate.Delitem(u' PrgDesc.handlerid = %d' % int(hndlid))
-		wx.MessageBox(_(u"Program successful delete from your list"))
+				self.setMDate.Table = u'PrgDesc'
+				self.setMDate.Delitem(u' PrgDesc.handlerid = %d' % int(hndlid))
+				wx.MessageBox(_(u"Program successful delete from your list"))
 		self.updat(None)
 		#event.Skip()
 
@@ -681,7 +699,7 @@ class MyPanel1 ( wx.Panel ):
 			import DCC1.DBDev2 as DB
 			ifrm = wx.Frame(self, -1, style=wx.FRAME_FLOAT_ON_PARENT | wx.DEFAULT_FRAME_STYLE)
 			pnl = DB.MyPanel1(ifrm, [self.GetParent()])
-			ifrm.SetSize((555, 460))
+			ifrm.SetSize((555, 500))
 			ifrm.SetTitle(u'Database use Program')
 			ifrm.Show()
 		else:

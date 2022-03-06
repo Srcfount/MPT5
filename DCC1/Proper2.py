@@ -192,7 +192,7 @@ class MyPanel1 ( wx.Panel ):
                                               (u"Database Path",u'DBPath',u'',MAP+u'\\Src\\DBF'),
                                               (u"API source path",u'APIPath',u"The path of application program interface ",MAP+u'\\Src\\API'),
                                               (u"Program of Menu Bar Path",u"PRGPath",u"",MAP+u"\\Src\\PRG"),
-                                              (u"Menu Programs Path",u'MnuPath',u'',MAP+u'\\GUI\\Program')
+                                              (u"GUI Panel Path",u'GUIPath',u'',MAP+u'\\Src\\GUI')
                                               ],
                   u"Resouce and images":[(u"Fonts Path",u'Fonts',u'',MAP+u'\\Res\\Fonts'),
                                          (u"Icon Menu Path",u'MenuPath',u'',MAP+u'\\Res\\Icons\\Menu'),

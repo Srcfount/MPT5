@@ -572,8 +572,13 @@ class MyPanel1 ( wx.Panel ):
 		scod = int(str(self.bardata[0])[0])
 		britm = self.MyMenu.AllSub(u"where mitem.mbarid / 100 = %d or mitem.mbarid / 1000 = %d" % (scod, scod))[-1]
 
-		self.DoMenu.Table = 'mitem'
-		self.DoMenu.Additem(u'mbarid, itemid', [britm[0], int(britm[1]) + 1])
+		if self.bardata[3] == 'S':
+			self.DoMenu.Table = 'mitem'
+			self.DoMenu.Additem(u'mbarid, itemid', [britm[0], int(britm[1]) + 1])
+		else:
+			self.DoMenu.Table = 'mitem'
+			self.DoMenu.Additem(u'mbarid, itemid', self.bardata[0], int(britm) + 1 )
+
 		mw = self.FindWindowByName('main')
 		mb = mw.GetMenuBar()
 
@@ -860,14 +865,14 @@ class MyPanel1 ( wx.Panel ):
 		#print(wx.FindWindowByName(u'List of Program'))
 		#print(self.GetParent())
 		if wx.FindWindowByName(u'List of Program') == None:
-			import DCC1.ProgDev2 as DP
-			ifrm = wx.Frame(self, -1, style=wx.FRAME_FLOAT_ON_PARENT | wx.DEFAULT_FRAME_STYLE)
-			pnl = DP.MyPanel1(ifrm,[self.GetParent(),self.prgfld.GetValue()])
-			ifrm.SetSize((555, 460))
-			ifrm.SetTitle(u'List of Program')
-			ifrm.Show()
-			#print( 'transfer:',ifrm.TransferDataFromWindow() )
-			#print(ifrm.IsUnlinked())
+			if self.prgfld.GetValue() != '':
+				import DCC1.ProgDev2 as DP
+				ifrm = wx.Frame(self, -1, style=wx.FRAME_FLOAT_ON_PARENT | wx.DEFAULT_FRAME_STYLE)
+				pnl = DP.MyPanel1(ifrm,[self.GetParent(),self.prgfld.GetValue()])
+				ifrm.SetSize((555, 500))
+				ifrm.SetTitle(u'List of Program')
+				ifrm.Show()
+
 		else:
 			wx.MessageBox(_("Double Program: Please Close Program Develop then Do this item"))
 		event.Skip()
@@ -1189,7 +1194,7 @@ class MyPanel3 ( wx.Panel ):
 			    #print(dircod)
 			    pass
 		    else:
-			    dircod = str(data2)+'1'
+			    dircod = '1'+str(data2)   #+'1'
 			    self.SetMenu.Table = u'Guidir'
 			    self.SetMenu.Additem(u' Dir, prgdir, hdddir', (self.newdir,dircod,self.hdddir))
 			    if not os.path.isdir(mydir):
@@ -1208,6 +1213,8 @@ class MyPanel3 ( wx.Panel ):
 		    data5 = self.box2val
 		    self.SetMenu.Table = u'access'
 		    self.SetMenu.Additem(u'acclvlid , userid , acclvl , disenable ',(data3, 1, data5, data4))
+		    self.SetMenu.Table = u'handler'
+		    self.SetMenu.Additem(u' handlerid, prgname, prgdir, paramtr, public, prgno',(10000,'Demo',dircod, '-1',-1,1))
 		    mb.Append(wx.Menu(),data1)
 
 	    elif event.GetEventObject().GetLabel() == _('Change'):
