@@ -86,7 +86,7 @@ INSERT INTO `handler` (handlerid,prgname,prgdir,paramtr,public,prgno) VALUES
  (99004,'TPv1','9999','-1',-1,4),
  (99003,'MLv1','9999','-1',-1,3),
  (99002,'PPv1','9999','-1',-1,2),
- (10000,'Demo','1000','-1',-1,1),
+ --(10000,'Demo','1000','-1',-1,1),
  (99000,'Demo','8888','-1',-1,0);
 
 CREATE TABLE `grpitem` (
@@ -156,7 +156,7 @@ INSERT INTO `Guidir` (Dir,prgdir,hdddir) VALUES
  ('Utility','6666','..\Utility'),
  --('GUI.MLPane','4000','..\GUI\MLPane'),
  ('Src.API','7777','..\Src\API'),
- ('Src.PRG.','1000','..\Src\PRG\'),
+ --('Src.PRG.','1000','..\Src\PRG\'),
 
  ('Src.MLP','4444','..\Src\MLP'),
  ('Src.AUI','5555','..\Src\AUI');
