@@ -293,19 +293,19 @@ class MyPanel1 ( wx.Panel ):
 		rot = self.TLC1.GetItemText(par, 0)
 		#print(txt,cod,rot)
 		if txt == 'API':
-			Discrpt = "This group of program is very sample \n only for item that no need GUI frame or panel"
+			Discrpt = "This group of program is very simple \n only for item that no need GUI frame or panel"
 			Pathsrc = Src_api
 		elif txt == 'AUI':
 			Discrpt = "This group of program for Aui Pane file\n That you can use in application "
 			Pathsrc = Src_aui
 		elif txt == 'GUI':
-			Discrpt = "This group of program only a design Panel \n they use by other program in PRG source"
+			Discrpt = "This group of program only a designed Panel \n they used by other program in PRG source"
 			Pathsrc = Src_gui
 		elif txt == 'PRG':
 			Discrpt = "This group of program run by menu item in app \n each menubar has a same subdirectory you create it"
 			Pathsrc = Src_prg
 		elif txt == 'MLA':
-			Discrpt = "This group of program is for Machine Learning Algorithm\n you can use it in ML part that use by MLP"
+			Discrpt = "This group of program is for Machine Learning Algorithm\n you can use it in MLA part that use by MLP"
 			Pathsrc = Src_mla
 		elif txt == 'MLP':
 			Discrpt = "Machine learning Panel has Design for Algorithm \n You can see help document for how to use it "
