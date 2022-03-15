@@ -16,6 +16,7 @@ import os
 import sys
 import Database.MenuSet2 as MS
 from Config.Init import *
+import Res.Allicons as icon
 
 _ = wx.GetTranslation
 
@@ -150,7 +151,7 @@ class MyPanel1 ( wx.Panel ):
                                               (u"SysColor",u"Status Background Color",u"SBGColor",u"Status background colour set",self.SBGCol)]
         }
 
-        self.P1 = self.pgm.AddPage( u"General Properties Page", wx.ArtProvider.GetBitmap( wx.ART_LIST_VIEW, wx.ART_MESSAGE_BOX ) );
+        self.P1 = self.pgm.AddPage( u"General Properties Page", wx.Bitmap(icon.setting_tools.GetBitmap()) );
 
         Items1 = []
         for con in conflst:
@@ -213,7 +214,7 @@ class MyPanel1 ( wx.Panel ):
         self.Itms = []
 
 
-        self.P2 = self.pgm.AddPage( u"Directory and Path Page", wx.ArtProvider.GetBitmap( wx.ART_FOLDER_OPEN, wx.ART_MESSAGE_BOX ) );
+        self.P2 = self.pgm.AddPage( u"Directory and Path Page", wx.Bitmap(icon.folders.GetBitmap()) );
         for itm in dirlst:
             #print(itm)
             self.Itms.append(self.P2.Append(pg.PropertyCategory(itm,itm)))
@@ -283,8 +284,9 @@ class MyPanel1 ( wx.Panel ):
         #print('change',p.GetValue(),p.GetName(),p.GetLabel(),p.GetDisplayedString())
         if p.GetName() == 'Background':
             bmpwin = wx.GetTopLevelWindows()
-            bmpwin[0].bmpwin.BGfile = p.GetValue()
-            bmpwin[0].bmpwin.ChangeBackGround()
+            if 'bmpwin' in dir(bmpwin[0]):
+                bmpwin[0].bmpwin.BGfile = p.GetValue()
+                bmpwin[0].bmpwin.ChangeBackGround()
         if p.GetName() == u'Font':
             #print(v[u'Font'])
             wfont = p.GetValue()
@@ -324,10 +326,6 @@ class MyPanel1 ( wx.Panel ):
             #print(minwin[0].GetStatusBar().GetFieldsCount())
             minwin[0].GetStatusBar().SetBackgroundColour(wx.SystemSettings.GetColour(wcolor.m_type))
             minwin[0].Refresh()
-
-
-
-
 
 
     def OnPropGridSelect(self, event):

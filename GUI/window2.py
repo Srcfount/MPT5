@@ -2,8 +2,19 @@
 # Main Program Start
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import wx
 
+# import os
+# import sys
+# import glob
+# import time
+#
+# import importlib
+# import importlib.util
+#
+# import wx
+# import wx.adv
+# import wx.aui
+# import wx.dataview
 from Allimp import *
 
 import GUI.MainMenu2 as MM
@@ -77,12 +88,20 @@ class MainWin(wx.Frame):
         #self.BGrnd(BakGrnd)
         self.Bind(wx.EVT_RIGHT_DOWN, self.domouse)
         self.Bind(wx.EVT_CONTEXT_MENU, self.setmenu)
+        self.Bind(wx.EVT_CLOSE, self.OnClose)
 
         self.m_mgr.Update()
         self.Centre(wx.BOTH)
 
     def __del__(self):
         self.m_mgr.UnInit()
+
+    def OnClose(self, event):
+        if 'timer' in dir(self):
+            if self.timer.IsRunning():
+                self.timer.Stop()
+                del self.timer
+        self.Destroy()
 
     def Notify(self):
         t = time.localtime(time.time())
@@ -97,6 +116,7 @@ class MainWin(wx.Frame):
         statusBar = self.CreateStatusBar(len(lststat) + 1,
                                          wx.STB_ELLIPSIZE_END | wx.STB_ELLIPSIZE_MIDDLE | wx.STB_SHOW_TIPS | wx.STB_SIZEGRIP,
                                          wx.ID_ANY)
+
         # statusBar.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNSHADOW))
         for st in lststat:
             if st == 'time':

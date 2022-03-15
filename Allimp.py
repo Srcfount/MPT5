@@ -1,5 +1,5 @@
-#In the name of GOD
-#Import the need file for all prg
+# In the name of GOD
+# Import the need file for all prg
 
 import os
 import sys

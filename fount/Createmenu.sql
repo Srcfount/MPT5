@@ -155,8 +155,8 @@ INSERT INTO `Guidir` (Dir,prgdir,hdddir) VALUES
  ('GUI.Temp','8888','..\GUI\Temp'),
  ('Utility','6666','..\Utility'),
  --('GUI.MLPane','4000','..\GUI\MLPane'),
- ('Src.API','7777','..\Src\API'),
- --('Src.PRG.','1000','..\Src\PRG\'),
+ ('Src.GUI','7777','..\Src\GUI'),
+ ('Src.PRG.','1000','..\Src\PRG\'),
 
  ('Src.MLP','4444','..\Src\MLP'),
  ('Src.AUI','5555','..\Src\AUI');
