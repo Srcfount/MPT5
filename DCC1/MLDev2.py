@@ -20,7 +20,7 @@ import Database.PostGet2 as PG2
 import Database.MenuSet2 as MS
 
 import importlib
-import importlib.util
+#import importlib.util
 
 from AI.Analiz import *
 import AI.OpnSrc as OS

@@ -25,7 +25,7 @@ import Database.MenuSet2 as MS
 import Database.PostGet as PG
 import GUI.proman as pro
 import importlib
-import importlib.util
+#import importlib.util
 
 _ = wx.GetTranslation
 ###########################################################################
@@ -417,10 +417,10 @@ class MyPanel1 ( wx.Panel ):
 			# 	self.fillfield(data,'')
 			# 	self.PrgDir1.SetPath(GUI_PATH+"API"+SLASH)
 			elif cod == '7777':
-				self.thsfile = Src_api+txt+'.py' #SRC_PATH+"api"+SLASH+txt+'.py'
+				self.thsfile = Src_gui+txt+'.py' #SRC_PATH+"api"+SLASH+txt+'.py'
 				data = (cod,txt,'','-1','-1','-','Src.API','','',None,None)
 				self.fillfield(data,'')
-				self.PrgDir1.SetPath(Src_api)   #(SRC_PATH+"api"+SLASH)
+				self.PrgDir1.SetPath(Src_gui)   #(SRC_PATH+"api"+SLASH)
 		else:
 			if 'All-in-One' in txt:
 				self.Desc.SetValue(u"Here a list of program that only in one file and when you do it all command execute")

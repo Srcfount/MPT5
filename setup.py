@@ -53,12 +53,16 @@ def create_this(file,source,target):
 
 def main():
 	mydir = input("Please write directory to like install program:[sample: c:\Temp5\] >> ")
-	print(mydir)
+
+	if mydir == '':
+		print('Exit setup. you not entered anything')
+		exit()
 	if mydir[-1] != '\\':
 		print('Write a correct directory format')
 		exit()
 
 	if not os.path.isdir(mydir):
+		print('.', end='')
 		os.mkdir(mydir)
 
 	os.chdir(mydir)
@@ -66,15 +70,18 @@ def main():
 	for dir in main_direct:
 		if not os.path.isdir(dir):
 			os.mkdir(dir)
+			print('.', end='')
 			if not os.path.isfile(mydir+dir+'\\'+'__init__.py'):
 				with open(mydir +dir+'\\'+'__init__.py','w') as f:
 					f.write('')
+					print('.', end='')
 
 	for dir in main_file:
 		for fil in main_file[dir]:
 			if not os.path.isfile(mydir+dir+'\\'+fil):
 				with open(mydir+dir+'\\'+fil,'w') as f:
 					f.write('')
+					print('.', end='')
 
 	for Dir in creat_file:
 	   for file in creat_file[Dir]:
@@ -82,10 +89,12 @@ def main():
 			   if not os.path.isfile(mydir+Dir+'\\'+file):
 				   with open(mydir+Dir+'\\'+file,'w') as f:
 					   f.write('')
+					   print('.', end='')
 		   else:
 			   with open(mydir+ file, 'w') as f:
 				   f.write('')
-	update.main()
+				   print('.', end='')
+
 	for Dir in creat_file:
 		for file in creat_file[Dir]:
 			if Dir != '..':
@@ -94,6 +103,8 @@ def main():
 			else:
 				if os.stat(mydir+file).st_size == 0:
 					create_this(file,'c:\\MPT5\\Fount\\',mydir)
+
+	update.main()
 
 
 if __name__ == '__main__':

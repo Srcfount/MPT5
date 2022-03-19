@@ -91,7 +91,7 @@ class MyPanel1 ( wx.Panel ):
 
         LAuiP = [ l[0] for l in self.MyMenu.ListPanes() ]
 
-        Statu = [u'name',u'date',u'time']
+        Statu = [u'path',u'date',u'time']
         #print(LAuiP)
 
         language = [LANGUAGE_LIST[lan] for lan in LANGUAGE_LIST]

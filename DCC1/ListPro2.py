@@ -19,7 +19,7 @@ import Database.MenuSet2 as MS
 import Database.PostGet as PG
 import GUI.proman as pro
 import importlib
-import importlib.util
+#import importlib.util
 
 import AI.Analiz
 import AI.OpnSrc as OS

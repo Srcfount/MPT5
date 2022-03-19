@@ -28,6 +28,7 @@ def main():
 	for dirct in main_direct:
 		for update_file in main_file[dirct]:
 			shutil.copyfile(source_dirct+dirct+'\\'+update_file,target_dirct+dirct+'\\'+update_file)
+			print('.', end='')
 
 	print(u'successful Update')
 

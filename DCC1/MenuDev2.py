@@ -280,6 +280,8 @@ class MyPanel1 ( wx.Panel ):
 		self.Splt1.SplitVertically( self.P1, self.P2, 0 )
 		Vsz1.Add( self.Splt1, 1, wx.EXPAND, 5 )
 
+		self.ControlHide(0,0)
+
 
 		self.SetSizer( Vsz1 )
 		self.Layout()
@@ -299,7 +301,7 @@ class MyPanel1 ( wx.Panel ):
 		self.codgnr.Bind( wx.EVT_BUTTON, self.gnrcod )
 		self.iconfile.Bind( wx.EVT_FILEPICKER_CHANGED, self.icnslct )
 		self.chk1.Bind( wx.EVT_CHECKBOX, self.disbl )
-		self.chk2.Bind( wx.EVT_CHECKBOX, self.hidit )
+		#self.chk2.Bind( wx.EVT_CHECKBOX, self.hidit )
 		self.rdio1.Bind( wx.EVT_RADIOBUTTON, self.normnu )
 		self.rdio2.Bind( wx.EVT_RADIOBUTTON, self.chkmnu )
 		self.rdio3.Bind( wx.EVT_RADIOBUTTON, self.rdomnu )
@@ -308,6 +310,19 @@ class MyPanel1 ( wx.Panel ):
 
 	def __del__( self ):
 		pass
+
+	def ControlHide(self,Data,Dis):
+		if not os.path.isfile(Src_api+'Access_manage.py'):
+			self.chk2.Disable()
+		else:
+			if Dis:
+				self.chk2.Disable()
+			else:
+				self.chk2.Enable()
+			self.chk2.SetValue(Data)
+
+
+
 
 	def fillnull(self):
 	    self.titr.SetLabel(_(u'MenuBar: '))
@@ -319,6 +334,13 @@ class MyPanel1 ( wx.Panel ):
 	    self.icon1.SetBitmap(icon.image.GetBitmap())
 	    self.fld4.SetValue('')
 	    self.fld6.SetValue('')
+	    self.rdio1.SetValue(1)
+	    self.rdio2.SetValue(0)
+	    self.rdio3.SetValue(0)
+	    self.rdio4.SetValue(0)
+	    self.chk1.SetValue(0)
+	    self.ControlHide(0,0)
+	    #self.chk2.SetValue(0)
 	    self.prgfld.SetValue('')
 	    self.lbl9.SetLabel(_('Directory: '))
 
@@ -431,9 +453,11 @@ class MyPanel1 ( wx.Panel ):
 			else:
 				self.chk1.SetValue(0)
 			if data[6] != 'FFFF':
-				self.chk2.SetValue(1)
+				#self.chk2.SetValue(1)
+				self.ControlHide(1,0)
 			else:
-				self.chk2.SetValue(0)
+				#self.chk2.SetValue(0)
+				self.ControlHide(0,0)
 		if code > 1000:
 			self.disableall(0)
 			self.itmdata = self.bardata = data = self.MyMenu.getmItem(code)[0]
@@ -474,6 +498,8 @@ class MyPanel1 ( wx.Panel ):
 				pass
 			if data[16] != 1 and data[16] != None:
 				self.chk1.SetValue(1)
+			if data[15] != 'FFFF' and data[15] != None:
+				self.ControlHide(1,0)
 
 			if data[17] != None:
 				mydir = self.MyMenu.GetDirCod(data[19])[0][0]
@@ -507,7 +533,8 @@ class MyPanel1 ( wx.Panel ):
 		self.rdio3.SetValue(0)
 		self.rdio4.SetValue(0)
 		self.chk1.SetValue(0)
-		self.chk2.SetValue(0)
+		#self.chk2.SetValue(0)
+		self.ControlHide(0,0)
 		self.prgfld.SetValue('')
 		self.lbl9.SetLabel(_('Directory: '))
 		event.Skip()
@@ -699,6 +726,13 @@ class MyPanel1 ( wx.Panel ):
 			self.icon1.Disable()
 			self.fld4.Disable()
 			self.fld6.Disable()
+			self.rdio1.Disable()
+			self.rdio2.Disable()
+			self.rdio3.Disable()
+			self.rdio4.Disable()
+			self.chk1.Disable()
+			#self.chk2.Disable()
+			self.ControlHide(0,1)
 			self.prgfld.Disable()
 			self.lbl9.Disable()
 		else:
@@ -710,6 +744,13 @@ class MyPanel1 ( wx.Panel ):
 			self.icon1.Enable()
 			self.fld4.Enable()
 			self.fld6.Enable()
+			self.rdio1.Enable()
+			self.rdio2.Enable()
+			self.rdio3.Enable()
+			self.rdio4.Enable()
+			self.chk1.Enable()
+			#self.chk2.Enable()
+			self.ControlHide(0,0)
 			self.prgfld.Enable()
 			self.lbl9.Enable()
 
@@ -848,16 +889,16 @@ class MyPanel1 ( wx.Panel ):
 		# 	self.dis_enb = 1
 		event.Skip()
 
-	def hidit( self, event ):
-		if self.chk2.GetValue():
-			self.shw_hid = 0
-		else:
-			self.shw_hid = 1
-		# if self.shw_hid == 1:
-		# 	self.shw_hid = 0
-		# else:
-		# 	self.shw_hid = 1
-		event.Skip()
+	# def hidit( self, event ):
+	# 	if self.chk2.GetValue():
+	# 		self.shw_hid = 0
+	# 	else:
+	# 		self.shw_hid = 1
+	# 	# if self.shw_hid == 1:
+	# 	# 	self.shw_hid = 0
+	# 	# else:
+	# 	# 	self.shw_hid = 1
+	# 	event.Skip()
 
 	def normnu( self, event ):
 		event.Skip()
@@ -924,6 +965,8 @@ class MyPanel1 ( wx.Panel ):
 			Data8 = 0
 		else:
 			Data8 = 1
+
+
 		if self.chk2.GetValue():
 			Data9 = '0000'
 		else:

@@ -56,9 +56,10 @@ class mainApp(wx.App):
             self.locale = wx.Locale(supportedLangs[lang])
             if self.locale.IsOk():
                 self.locale.AddCatalog("Temp5fa")
-                #self.locale.AddCatalog("Temp5fr")
+                # self.locale.AddCatalog("Temp5fr")
                 self.locale.AddCatalog("Temp5de")
-                #self.locale.AddCatalog("Temp5tr")
+                # self.locale.AddCatalog("Temp5sp")
+                # self.locale.AddCatalog("Temp5tr")
             else:
                 self.locale = None
         else:

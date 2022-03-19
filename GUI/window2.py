@@ -41,14 +41,12 @@ class MainWin(wx.Frame):
         self.SetLabel(label)
         #self.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_BACKGROUND))
         self.newmenu = True
-
         fntis = self.config.Read(u'Font').split(',')
 
         if fntis[4] == 'True':
             undr = True
         else:
             undr = False
-
         ifont = wx.Font(int(fntis[0]), int(fntis[1]), int(fntis[2]), int(fntis[3]), undr, faceName=fntis[5])
         self.SetFont(ifont)
 
@@ -128,9 +126,14 @@ class MainWin(wx.Frame):
                 t = time.localtime(time.time())
                 self.SetStatusText(time.strftime("%d-%b-%Y", t), i)
                 Wthlst.append(90)
-            else:
-                self.SetStatusText(st, i)
+            elif st == 'path':
+                ipath = os.getcwd() #  self.config.Read('AppPath')
+                #print(ipath)
+                self.SetStatusText(ipath,i)
                 Wthlst.append(-1)
+            #else:
+            #    self.SetStatusText(st, i)
+            #    Wthlst.append(-1)
             i += 1
         self.SetStatusBar(statusBar)
 
