@@ -63,13 +63,15 @@ LOCALE_PATH   = os.path.join(MAP,opj(u'Locale')+SLASH)
 TEMPS_PATH    = os.path.join(MAP,opj(u'Temps')+SLASH)
 
 #### Source pass for user
-Src_prg = os.path.join(SRC_PATH,opj(u'PRG')+SLASH)
+
 Src_api = os.path.join(SRC_PATH,opj(u'API')+SLASH)
-Src_gui = os.path.join(SRC_PATH,opj(u'GUI')+SLASH)
-Src_dbf = os.path.join(SRC_PATH,opj(u'DBF')+SLASH)
 Src_aui = os.path.join(SRC_PATH,opj(u'AUI')+SLASH)
+Src_dbf = os.path.join(SRC_PATH,opj(u'DBF')+SLASH)
+Src_gui = os.path.join(SRC_PATH,opj(u'GUI')+SLASH)
 Src_mla = os.path.join(SRC_PATH,opj(u'MLA')+SLASH)
 Src_mlp = os.path.join(SRC_PATH,opj(u'MLP')+SLASH)
+Src_prg = os.path.join(SRC_PATH,opj(u'PRG')+SLASH)
+
 
 ####  List of language to use in application
 LANGUAGE_LIST = {1:"English",2:"Farsi",3:"French",4:"German",5:"Spanish",6:"Turkish"}

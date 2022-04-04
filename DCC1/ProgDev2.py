@@ -294,7 +294,8 @@ class MyPanel1 ( wx.Panel ):
 		#self.DVC1.AppendTextColumn()
 		self.my_data = self.getMData.AllHndl("""left join Guidir on Guidir.prgdir = handler.prgdir 
 		                                     left join PrgDesc on PrgDesc.handlerid = handler.handlerid 
-		                                     where handler.handlerid < 99000 """)
+		                                     where handler.handlerid < 99000 
+		                                     and handler.prgdir <> '8888' """)
 		#print(self.my_data)
 		allprgnm = [n[1] for n in self.my_data ]
 		Aroot = self.DVC1.GetRootItem()

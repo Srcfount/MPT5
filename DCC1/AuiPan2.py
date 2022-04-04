@@ -354,6 +354,7 @@ class MyPanel1 ( wx.Panel ):
 				self.fillinfo(tem)
 
 	def fillinfo(self, Data):
+		#print(Data)
 		self.fld1.SetValue(str(Data[0]))
 		self.fld2.SetValue(Data[7])
 		self.fld3.SetValue(Data[1])

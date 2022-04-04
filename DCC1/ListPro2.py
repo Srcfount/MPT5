@@ -246,7 +246,7 @@ class MyPanel1 ( wx.Panel ):
 		self.root4 = self.TLC1.AppendItem(Aroot, "Ziped Programs you downloaded")
 		self.root5 = self.TLC1.AppendItem(Aroot, "Programs file in your HDD ")
 
-		dirct = ['Free','Account','Uploads','Downloads']
+		dirct = ['Free','Account','Downloads']
 		#roots = [self.root1,self.root2,self.root3,self.root4]
 		roots = [self.root1, self.root2, self.root4]
 		i=0
@@ -336,7 +336,10 @@ class MyPanel1 ( wx.Panel ):
 		event.Skip()
 
 	def editit( self, event ):
-		if self.thsfile != '':
+		itm = self.TLC1.GetSelection()
+		par = self.TLC1.GetItemParent(itm)
+		rot = self.TLC1.GetItemText(par, 0)
+		if self.thsfile != '' and rot == "Programs file in your HDD ":
 			self.Frm = wx.Frame(self, style=wx.CAPTION | wx.CLOSE_BOX | wx.FRAME_FLOAT_ON_PARENT | wx.TAB_TRAVERSAL)
 			# self.Pnl = PyPanel(self.Frm, self.thsfile)
 			self.Pnl = OS.SrcPanel(self.Frm, self.thsfile)

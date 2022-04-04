@@ -52,14 +52,36 @@ def create_this(file,source,target):
 
 
 def main(argv):
-	mydir = input("Please write directory to like install program:[sample: c:\Temp5\] >> ")
+	print(argv)
+	arg_help = """syntax is :{0} <option> <directory> \n 
+	    Options: 
+	        Create = Make a new empty project 
+	        Update = Update my program platform \n
+	    example: 
+	        {0} Create c:\Temp5\myProject\ 
+	        {0} Update c:\Temp5\myProject\  \n """.format(argv[0])
 
-	if mydir == '':
-		print('Exit setup. you not entered anything')
-		exit()
-	if mydir[-1] != '\\':
-		print('Write a correct directory format')
-		exit()
+	if len(argv) < 2:
+		print(arg_help)
+	else:
+		if 'Create' in argv:
+			if argv[2] != '' or argv[2] != None:
+				mydir = argv[2]
+
+		print(argv[1])
+
+	exit()
+	#mydir = input("Please write directory to like install program:[sample: c:\Temp5\] >> ")
+	# url="https://github.com/Srcfount/MPT5/archive/refs/heads/master.zip"
+	# filobj = requests.get(url)
+	# with open('', 'wb') as f:
+	#	f.write(filobj.content)
+	#if mydir == '':
+	#	print('Exit setup. you not entered anything')
+	#	exit()
+	#if mydir[-1] != '\\':
+	#	print('Write a correct directory format')
+	#	exit()
 
 	if not os.path.isdir(mydir):
 		print('.', end='')

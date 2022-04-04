@@ -53,7 +53,7 @@ class SizeProperty(pg.PGProperty):
         """ Utility convert arbitrary value to a real wx.Size.
         """
         import collections
-        if isinstance(value, collections.Sequence) or hasattr(value, '__getitem__'):
+        if isinstance(value, collections.abc.Sequence) or hasattr(value, '__getitem__'):
             value = wx.Size(*value)
         return value
 
