@@ -10,13 +10,14 @@ class GetData:
         self.DBF = DBF
         self.sends = sends
 
-    def ShowItem(self, ibar=1):
+    def ShowItem(self, ibar=1, ext=''):
         return sq.wxsqltxt(self.DBF, """select distinct mitem.extid, mitem.itemid,mitem.mbarid,mitem.itemname,handler.prgname,extended.acclvlid, mitem.itemtyp
                                         from mitem
                                         left join handler on handler.handlerid = mitem.handlerid
                                         left join extended on extended.extid = mitem.extid
                                         where mitem.mbarid = %d
-                                        """ % ibar)
+                                        %s
+                                        """ % (ibar,ext))
 
     def gItem(self, mbar=1, ext=''):
         return sq.wxsqltxt(self.DBF, """select mitem.itemname,mitem.itemid
@@ -34,12 +35,13 @@ class GetData:
                                          and access.acclvl = '%s'
                                          %s order by menubar.mbarid""" % (Access,ext)
                            )
-    def AmenuItm(self, barid=101):
+    def AmenuItm(self, barid=101, ext=''):
         return sq.wxsqltxt(self.DBF, """SELECT DISTINCT mitem.itemid,mitem.itemname,extended.status,extended.shortcut,extended.icon,mitem.itemtyp
                      FROM mitem
                      left join extended on mitem.extid = extended.extid
                      WHERE mitem.mbarid = %d
-                       """ % barid)  #ORDER BY mitem.itemid
+                     %s
+                       """ % (barid,ext) )  #ORDER BY mitem.itemid
 
     def getmItem(self, itmid=0):
         return sq.wxsqltxt(self.DBF, """ SELECT DISTINCT *

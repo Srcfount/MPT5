@@ -390,7 +390,7 @@ class MyPanel1 ( wx.Panel ):
 			grp_roots = self.DVC1.AppendItem(broot, 'Bar Menu')
 			self.DVC1.SetItemText(grp_roots, 0, str(r[0]))
 			self.DVC1.SetItemText(grp_roots, 1, r[1])
-			items = self.MyMenu.ShowItem(r[0])
+			items = self.MyMenu.ShowItem(r[0]," order by mitem.itemid ")
 			for i in items:
 				chditm = self.DVC1.AppendItem(grp_roots, 'Items Menu')
 				self.DVC1.SetItemText(chditm, 0, str(i[1]))

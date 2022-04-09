@@ -77,7 +77,8 @@ class MySplashScreen(wx.adv.SplashScreen):
         frame = self.window.MainWin()
 
         frame.SetSize(SIZE)
-        frame.SetPosition((0, 0))
+
+        frame.SetPosition((0,0))
 
         frame.EnableFullScreenView(True)
         #frame.ShowFullScreen()

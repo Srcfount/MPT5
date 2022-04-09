@@ -101,14 +101,14 @@ class MenuData(object):
         return self.mbar
 
     def menuItem(self, i):
-        self.bitm = self.MySql.AmenuItm(i)
+        self.bitm = self.MySql.AmenuItm(i," order by mitem.itemid ")
         self.mitem = []
         self.sitem = []
         for itm in self.bitm:
             #print(itm)
             if itm[-1] == 'S':
                 self.sitem.append(itm)
-                stm = self.MySql.AmenuItm(itm[0])
+                stm = self.MySql.AmenuItm(itm[0]," order by mitem.itemid ")
                 for s in stm:
                     self.sitem.append(s)
                 #self.mitem.append(itm)
@@ -118,7 +118,7 @@ class MenuData(object):
         #print( self.mitem)
         return self.mitem
     def menuItem2(self, i):
-        bitm = self.MySql.AmenuItm(i)
+        bitm = self.MySql.AmenuItm(i," order by mitem.itemid ")
         mitem = []
         for itm in bitm:
             if itm[-1] == 'S':
