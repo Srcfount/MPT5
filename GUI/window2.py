@@ -58,11 +58,27 @@ class MainWin(wx.Frame):
         # If like Back Gorund or Aui Center =============================
         if eval(self.config.Read('BGActive')):
             self.BGrnd(self.config.Read('Background'))
+        if os.path.isfile(Src_aui+"login_pane.py"):
+            import Src.AUI.login_pane as Lg
+            dlg = wx.Dialog(self, -1)
+            pnl = Lg.MyPanel1(dlg)
+            dlg.SetSize((300,150))
+            disply = wx.GetDisplaySize()
+            dlg.SetPosition((disply[0] / 2 - 150, disply[1] / 2 - 75))
+            dlg.ShowModal()
+            if pnl.user == -1:
+                exit()
+            else:
+                userid = pnl.user
+            dlg.Destroy()
+        else:
+            userid = 1
 
 
         # Menu of Program==============
         if self.config.Read("Menu") == '1':
             self.menu = MM.AppMenu()
+            self.menu.m.userid = userid
             if len(self.menu.GetMenus()) != 0:
                 #self.SetMenuBar(menu)
                 self.UpdateMenu(self.menu, self.menu.GetMenus())
@@ -245,6 +261,7 @@ class MainWin(wx.Frame):
     def BGrnd(self,BGF):
         self.bmpwin = BG.BGPanel(self,BGF)
         self.m_mgr.AddPane( self.bmpwin, wx.aui.AuiPaneInfo() .CaptionVisible( False ) .Center() .CloseButton( False ).Dock().Resizable().FloatingSize( wx.Size( 800,600 )) )
+
 
     def NewMenu(self):
         self.newmenu = True

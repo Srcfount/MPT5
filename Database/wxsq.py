@@ -7,6 +7,7 @@ from Config.Init import *
 from wx import MessageBox, OK, ICON_WARNING
 
 
+
 class WXDB(object):
 	def __init__(self, database=":memory:", pathdb=os.getcwd()):
 		self.database = pathdb + database

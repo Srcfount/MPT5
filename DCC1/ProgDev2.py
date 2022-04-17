@@ -299,45 +299,49 @@ class MyPanel1 ( wx.Panel ):
 		#print(self.my_data)
 		allprgnm = [n[1] for n in self.my_data ]
 		Aroot = self.DVC1.GetRootItem()
-		self.root1 = self.DVC1.AppendItem(Aroot, "One page program All-in-One")
-		self.root2 = self.DVC1.AppendItem(Aroot, "One page program for aui panes")
-		self.root3 = self.DVC1.AppendItem(Aroot, "Program with one import panel ")
-		self.root4 = self.DVC1.AppendItem(Aroot, "Multi program with some import ")
-		self.root5 = self.DVC1.AppendItem(Aroot, "All python file in your HDD ")
+		self.root1 = self.DVC1.AppendItem(Aroot, "One page program All-in-One")   #code 1-999 dir 2222
+		self.root2 = self.DVC1.AppendItem(Aroot, "One page program for aui panes")  #code 5000-5999 dir 5555
+		self.root3 = self.DVC1.AppendItem(Aroot, "Program with one import panel ")  #code 1000-1999 dir 1101+
+		self.root4 = self.DVC1.AppendItem(Aroot, "Multi program with some import ")  #code 2000+ with 2+ import dir 1101+
+		self.root5 = self.DVC1.AppendItem(Aroot, "All python file in your HDD ")    #Not in allprgnm
 
+		alldir = self.getMData.AllGuiDir(
+			"  where rtrim(Guidir.prgdir,4) > '0000' and ltrim(Guidir.prgdir,4) < '8888' and Guidir.prgdir != '3333' ")
+		#lstdir = [d[2] for d in alldir]
 		subimp = []
+		#inlsthndlr = []
+		self.lsthddfil = []
+		for diimp ,dircod, hdddir in alldir:
+			#print(diimp, dircod, hdddir)
+			idr = hdddir.replace('..', MAP)
+			for ifil in os.listdir(idr):
+				if '.py' in ifil:
+					if ifil.rstrip('.py') not in allprgnm and ifil != '__init__.py' and ifil != 'PAui.py' :
+						#notlsthndlr.append(ifil)
+						child2 = self.DVC1.AppendItem(self.root5, ifil)
+						self.DVC1.SetItemText(child2, 0, ifil)
+						self.DVC1.SetItemText(child2, 1, dircod[:2]+'??')
+						self.lsthddfil.append(idr + '\\' + ifil)
+
+		#print(inlsthndlr)
 		for pro in self.my_data:
-			#print(pro[2])
 			thsfil = MAP + pro[8][2:] + SLASH + pro[1] + '.py'
 			af = Anlzfil(thsfil)
 			if pro[2] == '5555':
 				child = self.DVC1.AppendItem(self.root2, pro[1])
-
-			elif pro[2] < '5555' :
+			elif pro[2] == '2222':
+				child = self.DVC1.AppendItem(self.root1, pro[1])
+			elif pro[2] < '1999':
 				if pro[0] > 999:
 					child = self.DVC1.AppendItem(self.root3, pro[1])
 				if pro[0] < 999:
 					child = self.DVC1.AppendItem(self.root1, pro[1])
-
-			#elif pro[0] < 100:
-			#	child = self.DVC1.AppendItem(self.root1, pro[1])
-
-			elif pro[2] >= '6000':
-				child = self.DVC1.AppendItem(self.root1, pro[1])
-
 			else:
-				print("some code is error")
-			#print(af.ishasimport('GUI.API'), af.ishasfromim('GUI.API'))
+				print('Please send your menu2.db file to us')
 			self.DVC1.SetItemText(child, 0, pro[1])
 			self.DVC1.SetItemText(child, 1, str(pro[0]))
-			# if af.ishasimport('GUI.API'):
-			# 	atimp = af.ishasimport('GUI.API')[0].split(' ')[1].replace('GUI.API.','')
-			# 	subimp.append(atimp)
-			# 	child2 = self.DVC1.AppendItem(child, atimp)
-			# 	self.DVC1.SetItemText(child2, 0, atimp)
-			# 	self.DVC1.SetItemText(child2, 1, '7777')
 			if af.ishasimport(self.iSrc_api_Imp):
-				atimp = af.ishasimport(self.iSrc_api_Imp)[0].split(' ')[1].replace(self.iSrc_api_Imp+'.','')
+				atimp = af.ishasimport(self.iSrc_api_Imp)[0].split(' ')[1].replace(self.iSrc_api_Imp + '.', '')
 				subimp.append(atimp)
 				child2 = self.DVC1.AppendItem(child, atimp)
 				self.DVC1.SetItemText(child2, 0, atimp)
@@ -345,29 +349,9 @@ class MyPanel1 ( wx.Panel ):
 			if af.ishasfromim(' . '):
 				atimp = af.ishasfromim(' . ')[0].split(' ')[3]
 				subimp.append(atimp)
-				chil3 = self.DVC1.AppendItem(child, atimp)
-				self.DVC1.SetItemText(chil3, 0, atimp)
-				self.DVC1.SetItemText(chil3, 1, '7777')
-
-		lstdir = self.getMData.AllGuiDir("  where rtrim(Guidir.prgdir,4) > '0000' and ltrim(Guidir.prgdir,4) < '8888' ")
-		lstdir = [d[2] for d in lstdir ]
-		#print(lstdir)
-		notlsthndlr = []
-		self.lsthddfil = []
-		#print(allprgnm,subimp)
-		for dr in lstdir:
-			idr = dr.replace('..',MAP)
-			#print(idr)
-			for ifil in os.listdir(idr):
-				if '.py' in ifil:
-					if ifil.rstrip('.py') not in allprgnm and ifil != '__init__.py' and ifil != 'PAui.py' and ifil.rstrip('.py') not in subimp:
-						notlsthndlr.append(ifil)
-						self.lsthddfil.append(idr+'\\'+ifil)
-		#print(notlsthndlr,self.lsthddfil)
-		for nm in notlsthndlr:
-			child2 = self.DVC1.AppendItem(self.root5,nm)
-			self.DVC1.SetItemText(child2, 0, nm)
-			self.DVC1.SetItemText(child2, 1, '????')
+				child3 = self.DVC1.AppendItem(child, atimp)
+				self.DVC1.SetItemText(child3, 0, atimp)
+				self.DVC1.SetItemText(child3, 1, '7777')
 
 		if len(self.FTF) > 0:
 			fitm = self.DVC1.GetFirstItem()
@@ -399,7 +383,7 @@ class MyPanel1 ( wx.Panel ):
 		cod = self.DVC1.GetItemText(itm,1)
 		#print(txt,cod)
 		if cod != '':
-			if cod == '????':
+			if cod[2:] == '??':
 				for l in self.lsthddfil:
 					if txt in l.split('\\'):
 						self.PrgDir1.SetPath(l)
@@ -474,7 +458,6 @@ class MyPanel1 ( wx.Panel ):
 		event.Skip()
 
 	def addit( self, event ):
-
 		self.Frm = wx.Frame(self, style=wx.CAPTION | wx.CLOSE_BOX | wx.FRAME_FLOAT_ON_PARENT | wx.TAB_TRAVERSAL)
 		#self.Pnl = PyPanel(self.Frm, GUI_PATH + 'Temp\\untitle.py')
 		self.Pnl = OS.SrcPanel(self.Frm,GUI_PATH + 'Temp\\untitle.py' )
@@ -485,7 +468,6 @@ class MyPanel1 ( wx.Panel ):
 		event.Skip()
 
 	def edtit( self, event ):
-
 		self.Frm = wx.Frame(self, style=wx.CAPTION | wx.CLOSE_BOX | wx.FRAME_FLOAT_ON_PARENT | wx.TAB_TRAVERSAL)
 		#self.Pnl = PyPanel(self.Frm, self.thsfile)
 		self.Pnl = OS.SrcPanel(self.Frm, self.thsfile)
@@ -524,18 +506,7 @@ class MyPanel1 ( wx.Panel ):
 
 	def prviw( self, event ):
 		cdfld = self.fld2.GetValue()
-		if len(cdfld) > 0:
-			if cdfld[0] == '6':
-				a2 = pro.DoProgram2(0,int(self.fld1.GetValue()))
-				#print(a2)
-				win1 = wx.Frame(self, -1)
-				a2.main(win1)
-			if cdfld[0] == '1':
-				a2 = pro.DoProgram2(0,int(self.fld1.GetValue()))
-				#print(a2)
-				win1 = wx.Frame(self, -1)
-				a2.main(win1)
-
+		if len(cdfld) > 0 and cdfld != '-':
 			if cdfld[0] == '5':
 				a2 = pro.DoProgram2(0, int(self.fld1.GetValue()))
 				#print(a2)
@@ -543,8 +514,15 @@ class MyPanel1 ( wx.Panel ):
 				self.pnl = a2.MyPanel1(self.Frm, id=wx.ID_ANY, pos=wx.DefaultPosition, size=wx.DefaultSize,
 				                      style=wx.TAB_TRAVERSAL)
 				self.Frm.Show()
+			else:
+				a2 = pro.DoProgram2(0, int(self.fld1.GetValue()))
+				# print(a2)
+				win1 = wx.Frame(self, -1)
+				a2.main(win1)
 
-		elif cdfld == '':
+		elif cdfld == '' or cdfld == '-':
+			if self.fld1.GetValue() == '':
+				pass
 			af = Anlzfil(self.thsfile)
 			ifil = self.thsfile.replace(MAP + '\\', '')
 			ifil = ifil.replace('\\', '.')
@@ -552,7 +530,6 @@ class MyPanel1 ( wx.Panel ):
 			m = importlib.import_module(ifil)
 			if af.ishasframe():
 				try:
-
 					fr = af.ishasframe()
 					myclass = getattr(m,fr)
 					iframe = myclass(self)
@@ -595,15 +572,12 @@ class MyPanel1 ( wx.Panel ):
 		#event.Skip()
 
 	def gnrat( self, event ):
-		#print(self.thsfile,self.thspath)
 		itm = self.DVC1.GetSelection()
 		txt = self.DVC1.GetItemText(itm, 0)
 		cod = self.DVC1.GetItemText(itm, 1)
 		af = Anlzfil(self.thsfile)
-
 		#print(txt,cod,self.thsdcod,self.thsfile,self.thspath)
-
-		if cod == '????':
+		if cod[2:] == '??':
 			if af.ishasifin():
 				m = af.ishasmain()
 				#print(m)
@@ -624,9 +598,6 @@ class MyPanel1 ( wx.Panel ):
 				else:
 					print("Please Add if __name__=='__main__' to end of file")
 
-				#if af.ishasifin():
-					#print(u'If is in file')
-				#	af.checkSyntx()
 			if af.ishasframe():
 				mygnrt = Genrate2(self.thsfile)
 				mygnrt.gnratLine(False,True,True,True,af.ishasframe())
@@ -662,8 +633,6 @@ class MyPanel1 ( wx.Panel ):
 						lstcod = self.getMData.getHndid(dircode)
 						newcod = int(dircode[0]) * 10000 + len(lstcod) + 1
 						newnom = int(dircode[0]) * 10 + len(lstcod) + 1
-
-
 					else:
 						newname = txt[0].upper()+txt[len(txt)/2].upper()
 						dircode = '8888'
@@ -672,17 +641,14 @@ class MyPanel1 ( wx.Panel ):
 						newnom = int(dircode[0]) * 100 + len(lstcod) + 1
 					dlg.Destroy()
 					#print(newname,dircode,patfil)
-
-
 					data = [newcod, newname, dircode, '-1', -1, newnom]
 					self.setMDate.Table = 'handler'
 					self.setMDate.Additem(" handlerid, prgname, prgdir, paramtr, public, prgno", data)
 					self.DVC1.DeleteAllItems()
 					self.filllist()
 					self.Refresh()
-
 		else:
-			wx.MessageBox(_(u"You can only generate the unlisted program with this code '????'"))
+			wx.MessageBox(_(u"You can only generate the unlisted program with end with this code '??'"))
 
 		#event.Skip()
 

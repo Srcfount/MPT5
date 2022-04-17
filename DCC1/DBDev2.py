@@ -234,10 +234,8 @@ class MyPanel1 ( wx.Panel ):
 			print(frmname)
 
 
-
 	def dbopn(self, event):
 		dbftype = Database_type[int(self.config.Read('DBtype'))]
-		#self.dbfil = self.dbfile.GetPath().split('\\')[-1]
 		self.dbfil = self.dbfile.GetPath()
 		#print(self.dbfil,self.dbfile.GetPath())
 		#self.idbfl = PG.Get(self.dbfil, u'', u'DBFields')

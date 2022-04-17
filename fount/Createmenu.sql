@@ -154,7 +154,7 @@ INSERT INTO `Guidir` (Dir,prgdir,hdddir) VALUES
  ('GUI.Main','9999','..\GUI\Main'),
  --('GUI.AuiPanel','5000','..\GUI\AuiPanel'),
  ('GUI.Temp','8888','..\GUI\Temp'),
- ('Utility','6666','..\Utility'),
+ --('Utility','6666','..\Utility'),
  --('GUI.MLPane','4000','..\GUI\MLPane'),
  ('Src.GUI','7777','..\Src\GUI'),
  ('Src.PRG.','1000','..\Src\PRG\'),

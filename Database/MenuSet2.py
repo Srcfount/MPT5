@@ -32,17 +32,30 @@ class GetData:
         return sq.wxsqltxt(self.DBF, """ SELECT distinct *
                                          FROM menubar,access
                                          where menubar.acclvlid = access.acclvlid
-                                         and access.acclvl = '%s'
+                                         and access.acclvl = '%s' and access.userid = 1
                                          %s order by menubar.mbarid""" % (Access,ext)
+                           )
+    def AmenuBar2(self, Access=u'FFFF',ext='',userid = 1):
+        return sq.wxsqltxt(self.DBF, """ SELECT distinct *
+                                         FROM menubar,access
+                                         where menubar.acclvlid = access.acclvlid
+                                         and access.acclvl = '%s' and access.userid = %d
+                                         %s order by menubar.mbarid""" % (Access,userid,ext)
                            )
     def AmenuItm(self, barid=101, ext=''):
         return sq.wxsqltxt(self.DBF, """SELECT DISTINCT mitem.itemid,mitem.itemname,extended.status,extended.shortcut,extended.icon,mitem.itemtyp
                      FROM mitem
                      left join extended on mitem.extid = extended.extid
                      WHERE mitem.mbarid = %d
-                     %s
-                       """ % (barid,ext) )  #ORDER BY mitem.itemid
+                     %s  """ % (barid,ext) )  #ORDER BY mitem.itemid
 
+    def AmenuItm2(self, barid=101, ext='', usrid=1):
+        return sq.wxsqltxt(self.DBF, """ SELECT DISTINCT mitem.itemid,mitem.itemname,extended.status,extended.shortcut,extended.icon,mitem.itemtyp,access.acclvl,access.disenable
+                     FROM mitem
+                     left join extended on mitem.extid = extended.extid
+					 left join access on extended.acclvlid = access.acclvlid and access.userid = %d
+                     WHERE mitem.mbarid = %d
+                     %s """  % (usrid, barid,ext) )
     def getmItem(self, itmid=0):
         return sq.wxsqltxt(self.DBF, """ SELECT DISTINCT *
                      FROM mitem

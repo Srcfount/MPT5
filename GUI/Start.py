@@ -73,6 +73,7 @@ class MySplashScreen(wx.adv.SplashScreen):
     def ShowMain(self):
         wx.CallAfter(wx.EndBusyCursor)
 
+
         SIZE = wx.Size(eval(self.config.Read(u'WinSize')))
         frame = self.window.MainWin()
 
