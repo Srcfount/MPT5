@@ -26,16 +26,16 @@ Appearance of the application
   * Sources
 ---------------------
 
-New Peorgam (How to add)
+New Program (How to add)
 ------------------------
 
- 1. Connect to items
+ 1. How Connect to items
  2. Relationship with database
 
 Design Database
 ---------------
 
- * Select your engain type
+ * Select your engein type
  * SQL Language
  * Use in source
 
@@ -49,7 +49,7 @@ Add from another source code
 Machine Learning
 ----------------
 
-1. Design Panel
+1. Design a Panel
 2. Add Algorithm
 3. Connect to Data
 4. Perview Computing
@@ -57,7 +57,7 @@ Machine Learning
 Overview
 ========
 
-Connect us
+Contact to us
 ==========
 
 
