@@ -33,6 +33,14 @@ class Anlzfil(object):
     def showParse(self):
         print(self.imprts,self.objcts,self.pmodls)
 
+    def hasDesc(self):
+        with open(self.pyFile,'r') as f:
+            whris = re.search(r'##### Description #####',f.read())
+            whrhs = re.findall(r'^#{5,}.Desc.*#{5,}\n##.*.*\n#{5,}.End.#{5,}',f.read(),re.MULTILINE)
+        if whris:
+            return whrhs[0]
+
+
     def getGUIfil(self):
         for im in self.imprts:
             if 'Src' in im:

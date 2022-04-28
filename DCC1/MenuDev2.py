@@ -371,10 +371,10 @@ class MyPanel1 ( wx.Panel ):
 		broot = self.DVC1.GetRootItem()
 		#roots = self.MyMenu.AllBar("where mbarid < 9999")
 		roots = self.MyMenu.AllBar("order by menubar.mbarid")
-		subrot = self.MyMenu.AllSub(" Where mitem.itemtyp = 'S' ")
+		subrot = self.MyMenu.AllSub(" Where mitem.itemtyp = 'S'  ")
 
 		def getSubmenu(itmid, chditm, titl):
-			subitems = self.MyMenu.ShowItem(itmid)
+			subitems = self.MyMenu.ShowItem(itmid," order by mitem.itemid ")
 			for sub in subitems:
 				subitm = self.DVC1.AppendItem(chditm, titl)
 				self.DVC1.SetItemText(subitm, 0, str(sub[1]))
@@ -915,11 +915,12 @@ class MyPanel1 ( wx.Panel ):
 	def prglst( self, event ):
 		#print(wx.FindWindowByName(u'List of Program'))
 		#print(self.GetParent())
+		#print(self.bardata,self.itmcod)
 		if wx.FindWindowByName(u'List of Program') == None:
 			if self.prgfld.GetValue() != '':
 				import DCC1.ProgDev2 as DP
 				ifrm = wx.Frame(self, -1, style=wx.FRAME_FLOAT_ON_PARENT | wx.DEFAULT_FRAME_STYLE)
-				pnl = DP.MyPanel1(ifrm,[self.GetParent(),self.prgfld.GetValue()])
+				pnl = DP.MyPanel1(ifrm,[self.GetParent(),self.prgfld.GetValue(),self.bardata[5]])
 				ifrm.SetSize((555, 500))
 				ifrm.SetTitle(u'List of Program')
 				ifrm.Show()
@@ -929,17 +930,17 @@ class MyPanel1 ( wx.Panel ):
 		event.Skip()
 
 	def getHandel(self, imodel, pathfile):
-		# print(imodel,pathfile)
+		print(imodel,pathfile)
 		pr = self.getMData.AllHndl()
 		# m = imodel.split('.')[1]
 		for p in pr:
 			if imodel in p:
 				return p[0]
-		return 10000
+		return 10000+int(self.bardata[2][1:3])
 
 	def findhandler(self, hndlrnm):
 		if hndlrnm == '':
-			return 10000
+			return 10000+int(self.bardata[2][1:3])
 		else:
 			codid , self.prgdir = self.MyMenu.getHndlr(hndlrnm)[0]
 			return codid
@@ -1286,7 +1287,7 @@ class MyPanel3 ( wx.Panel ):
 		    self.SetMenu.Table = u'access'
 		    self.SetMenu.Additem(u'acclvlid , userid , acclvl , disenable ',(data3, 1, data5, data4))
 		    self.SetMenu.Table = u'handler'
-		    self.SetMenu.Additem(u' handlerid, prgname, prgdir, paramtr, public, prgno',(10000,'Demo',dircod, '-1',-1,1))
+		    self.SetMenu.Additem(u' handlerid, prgname, prgdir, paramtr, public, prgno',(10000+int(dircod[1:3]),'Demo',dircod, '-1',-1,100*int(dircod[1])))
 		    mb.Append(wx.Menu(),data1)
 
 	    elif event.GetEventObject().GetLabel() == _('Change'):

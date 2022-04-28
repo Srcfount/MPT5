@@ -8,7 +8,7 @@ from . import wxsq as sq
 class GetData:
     def __init__(self, DBF, sends):
         self.DBF = DBF
-        self.sends = sends
+        #self.sends = sends
 
     def ShowItem(self, ibar=1, ext=''):
         return sq.wxsqltxt(self.DBF, """select distinct mitem.extid, mitem.itemid,mitem.mbarid,mitem.itemname,handler.prgname,extended.acclvlid, mitem.itemtyp

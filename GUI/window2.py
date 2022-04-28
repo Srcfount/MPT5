@@ -77,8 +77,8 @@ class MainWin(wx.Frame):
 
         # Menu of Program==============
         if self.config.Read("Menu") == '1':
-            self.menu = MM.AppMenu()
-            self.menu.m.userid = userid
+            self.menu = MM.AppMenu(userid)
+            #self.menu.m.userid = userid
             if len(self.menu.GetMenus()) != 0:
                 #self.SetMenuBar(menu)
                 self.UpdateMenu(self.menu, self.menu.GetMenus())
@@ -100,8 +100,9 @@ class MainWin(wx.Frame):
         self.APnls2()
 
         #self.BGrnd(BakGrnd)
-        self.Bind(wx.EVT_RIGHT_DOWN, self.domouse)
-        self.Bind(wx.EVT_CONTEXT_MENU, self.setmenu)
+        if userid == 1:
+            self.Bind(wx.EVT_RIGHT_DOWN, self.domouse)
+            self.Bind(wx.EVT_CONTEXT_MENU, self.setmenu)
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
         self.m_mgr.Update()

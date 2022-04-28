@@ -351,6 +351,7 @@ class MyPanel1 ( wx.Panel ):
 		for tem in self.items:
 			if int(it2) in tem:
 				#print(tem)
+				self.thspan = tem
 				self.fillinfo(tem)
 
 	def fillinfo(self, Data):
@@ -404,7 +405,7 @@ class MyPanel1 ( wx.Panel ):
 
 			mypan = self.MyMenu.getPane(Up1[0])
 			codinfo = mypan[0][5]
-			print(Up1,mypan,codinfo)
+			#print(Up1,mypan,codinfo)
 			D1 = [ Up1[2], Up1[7], Up1[4], int(Up1[8]),  hndlid, Up1[1]]
 			self.DoMenu.Table = u'pans'
 			self.DoMenu.Upditem( ' panname = ? , pandok = ?, pansiz = ?, panlyr = ? , handlerid = ? , acclvlid = ? \
@@ -593,9 +594,10 @@ class MyPanel1 ( wx.Panel ):
 	def prglst( self, event ):
 		if wx.FindWindowByName(u'List of Program') == None:
 			if self.prgfld.GetValue() != '':
+				#print(self.thspan)
 				import DCC1.ProgDev2 as DP
 				ifrm = wx.Frame(self, -1, style=wx.FRAME_FLOAT_ON_PARENT | wx.DEFAULT_FRAME_STYLE)
-				pnl = DP.MyPanel1(ifrm,[self.GetParent(),self.prgfld.GetValue().replace('.py','')])
+				pnl = DP.MyPanel1(ifrm,[self.GetParent(),self.prgfld.GetValue().replace('.py',''),self.thspan[6]])
 				ifrm.SetSize((555, 500))
 				ifrm.SetTitle(u'List of Program')
 				ifrm.Show()

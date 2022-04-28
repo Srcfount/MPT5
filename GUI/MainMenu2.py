@@ -11,10 +11,10 @@ _ = wx.GetTranslation
 
 
 class MenuData(object):
-    def __init__(self):
+    def __init__(self,userid):
         self.MySql = MS.GetData(u'Menu2.db', u'')
         self.ToSql = MS.SetData(u'', u'',u'')
-        self.userid = 1
+        self.userid = userid
 
 
     def menuBar(self):
@@ -35,7 +35,7 @@ class MenuData(object):
         bitm = self.MySql.AmenuItm2(i," order by mitem.itemid ",self.userid)
         mitem = []
         for itm in bitm:
-            if itm[-1] == 'S':
+            if itm[-3] == 'S':
                 sitem = []
                 sitem.append(itm)
                 sitem.append(self.menuItem2(itm[0]))
@@ -56,11 +56,12 @@ class MenuData(object):
 class AppMenu(wx.MenuBar):
     Lstmnu = []
     Lstsub = []
-    def __init__(self):
+    def __init__(self,usrid=1):
         wx.MenuBar.__init__(self, style=0)
-        self.m = MenuData()
-        self.userid = self.m.userid
-        #print(self.m)
+        self.m = MenuData(usrid)
+        self.userid = usrid
+
+        #print(self.m.userid,self.userid,usrid)
         self.createMenuBar()
 
     def createMenuBar(self):
@@ -76,9 +77,12 @@ class AppMenu(wx.MenuBar):
         self.Lstmnu.append(menu)
         #print(menudata)
         for eachitem in menudata:
-            print(eachitem)
-            if type(eachitem) != list:
+            #print(eachitem)
+            if type(eachitem) != list :
                 eachid, eachlabel, eachstatus, shortcut, eachicon, eachtype, eachacc, eachdisbl = eachitem
+                if eachacc == '0000':
+                    continue
+
                 if not eachlabel:
                     menu.AppendSeparator()
                     continue
@@ -95,10 +99,16 @@ class AppMenu(wx.MenuBar):
                 #elif eachtype == 'S':
                 #    self.menu.AppendSubMenu(self.createMenuItem2(eachitem), eachlabel, eachstatus)
                     #return self.menu
+
                 else:
                     wx.MessageBox(_('Error In Menu Database. Please connect to Programmer'))
                 if eachicon != None and eachicon != '':
                     menuitem.SetBitmap(wx.Bitmap(ICONS_MENU + eachicon, wx.BITMAP_TYPE_ANY))
+                #print(eachacc,eachdisbl)
+                if eachdisbl:
+                    menuitem.Enable(True)
+                else:
+                    menuitem.Enable(False)
 
             elif type(eachitem) == list:
                 #print('This list send:', eachitem[1])

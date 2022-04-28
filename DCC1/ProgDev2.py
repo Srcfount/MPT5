@@ -295,7 +295,7 @@ class MyPanel1 ( wx.Panel ):
 		self.my_data = self.getMData.AllHndl("""left join Guidir on Guidir.prgdir = handler.prgdir 
 		                                     left join PrgDesc on PrgDesc.handlerid = handler.handlerid 
 		                                     where handler.handlerid < 99000 
-		                                     and handler.prgdir <> '8888' """)
+		                                     and handler.prgdir <> '8888' order by handler.handlerid """)
 		#print(self.my_data)
 		allprgnm = [n[1] for n in self.my_data ]
 		Aroot = self.DVC1.GetRootItem()
@@ -305,8 +305,11 @@ class MyPanel1 ( wx.Panel ):
 		self.root4 = self.DVC1.AppendItem(Aroot, "Multi program with some import ")  #code 2000+ with 2+ import dir 1101+
 		self.root5 = self.DVC1.AppendItem(Aroot, "All python file in your HDD ")    #Not in allprgnm
 
+		#alldir = self.getMData.AllGuiDir(
+		#	"  where rtrim(Guidir.prgdir,4) > '0000' and ltrim(Guidir.prgdir,4) < '8888' and Guidir.prgdir != '3333' ")
 		alldir = self.getMData.AllGuiDir(
-			"  where rtrim(Guidir.prgdir,4) > '0000' and ltrim(Guidir.prgdir,4) < '8888' and Guidir.prgdir != '3333' ")
+			"  where rtrim(Guidir.prgdir,4) > '0000' and ltrim(Guidir.prgdir,4) < '2222' or \
+			Guidir.prgdir = '5555' or Guidir.prgdir = '7777' ")
 		#lstdir = [d[2] for d in alldir]
 		subimp = []
 		#inlsthndlr = []
@@ -325,47 +328,53 @@ class MyPanel1 ( wx.Panel ):
 
 		#print(inlsthndlr)
 		for pro in self.my_data:
-			thsfil = MAP + pro[8][2:] + SLASH + pro[1] + '.py'
-			af = Anlzfil(thsfil)
-			if pro[2] == '5555':
-				child = self.DVC1.AppendItem(self.root2, pro[1])
-			elif pro[2] == '2222':
-				child = self.DVC1.AppendItem(self.root1, pro[1])
-			elif pro[2] < '1999':
-				if pro[0] > 999:
-					child = self.DVC1.AppendItem(self.root3, pro[1])
-				if pro[0] < 999:
+			if os.path.isfile(MAP + pro[8][2:] + SLASH + pro[1] + '.py'):
+				thsfil = MAP + pro[8][2:] + SLASH + pro[1] + '.py'
+				af = Anlzfil(thsfil)
+				if pro[2] == '5555':
+					child = self.DVC1.AppendItem(self.root2, pro[1])
+				elif pro[2] == '7777':
+					continue
+				#elif pro[2] == '2222':
+				#	child = self.DVC1.AppendItem(self.root1, pro[1])
+				elif pro[2] < '1999':
+					if pro[0] > 10000:
+						child = self.DVC1.AppendItem(self.root3, pro[1])
+					if pro[0] < 999:
+						child = self.DVC1.AppendItem(self.root1, pro[1])
+				elif pro[2] not in [prgd[1] for prgd in alldir]:
 					child = self.DVC1.AppendItem(self.root1, pro[1])
-			else:
-				print('Please send your menu2.db file to us')
-			self.DVC1.SetItemText(child, 0, pro[1])
-			self.DVC1.SetItemText(child, 1, str(pro[0]))
-			if af.ishasimport(self.iSrc_api_Imp):
-				atimp = af.ishasimport(self.iSrc_api_Imp)[0].split(' ')[1].replace(self.iSrc_api_Imp + '.', '')
-				subimp.append(atimp)
-				child2 = self.DVC1.AppendItem(child, atimp)
-				self.DVC1.SetItemText(child2, 0, atimp)
-				self.DVC1.SetItemText(child2, 1, '7777')
-			if af.ishasfromim(' . '):
-				atimp = af.ishasfromim(' . ')[0].split(' ')[3]
-				subimp.append(atimp)
-				child3 = self.DVC1.AppendItem(child, atimp)
-				self.DVC1.SetItemText(child3, 0, atimp)
-				self.DVC1.SetItemText(child3, 1, '7777')
+				else:
+					print('Please send your menu2.db file to us')
+				self.DVC1.SetItemText(child, 0, pro[1])
+				self.DVC1.SetItemText(child, 1, str(pro[0]))
+
+				if af.ishasimport(self.iSrc_api_Imp):
+					atimp = af.ishasimport(self.iSrc_api_Imp)[0].split(' ')[1].replace(self.iSrc_api_Imp + '.', '')
+					subimp.append(atimp)
+					child2 = self.DVC1.AppendItem(child, atimp)
+					self.DVC1.SetItemText(child2, 0, atimp)
+					self.DVC1.SetItemText(child2, 1, '7777')
+				if af.ishasfromim(' . '):
+					atimp = af.ishasfromim(' . ')[0].split(' ')[3]
+					subimp.append(atimp)
+					child3 = self.DVC1.AppendItem(child, atimp)
+					self.DVC1.SetItemText(child3, 0, atimp)
+					self.DVC1.SetItemText(child3, 1, '7777')
 
 		if len(self.FTF) > 0:
 			fitm = self.DVC1.GetFirstItem()
-			#print(fitm,self.FTF[1])
-			iitm = self.findthis(self.FTF[1],fitm)
+			#print(fitm,self.FTF[1],self.FTF[2])
+			iitm = self.findthis(self.FTF[1],self.FTF[2],fitm)
 			slct = self.DVC1.Select(iitm)
 			self.slctitm(slct)
 
-	def findthis(self, mytxt,fitm):
-		if self.DVC1.GetItemText(fitm,0) == mytxt:
+	def findthis(self, mytxt,mycod,fitm):
+		if self.DVC1.GetItemText(fitm,0) == mytxt and self.DVC1.GetItemText(fitm,1) == str(mycod):
 			return fitm
 		else:
 			fitm = self.DVC1.GetNextItem(fitm)
-			return self.findthis(mytxt,fitm)
+			return self.findthis(mytxt,mycod,fitm)
 
 	def slctmnu( self, event ):
 		#print(self.DVC1.GetSelection())
@@ -647,6 +656,13 @@ class MyPanel1 ( wx.Panel ):
 					self.DVC1.DeleteAllItems()
 					self.filllist()
 					self.Refresh()
+			if af.hasDesc():
+				Desc = af.hasDesc()
+				print(Desc.replace('#','').replace('Description','').replace('End',''))
+				data = [newcod, Desc.replace('#','').replace('Description','').replace('End','')]
+				self.setMDate.Table = 'PrgDesc'
+				self.setMDate.Additem(" handlerid, Description ", data)
+
 		else:
 			wx.MessageBox(_(u"You can only generate the unlisted program with end with this code '??'"))
 

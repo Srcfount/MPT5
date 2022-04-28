@@ -101,13 +101,13 @@ class MyPanel1 ( wx.Panel ):
 		self.btn5 = wx.BitmapButton( self.P1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0 )
 		#self.btn5.SetBitmap(wx.Bitmap(ICON16_PATH + u'update.png', wx.BITMAP_TYPE_ANY))
 		self.btn5.SetBitmap(icon.update.GetBitmap())
-		self.btn5.SetToolTip(_(u"Update"))
+		self.btn5.SetToolTip(_(u"Upload"))
 		Hsz3.Add( self.btn5, 0, wx.ALL, 5 )
 
 		self.btn6 = wx.BitmapButton( self.P1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0 )
 		#self.btn6.SetBitmap(wx.Bitmap(ICON16_PATH + u'application_put.png', wx.BITMAP_TYPE_ANY))
 		self.btn6.SetBitmap(icon.application_put.GetBitmap())
-		self.btn6.SetToolTip(_(u"Download"))
+		self.btn6.SetToolTip(_(u"Apply"))
 		Hsz3.Add( self.btn6, 0, wx.ALL, 5 )
 
 		self.btn7 = wx.BitmapButton( self.P1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0 )
@@ -141,41 +141,35 @@ class MyPanel1 ( wx.Panel ):
 
 		Hsz12 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.lbl1 = wx.StaticText( self.P2, wx.ID_ANY, _(u"To Menu id "), wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.lbl1.Wrap( -1 )
+		self.btndon = wx.Button(self.P2, wx.ID_ANY, u"Download", wx.DefaultPosition, wx.DefaultSize, wx.BU_EXACTFIT)
+		Hsz12.Add(self.btndon, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
 
-		Hsz12.Add( self.lbl1, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
-
-		self.fld1 = wx.TextCtrl( self.P2, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
-		Hsz12.Add( self.fld1, 1, wx.ALIGN_CENTER_VERTICAL|wx.TOP|wx.BOTTOM|wx.LEFT, 5 )
-
-		self.btn8 = wx.Button( self.P2, wx.ID_ANY, u"...", wx.DefaultPosition, wx.DefaultSize, wx.BU_EXACTFIT )
-		Hsz12.Add( self.btn8, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
-
+		self.gug1 = wx.Gauge(self.P2, wx.ID_ANY, 100, wx.DefaultPosition, wx.DefaultSize, wx.GA_HORIZONTAL)
+		self.gug1.SetValue(0)
+		Hsz12.Add(self.gug1, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
 
 		Vsz3.Add( Hsz12, 0, wx.EXPAND, 5 )
 
 		Hsz13 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.lbl2 = wx.StaticText( self.P2, wx.ID_ANY, _(u"To Directory"), wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.lbl2.Wrap( -1 )
+		self.extchk = wx.Button(self.P2, wx.ID_ANY, u"Extract, Check and Show File", wx.DefaultPosition, wx.DefaultSize,
+		                        0)
+		Hsz13.Add(self.extchk, 1, wx.ALL, 5)
 
-		Hsz13.Add( self.lbl2, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
-		self.dir2 = wx.DirPickerCtrl( self.P2, wx.ID_ANY, wx.EmptyString, _(u"Select a folder"), wx.DefaultPosition, wx.DefaultSize, wx.DIRP_DEFAULT_STYLE|wx.DIRP_SMALL )
-		Hsz13.Add( self.dir2, 1, wx.ALL, 5 )
 
 
 		Vsz3.Add( Hsz13, 0, wx.EXPAND, 5 )
 
 		Hsz14 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.btn9 = wx.Button( self.P2, wx.ID_ANY, _(u"Download"), wx.DefaultPosition, wx.DefaultSize, wx.BU_EXACTFIT )
-		Hsz14.Add( self.btn9, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+		self.lbl2 = wx.StaticText( self.P2, wx.ID_ANY, _(u"To Directory"), wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.lbl2.Wrap( -1 )
 
-		self.gug1 = wx.Gauge( self.P2, wx.ID_ANY, 100, wx.DefaultPosition, wx.DefaultSize, wx.GA_HORIZONTAL )
-		self.gug1.SetValue( 0 )
-		Hsz14.Add( self.gug1, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+		Hsz14.Add( self.lbl2, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+
+		self.dir2 = wx.DirPickerCtrl( self.P2, wx.ID_ANY, wx.EmptyString, _(u"Select a folder"), wx.DefaultPosition, wx.DefaultSize, wx.DIRP_DEFAULT_STYLE|wx.DIRP_SMALL )
+		Hsz14.Add( self.dir2, 1, wx.ALL, 5 )
 
 
 		Vsz3.Add( Hsz14, 0, wx.EXPAND, 5 )
@@ -183,13 +177,13 @@ class MyPanel1 ( wx.Panel ):
 		self.lin1 = wx.StaticLine( self.P2, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
 		Vsz3.Add( self.lin1, 0, wx.EXPAND |wx.ALL, 5 )
 
-		Hsz15 = wx.BoxSizer( wx.HORIZONTAL )
+		# Hsz15 = wx.BoxSizer( wx.HORIZONTAL )
+		#
+		# self.chk1 = wx.CheckBox( self.P2, wx.ID_ANY, _(u"Check it ..."), wx.DefaultPosition, wx.DefaultSize, 0 )
+		# Hsz15.Add( self.chk1, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
-		self.chk1 = wx.CheckBox( self.P2, wx.ID_ANY, _(u"Check it ..."), wx.DefaultPosition, wx.DefaultSize, 0 )
-		Hsz15.Add( self.chk1, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
-
-		Vsz3.Add( Hsz15, 0, wx.EXPAND, 5 )
+		# Vsz3.Add( Hsz15, 0, wx.EXPAND, 5 )
 
 		Hsz16 = wx.BoxSizer( wx.VERTICAL )
 
@@ -227,10 +221,12 @@ class MyPanel1 ( wx.Panel ):
 		self.btn5.Bind( wx.EVT_BUTTON, self.upd )
 		self.btn6.Bind( wx.EVT_BUTTON, self.aply )
 		self.btn7.Bind( wx.EVT_BUTTON, self.gnrt )
-		self.btn8.Bind( wx.EVT_BUTTON, self.mnuid )
+		#self.btn8.Bind( wx.EVT_BUTTON, self.mnuid )
+		self.btndon.Bind(wx.EVT_BUTTON, self.dnlod)
+		self.extchk.Bind(wx.EVT_BUTTON, self.extrc)
 		self.dir2.Bind( wx.EVT_DIRPICKER_CHANGED, self.thsdir )
-		self.btn9.Bind( wx.EVT_BUTTON, self.dnlod )
-		self.chk1.Bind( wx.EVT_CHECKBOX, self.chkdon )
+		#self.btn9.Bind( wx.EVT_BUTTON, self.dnlod )
+		#self.chk1.Bind( wx.EVT_CHECKBOX, self.chkdon )
 
 	def __del__( self ):
 		pass
@@ -242,13 +238,14 @@ class MyPanel1 ( wx.Panel ):
 		Aroot = self.TLC1.GetRootItem()
 		self.root1 = self.TLC1.AppendItem(Aroot, "Free Programs you can Download")
 		self.root2 = self.TLC1.AppendItem(Aroot, "Programs in your Account")
-		#self.root3 = self.TLC1.AppendItem(Aroot, "Programs you Upload for sell")
+		self.root3 = self.TLC1.AppendItem(Aroot, "Programs you Upload for sell")
 		self.root4 = self.TLC1.AppendItem(Aroot, "Ziped Programs you downloaded")
-		self.root5 = self.TLC1.AppendItem(Aroot, "Programs file in your HDD ")
+		#self.root5 = self.TLC1.AppendItem(Aroot, "Programs file in your HDD ")
 
-		dirct = ['Free','Account','Downloads']
+
+		dirct = ['Free','Account','Uploads','Downloads']
 		#roots = [self.root1,self.root2,self.root3,self.root4]
-		roots = [self.root1, self.root2, self.root4]
+		roots = [self.root1, self.root2, self.root3, self.root4]
 		i=0
 		for d in dirct:
 			mylist = os.listdir(UTILITY_PATH+d+'\\')
@@ -259,20 +256,20 @@ class MyPanel1 ( wx.Panel ):
 					self.TLC1.SetItemText(mychld,0,myfil)
 					self.TLC1.SetItemText(mychld,1,'>>>')
 			i += 1
-		dirdt2 = ['API','AUI','GUI','MLA','MLP','PRG']
-		dcods = {'API':6122,'AUI':6155,'PRG':6111,'GUI':6177,'MLA':6133,'MLP':6144}
-		for d in dirdt2:
-			mylist = os.listdir(UTILITY_PATH+'Fount\\'+d+'\\')
-			mychild = self.TLC1.AppendItem(self.root5, 'HardDisk')
-			self.TLC1.SetItemText(mychild, 0, d)
-			self.TLC1.SetItemText(mychild,1,str(dcods[d])[-3:])
-			for file in mylist:
-				if file != '__init__.py':
-					#myfile = file #file.replace(UTILITY_PATH+'Fount\\'+d+'\\','')
-					#mychild = self.TLC1.AppendItem(self.root5, 'HardDisk')
-					child2 = self.TLC1.AppendItem(mychild, d)
-					self.TLC1.SetItemText(child2,0,file)
-					self.TLC1.SetItemText(child2,1,str(dcods[d]))
+		# dirdt2 = ['API','AUI','GUI','MLA','MLP','PRG']
+		# dcods = {'API':6122,'AUI':6155,'PRG':6111,'GUI':6177,'MLA':6133,'MLP':6144}
+		# for d in dirdt2:
+		# 	mylist = os.listdir(UTILITY_PATH+'Fount\\'+d+'\\')
+		# 	mychild = self.TLC1.AppendItem(self.root5, 'HardDisk')
+		# 	self.TLC1.SetItemText(mychild, 0, d)
+		# 	self.TLC1.SetItemText(mychild,1,str(dcods[d])[-3:])
+		# 	for file in mylist:
+		# 		if file != '__init__.py':
+		# 			#myfile = file #file.replace(UTILITY_PATH+'Fount\\'+d+'\\','')
+		# 			#mychild = self.TLC1.AppendItem(self.root5, 'HardDisk')
+		# 			child2 = self.TLC1.AppendItem(mychild, d)
+		# 			self.TLC1.SetItemText(child2,0,file)
+		# 			self.TLC1.SetItemText(child2,1,str(dcods[d]))
 
 
 	def fillfilds(self, Data):
@@ -327,43 +324,40 @@ class MyPanel1 ( wx.Panel ):
 
 	def consrv( self, event ):
 		import socket
-		host = socket.gethostbyname(socket.gethostname())
-		print(host)
-		event.Skip()
+		# s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		# #host = socket.gethostbyname(socket.gethostname())
+		# ip = socket.gethostbyname('http:\\srcfount.pythonanywhere.com')
+		# print(ip)
+		# event.Skip()
+		try:
+			s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+			print("Socket successfully created")
+		except socket.error as err:
+			print("socket creation failed with error %s" % (err))
+
+		# default port for socket
+		port = 80
+		try:
+			host_ip = socket.gethostbyname('srcfount.pythonanywhere.com')
+		except socket.gaierror:
+			# this means could not resolve the host
+			print("there was an error resolving the host")
+		# connecting to the server
+		print(host_ip)
+		s.connect((host_ip, port))
+		print("the socket has successfully connected ")
 
 
 	def addit( self, event ):
+
 		event.Skip()
 
 	def editit( self, event ):
-		itm = self.TLC1.GetSelection()
-		par = self.TLC1.GetItemParent(itm)
-		rot = self.TLC1.GetItemText(par, 0)
-		if self.thsfile != '' and rot == "Programs file in your HDD ":
-			self.Frm = wx.Frame(self, style=wx.CAPTION | wx.CLOSE_BOX | wx.FRAME_FLOAT_ON_PARENT | wx.TAB_TRAVERSAL)
-			# self.Pnl = PyPanel(self.Frm, self.thsfile)
-			self.Pnl = OS.SrcPanel(self.Frm, self.thsfile)
-			self.Frm.SetMenuBar(OS.MyMenuBar1(u'Pro'))
-			self.Frm.SetSize((700, 560))
-			self.Frm.SetLabel(self.thsfile)
-			self.Frm.Show()
+
 		event.Skip()
 
 	def delit( self, event ):
-		if self.thsfile != '':
-			answr = wx.MessageBox("Are you sure to Delete %s from your Hard Drive?"%self.thsfile,'Warrning', wx.YES_NO)
-			if answr == 2:
-				if os.path.isfile(self.thsfile):
-					try:
-						os.remove(self.thsfile)
-						wx.MessageBox(_("File Successfully Remove from HardDisk"))
-					except os.error:
-						print(os.error)
-				else:
-					wx.MessageBox(_("File Open or dose not exist please close it or check Harddisk"))
-		self.TLC1.DeleteAllItems()
-		self.filllist()
-		self.Refresh()
+
 		event.Skip()
 
 	def prw( self, event ):
@@ -378,8 +372,8 @@ class MyPanel1 ( wx.Panel ):
 	def gnrt( self, event ):
 		event.Skip()
 
-	def mnuid( self, event ):
-		event.Skip()
+	# def mnuid( self, event ):
+	# 	event.Skip()
 
 	def thsdir( self, event ):
 		event.Skip()
@@ -387,8 +381,11 @@ class MyPanel1 ( wx.Panel ):
 	def dnlod( self, event ):
 		event.Skip()
 
-	def chkdon( self, event ):
+	def extrc(self, event):
 		event.Skip()
+
+	# def chkdon( self, event ):
+	# 	event.Skip()
 
 	def Splt1OnIdle( self, event ):
 		self.Splt1.SetSashPosition( 266 )
