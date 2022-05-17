@@ -299,33 +299,22 @@ class MyPanel1 ( wx.Panel ):
 		#print(self.my_data)
 		allprgnm = [n[1] for n in self.my_data ]
 		Aroot = self.DVC1.GetRootItem()
-		self.root1 = self.DVC1.AppendItem(Aroot, "One page program All-in-One")   #code 1-999 dir 2222
+		self.root0 = self.DVC1.AppendItem(Aroot, "All program in Src\API Path")      #code 10-999 dir 2222
+		self.root1 = self.DVC1.AppendItem(Aroot, "One page program All-in-One")   #code 1100-1999 dir PRG 1101+
 		self.root2 = self.DVC1.AppendItem(Aroot, "One page program for aui panes")  #code 5000-5999 dir 5555
 		self.root3 = self.DVC1.AppendItem(Aroot, "Program with one import panel ")  #code 1000-1999 dir 1101+
 		self.root4 = self.DVC1.AppendItem(Aroot, "Multi program with some import ")  #code 2000+ with 2+ import dir 1101+
-		self.root5 = self.DVC1.AppendItem(Aroot, "All python file in your HDD ")    #Not in allprgnm
+		self.root5 = self.DVC1.AppendItem(Aroot, "Other python file NOT in Handler ")    #Not in allprgnm
 
 		#alldir = self.getMData.AllGuiDir(
 		#	"  where rtrim(Guidir.prgdir,4) > '0000' and ltrim(Guidir.prgdir,4) < '8888' and Guidir.prgdir != '3333' ")
 		alldir = self.getMData.AllGuiDir(
-			"  where rtrim(Guidir.prgdir,4) > '0000' and ltrim(Guidir.prgdir,4) < '2222' or \
+			"  where rtrim(Guidir.prgdir,4) > '0000' and ltrim(Guidir.prgdir,4) < '3333' or \
 			Guidir.prgdir = '5555' or Guidir.prgdir = '7777' ")
 		#lstdir = [d[2] for d in alldir]
 		subimp = []
-		#inlsthndlr = []
+		inlstimport = []
 		self.lsthddfil = []
-		for diimp ,dircod, hdddir in alldir:
-			#print(diimp, dircod, hdddir)
-			idr = hdddir.replace('..', MAP)
-			for ifil in os.listdir(idr):
-				if '.py' in ifil:
-					if ifil.rstrip('.py') not in allprgnm and ifil != '__init__.py' and ifil != 'PAui.py' :
-						#notlsthndlr.append(ifil)
-						child2 = self.DVC1.AppendItem(self.root5, ifil)
-						self.DVC1.SetItemText(child2, 0, ifil)
-						self.DVC1.SetItemText(child2, 1, dircod[:2]+'??')
-						self.lsthddfil.append(idr + '\\' + ifil)
-
 		#print(inlsthndlr)
 		for pro in self.my_data:
 			if os.path.isfile(MAP + pro[8][2:] + SLASH + pro[1] + '.py'):
@@ -355,12 +344,33 @@ class MyPanel1 ( wx.Panel ):
 					child2 = self.DVC1.AppendItem(child, atimp)
 					self.DVC1.SetItemText(child2, 0, atimp)
 					self.DVC1.SetItemText(child2, 1, '7777')
+					inlstimport.append(atimp+'.py')
 				if af.ishasfromim(' . '):
 					atimp = af.ishasfromim(' . ')[0].split(' ')[3]
 					subimp.append(atimp)
 					child3 = self.DVC1.AppendItem(child, atimp)
 					self.DVC1.SetItemText(child3, 0, atimp)
 					self.DVC1.SetItemText(child3, 1, '7777')
+					inlstimport.append(atimp+'.py')
+
+		for diimp ,dircod, hdddir in alldir:
+			#print(diimp, dircod, hdddir)
+			idr = hdddir.replace('..', MAP)
+			if dircod == '2222':
+				for ifil in os.listdir(idr):
+					if '.py' in ifil:
+						if ifil.rstrip('.py') not in allprgnm and ifil != '__init__.py':
+							child2 = self.DVC1.AppendItem(self.root0, ifil)
+							self.DVC1.SetItemText(child2, 0, ifil)
+							self.DVC1.SetItemText(child2, 1, '2222')
+			else:
+				for ifil in os.listdir(idr):
+					if '.py' in ifil and ifil not in inlstimport:
+						if ifil.rstrip('.py') not in allprgnm and ifil != '__init__.py' and ifil != 'PAui.py' :
+							child2 = self.DVC1.AppendItem(self.root5, ifil)
+							self.DVC1.SetItemText(child2, 0, ifil)
+							self.DVC1.SetItemText(child2, 1, dircod[:2]+'??')
+							self.lsthddfil.append(idr + '\\' + ifil)
 
 		if len(self.FTF) > 0:
 			fitm = self.DVC1.GetFirstItem()
@@ -567,7 +577,7 @@ class MyPanel1 ( wx.Panel ):
 		itm = self.DVC1.GetSelection()
 		txt = self.DVC1.GetItemText(itm, 0)
 		cod = self.DVC1.GetItemText(itm, 1)
-		if cod == '????':
+		if cod[2:] == '??':
 			wx.MessageBox(_(u'Please first Generate program then select the correct one to use it'))
 		#print(self.FTF)
 		else:

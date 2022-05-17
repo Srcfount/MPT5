@@ -5,9 +5,15 @@
 
 Introduction
 ===========
+This is a new idea for made an application and develop base on GUI and Relation between components,
+you can start work and change for each Time, each Position, each Conditions, with or without other, at your likely style.
+Also you can Test your own code with use own Machine Learning Algorithm codes for own Data and Dataset for own Design.
+All of this project can change in other computer language , other GUI interface , other option and tools and ...
+
 
 Start
 -----
+
 
 Installation
 ------------

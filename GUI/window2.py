@@ -16,6 +16,7 @@
 # import wx.aui
 # import wx.dataview
 from Allimp import *
+import platform
 
 import GUI.MainMenu2 as MM
 import GUI.MainTool as MT
@@ -41,14 +42,11 @@ class MainWin(wx.Frame):
         self.SetLabel(label)
         #self.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_BACKGROUND))
         self.newmenu = True
-        fntis = self.config.Read(u'Font').split(',')
 
-        if fntis[4] == 'True':
-            undr = True
-        else:
-            undr = False
-        ifont = wx.Font(int(fntis[0]), int(fntis[1]), int(fntis[2]), int(fntis[3]), undr, faceName=fntis[5])
-        self.SetFont(ifont)
+        if platform.system() == 'Windows':
+            fntis = self.config.Read(u'Font').split(',')
+            ifont = wx.Font(int(fntis[0]), int(fntis[1]), int(fntis[2]), int(fntis[3]), eval(fntis[4]), faceName=fntis[5])
+            self.SetFont(ifont)
 
         self.SetSizeHints(wx.DefaultSize, wx.DefaultSize)
         self.m_mgr = wx.aui.AuiManager()
@@ -109,7 +107,8 @@ class MainWin(wx.Frame):
         self.Centre(wx.BOTH)
 
     def __del__(self):
-        self.m_mgr.UnInit()
+        if platform.system() == 'windows':
+            self.m_mgr.UnInit()
 
     def OnClose(self, event):
         if 'timer' in dir(self):

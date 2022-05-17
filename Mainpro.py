@@ -33,7 +33,7 @@ class mainApp(wx.App):
                 SIZE = (wx.GetDisplaySize()[0],wx.GetDisplaySize()[1]-30)
             frame.SetSize(SIZE)
             frame.SetPosition((0,0))
-            frame.EnableFullScreenView(True)
+            #frame.EnableFullScreenView(True)
             frame.Show()
         return True
 

@@ -6,8 +6,14 @@
 ##
 ## PLEASE DO *NOT* EDIT THIS FILE!
 ###########################################################################
+import datetime
 import os
-
+import shutil
+import zipfile
+import zipimport
+import tarfile
+import requests
+#import cv2
 import wx
 import wx.xrc
 import wx.dataview
@@ -100,19 +106,19 @@ class MyPanel1 ( wx.Panel ):
 
 		self.btn5 = wx.BitmapButton( self.P1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0 )
 		#self.btn5.SetBitmap(wx.Bitmap(ICON16_PATH + u'update.png', wx.BITMAP_TYPE_ANY))
-		self.btn5.SetBitmap(icon.update.GetBitmap())
+		self.btn5.SetBitmap(icon.application_get.GetBitmap())
 		self.btn5.SetToolTip(_(u"Upload"))
 		Hsz3.Add( self.btn5, 0, wx.ALL, 5 )
 
 		self.btn6 = wx.BitmapButton( self.P1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0 )
 		#self.btn6.SetBitmap(wx.Bitmap(ICON16_PATH + u'application_put.png', wx.BITMAP_TYPE_ANY))
-		self.btn6.SetBitmap(icon.application_put.GetBitmap())
+		self.btn6.SetBitmap(icon.accept_button.GetBitmap())
 		self.btn6.SetToolTip(_(u"Apply"))
 		Hsz3.Add( self.btn6, 0, wx.ALL, 5 )
 
 		self.btn7 = wx.BitmapButton( self.P1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0 )
 		#self.btn7.SetBitmap(wx.Bitmap(ICON16_PATH + u'application_lightning.png', wx.BITMAP_TYPE_ANY))
-		self.btn7.SetBitmap(icon.application_lightning.GetBitmap())
+		self.btn7.SetBitmap(icon.lightning.GetBitmap())
 		self.btn7.SetToolTip(_(u"Generate"))
 		Hsz3.Add( self.btn7, 0, wx.ALL, 5 )
 
@@ -133,7 +139,7 @@ class MyPanel1 ( wx.Panel ):
 
 		Hsz11 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.Descr = wx.TextCtrl( self.P2, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.HSCROLL|wx.TE_MULTILINE )
+		self.Descr = wx.TextCtrl( self.P2, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_MULTILINE )
 		Hsz11.Add( self.Descr, 1, wx.ALL|wx.EXPAND, 5 )
 
 
@@ -192,7 +198,7 @@ class MyPanel1 ( wx.Panel ):
 
 		Hsz16.Add( self.lbl3, 0, wx.ALL, 5 )
 
-		self.msag = wx.TextCtrl( self.P2, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_BESTWRAP|wx.TE_MULTILINE )
+		self.msag = wx.TextCtrl( self.P2, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_MULTILINE )
 		Hsz16.Add( self.msag, 1, wx.ALL|wx.EXPAND, 5 )
 
 
@@ -210,6 +216,9 @@ class MyPanel1 ( wx.Panel ):
 
 		self.SetSizer( Vsz1 )
 		self.Layout()
+
+		self.listfilezip = []
+		self.infopacktxt = []
 
 		# Connect Events
 		self.TLC1.Bind(wx.dataview.EVT_DATAVIEW_SELECTION_CHANGED, self.slctitm, id=wx.ID_ANY)
@@ -236,16 +245,16 @@ class MyPanel1 ( wx.Panel ):
 	def filllist(self):
 
 		Aroot = self.TLC1.GetRootItem()
-		self.root1 = self.TLC1.AppendItem(Aroot, "Free Programs you can Download")
-		self.root2 = self.TLC1.AppendItem(Aroot, "Programs in your Account")
-		self.root3 = self.TLC1.AppendItem(Aroot, "Programs you Upload for sell")
-		self.root4 = self.TLC1.AppendItem(Aroot, "Ziped Programs you downloaded")
+		self.root1 = self.TLC1.AppendItem(Aroot, "Programs you can Download")
+		#self.root2 = self.TLC1.AppendItem(Aroot, "Programs in your Account")
+		self.root3 = self.TLC1.AppendItem(Aroot, "Programs that you Upload ")
+		self.root4 = self.TLC1.AppendItem(Aroot, "Unpacked downloaded Programs")
 		#self.root5 = self.TLC1.AppendItem(Aroot, "Programs file in your HDD ")
 
 
-		dirct = ['Free','Account','Uploads','Downloads']
+		dirct = ['Downloads','Uploads','Account']
 		#roots = [self.root1,self.root2,self.root3,self.root4]
-		roots = [self.root1, self.root2, self.root3, self.root4]
+		roots = [self.root1,  self.root3, self.root4]
 		i=0
 		for d in dirct:
 			mylist = os.listdir(UTILITY_PATH+d+'\\')
@@ -256,26 +265,11 @@ class MyPanel1 ( wx.Panel ):
 					self.TLC1.SetItemText(mychld,0,myfil)
 					self.TLC1.SetItemText(mychld,1,'>>>')
 			i += 1
-		# dirdt2 = ['API','AUI','GUI','MLA','MLP','PRG']
-		# dcods = {'API':6122,'AUI':6155,'PRG':6111,'GUI':6177,'MLA':6133,'MLP':6144}
-		# for d in dirdt2:
-		# 	mylist = os.listdir(UTILITY_PATH+'Fount\\'+d+'\\')
-		# 	mychild = self.TLC1.AppendItem(self.root5, 'HardDisk')
-		# 	self.TLC1.SetItemText(mychild, 0, d)
-		# 	self.TLC1.SetItemText(mychild,1,str(dcods[d])[-3:])
-		# 	for file in mylist:
-		# 		if file != '__init__.py':
-		# 			#myfile = file #file.replace(UTILITY_PATH+'Fount\\'+d+'\\','')
-		# 			#mychild = self.TLC1.AppendItem(self.root5, 'HardDisk')
-		# 			child2 = self.TLC1.AppendItem(mychild, d)
-		# 			self.TLC1.SetItemText(child2,0,file)
-		# 			self.TLC1.SetItemText(child2,1,str(dcods[d]))
-
 
 	def fillfilds(self, Data):
 		self.Descr.SetValue(Data[0])
-		self.fld1.SetValue(Data[1])
-		self.dir2.SetPath(Data[2])
+		#self.fld1.SetValue(Data[1])
+		self.dir2.SetPath(Data[1])
 		self.Refresh()
 		self.Layout()
 
@@ -288,39 +282,28 @@ class MyPanel1 ( wx.Panel ):
 		cod = self.TLC1.GetItemText(itm, 1)
 		par = self.TLC1.GetItemParent(itm)
 		rot = self.TLC1.GetItemText(par, 0)
-		#print(txt,cod,rot)
-		if txt == 'API':
-			Discrpt = "This group of program is very simple \n only for item that no need GUI frame or panel"
-			Pathsrc = Src_api
-		elif txt == 'AUI':
-			Discrpt = "This group of program for Aui Pane file\n That you can use in application "
-			Pathsrc = Src_aui
-		elif txt == 'GUI':
-			Discrpt = "This group of program only a designed Panel \n they used by other program in PRG source"
-			Pathsrc = Src_gui
-		elif txt == 'PRG':
-			Discrpt = "This group of program run by menu item in app \n each menubar has a same subdirectory you create it"
-			Pathsrc = Src_prg
-		elif txt == 'MLA':
-			Discrpt = "This group of program is for Machine Learning Algorithm\n you can use it in MLA part that use by MLP"
-			Pathsrc = Src_mla
-		elif txt == 'MLP':
-			Discrpt = "Machine learning Panel has Design for Algorithm \n You can see help document for how to use it "
-			Pathsrc = Src_mlp
+		#print(txt)
+		if 'Download' in txt:
+			Discrpt = "Programs you download from Site in to your HardDisk"
+			Pathsrc = UTILITY_PATH+'Downloads'
+		elif 'Upload' in txt:
+			Discrpt = "Programs that you Upload to your Account for Sell"
+			Pathsrc = UTILITY_PATH+'Uploads'
+		elif 'Unpacked' in txt:
+			Discrpt = "Unpacked program that download from Site and see files in it"
+			Pathsrc = UTILITY_PATH+'Account'
+
 		else:
-			Discrpt = ""
-			Pathsrc = ""
+		 	Discrpt = ""
+		 	Pathsrc = ""
 
-
-		D = [Discrpt,'',Pathsrc]
+		D = [Discrpt,Pathsrc]
 		self.fillfilds(D)
 		if '.py' in txt:
 			self.thsfile = UTILITY_PATH+'Fount\\'+rot+SLASH+txt
 		else:
 			self.thsfile = ''
 		#print(self.thsfile)
-
-
 
 	def consrv( self, event ):
 		import socket
@@ -338,42 +321,195 @@ class MyPanel1 ( wx.Panel ):
 		# default port for socket
 		port = 80
 		try:
-			host_ip = socket.gethostbyname('srcfount.pythonanywhere.com')
+			self.host_ip = socket.gethostbyname('srcfount.pythonanywhere.com')
 		except socket.gaierror:
 			# this means could not resolve the host
 			print("there was an error resolving the host")
 		# connecting to the server
-		print(host_ip)
-		s.connect((host_ip, port))
+		print(self.host_ip)
+		s.connect((self.host_ip, port))
 		print("the socket has successfully connected ")
 
-
 	def addit( self, event ):
+		def addzip(izipname,chld2):
+			thsfil,pthcod = self.slctfil()
+			if thsfil == '':
+				wx.MessageBox(_(" The file is in Zip file Please select new file!"))
+			elif thsfil == -1:
+				wx.MessageBox(_("Only file in Src Directory execpt DBF send to zip file"))
+			else:
+				self.listfilezip.append(thsfil)
+				self.add2zip(izipname, chld2,str(pthcod) )
 
+		itm = self.TLC1.GetSelection()
+		if itm.IsOk() :
+			txt = self.TLC1.GetItemText(itm, 0)
+		else:
+			txt = ''
+		#print(txt)
+
+		if 'Upload' in txt:
+			ischld =  self.TLC1.GetNextItem(itm)
+			if 'download' in self.TLC1.GetItemText(ischld, 0):
+				addtim = datetime.datetime.now().isoformat(timespec='minutes').replace(':','_').replace('-','_')
+				izipname = 'packzip'+addtim+'.tm5'
+				chld2 = self.TLC1.AppendItem(self.root3,izipname)
+				self.TLC1.SetItemText(chld2,0,izipname)
+				self.TLC1.SetItemText(chld2,1,'6666')
+				addzip(izipname,chld2)
+			else:
+				if 'packzip' in self.TLC1.GetItemText(ischld, 0):
+					izipname = self.TLC1.GetItemText(ischld, 0)
+					chld2 = ischld
+					addzip(izipname,chld2)
+		else:
+			ischld = self.TLC1.GetNextItem(itm)
+			if 'packzip' in txt:
+				izipname = self.TLC1.GetItemText(ischld, 0)
+				chld2 = self.TLC1.GetSelection()
+				addzip(izipname,chld2)
+				#print(self.TLC1.GetItemText(itm, 0))
+		#print(self.listfilezip)
+		#self.add2zip(izipname,chld2)
 		event.Skip()
 
-	def editit( self, event ):
+	def slctfil(self):
+		dlg = wx.FileDialog(self,'Select your Source Code',SRC_PATH,wildcard ='*.*' ,style=wx.FD_DEFAULT_STYLE)
+		dlg.ShowModal()
+		myfile = dlg.GetPath()
+		dlg.Destroy()
+		if myfile in self.listfilezip:
+			return '',''
+		for src in Src_Pth:
+			if src in myfile:
+				self.writinfo(myfile.replace(src,''),Src_Dir[Src_Pth[src]],Src_Pth[src],str(os.stat(myfile).st_size))
+				return myfile,Src_Dir[Src_Pth[src]]
+		return -1,-1
 
+	def writinfo(self, file, code,titl,size):
+		if SLASH in file:
+			file = file.split(SLASH)[-1]
+		self.infopacktxt.append((titl,str(code),file,size))
+
+	def editit( self, event ):
+		itm = self.TLC1.GetSelection()
+		txt = self.TLC1.GetItemText(itm, 0)
+		cod = self.TLC1.GetItemText(itm, 1)
+		#print(txt,cod)
+		if cod != '' and cod.isdigit() and cod != '6666':
+			myindx = iter(self.infopacktxt)
+			for i in range(len(self.infopacktxt)):
+				if txt in next(myindx):
+					#print(i)
+					self.infopacktxt.remove(self.infopacktxt[i])
+					for i, v in enumerate(self.listfilezip):
+						if txt in v:
+							self.listfilezip.remove(self.listfilezip[i])
+					thsfil, pthcod = self.slctfil()
+					self.ins2zip( itm,thsfil,str(pthcod) )
+					self.listfilezip.append(thsfil)
+		#else:
+		#	print('Not this')
+		#print(self.infopacktxt)
+		#print(self.listfilezip)
 		event.Skip()
 
 	def delit( self, event ):
+		itm = self.TLC1.GetSelection()
+		txt = self.TLC1.GetItemText(itm, 0)
+		cod = self.TLC1.GetItemText(itm, 1)
+		#print(txt, cod)
+		if cod != '' and cod.isdigit() and cod != '6666':
+			for indx,item in enumerate(self.infopacktxt):
+				if txt in item:
+					#print(indx)
+					self.infopacktxt.remove(item)
+					self.del2zip(itm)
+					for i, v in enumerate(self.listfilezip):
+						if txt in v:
+							self.listfilezip.remove(self.listfilezip[i])
 
+		#print(self.infopacktxt)
+		#print(self.listfilezip)
 		event.Skip()
 
 	def prw( self, event ):
 		event.Skip()
 
 	def upd( self, event ):
+		txt = self.TLC1.GetItemText(self.TLC1.GetSelection(), 0)
+		rot = self.TLC1.GetItemParent(self.TLC1.GetSelection())
+		roottxt = self.TLC1.GetItemText(rot, 0)
+		if 'packzip' in txt:
+			with open(UTILITY_PATH+'Uploads'+SLASH+txt,'rb') as f:
+				url = "http://SrcFount.pythonanywhere.com"
+
+				tstpos = requests.post(self.host_ip,data=f) #,files = {"UPLOAD_FOLDER": f})
+			if tstpos.ok:
+				self.msag.write("Upload completed successfully!")
+				self.msag.write(tstpos.text)
+			else:
+				self.msag.write("Something went wrong!")
+
+
+
 		event.Skip()
 
 	def aply( self, event ):
 		event.Skip()
 
 	def gnrt( self, event ):
+
+		txt = self.TLC1.GetItemText(self.TLC1.GetSelection(),0)
+		rot = self.TLC1.GetItemParent(self.TLC1.GetSelection())
+		roottxt = self.TLC1.GetItemText(rot,0)
+		if 'packzip' in txt and 'Upload' in roottxt:
+			with open(TEMPS_PATH + 'infopack.sfn', 'a', encoding='utf-8') as f:
+				for t in self.infopacktxt:
+					f.write(t[0]+','+t[1]+','+t[2]+','+t[3]+'\n')
+
+			for fil in self.listfilezip:
+				shutil.copy(fil, TEMPS_PATH)
+
+			with zipfile.ZipFile(UTILITY_PATH+'Uploads'+SLASH+txt,'w', compression=zipfile.ZIP_DEFLATED) as zp:
+				self.zipdir(TEMPS_PATH, zp)
+
+			for zf in os.listdir(TEMPS_PATH):
+				if os.path.isfile(TEMPS_PATH+zf):
+					os.unlink(TEMPS_PATH+zf)
+
+			self.TLC1.DeleteAllItems()
+			self.filllist()
+			self.Refresh()
+
+
 		event.Skip()
 
+	def zipdir(self, path, ziph):
+		# ziph is zipfile handle
+		for root, dirs, files in os.walk(path):
+			for file in files:
+				ziph.write(path+file,file)
 	# def mnuid( self, event ):
 	# 	event.Skip()
+	def add2zip(self,zipname,child,pathcod):
+		#print(self.listfilezip)
+		SP1 = {v: k for k, v in Src_Pth.items()}
+		SD1 = {v: k for k, v in Src_Dir.items()}
+
+		chld3 = self.TLC1.AppendItem(child,zipname)
+		self.TLC1.SetItemText(chld3,0,self.listfilezip[-1].replace(SP1[SD1[int(pathcod)]],''))
+		self.TLC1.SetItemText(chld3,1,pathcod)
+
+	def ins2zip(self, itm, filname, pathcod):
+		SP1 = {v: k for k, v in Src_Pth.items()}
+		SD1 = {v: k for k, v in Src_Dir.items()}
+
+		self.TLC1.SetItemText(itm, 0, filname.replace(SP1[SD1[int(pathcod)]],''))
+		self.TLC1.SetItemText(itm, 1, pathcod)
+
+	def del2zip(self, itm):
+		self.TLC1.DeleteItem(itm)
 
 	def thsdir( self, event ):
 		event.Skip()
@@ -382,6 +518,28 @@ class MyPanel1 ( wx.Panel ):
 		event.Skip()
 
 	def extrc(self, event):
+		txt = self.TLC1.GetItemText(self.TLC1.GetSelection(), 0)
+		rot = self.TLC1.GetItemParent(self.TLC1.GetSelection())
+		roottxt = self.TLC1.GetItemText(rot, 0)
+		msg = ''
+		if 'Unpacked' in roottxt:
+			print(txt)
+			with zipfile.ZipFile(UTILITY_PATH+'Account'+SLASH+txt,'r') as fz:
+				#fz.printdir()
+				fz.extract('infopack.sfn',TEMPS_PATH)
+			with open(TEMPS_PATH+'infopack.sfn','r') as f:
+				lstfil = f.readlines()
+			for fl in lstfil:
+				finfo = fl.split(',')
+				msg += 'Copy file Src/%s [%s] zise %s'%(finfo[0]+'/'+finfo[2],finfo[1],finfo[3])
+				self.msag.SetValue(msg)
+				with zipfile.ZipFile(UTILITY_PATH + 'Account' + SLASH + txt, 'r') as fz:
+					fz.extract(finfo[2],TEMPS_PATH)
+
+				#shutil.copy(TEMPS_PATH+fl,)
+
+
+
 		event.Skip()
 
 	# def chkdon( self, event ):

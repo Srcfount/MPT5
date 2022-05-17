@@ -14,6 +14,7 @@ import wx.adv
 import wx.propgrid as pg
 import os
 import sys
+import platform
 import Database.MenuSet2 as MS
 from Config.Init import *
 import Res.Allicons as icon
@@ -124,14 +125,11 @@ class MyPanel1 ( wx.Panel ):
 
         mw = wx.GetTopLevelWindows()
 
-        fntis = self.config.Read(u'Font').split(',')
-        #print(fntis)
-        if fntis[4] == 'True':
-            undr = True
+        if platform.system() == 'Windows':
+            fntis = self.config.Read(u'Font').split(',')
+            ifont = wx.Font(int(fntis[0]),int(fntis[1]),int(fntis[2]),int(fntis[3]),eval(fntis[4]),faceName=fntis[5])
         else:
-            undr = False
-
-        ifont = wx.Font(int(fntis[0]),int(fntis[1]),int(fntis[2]),int(fntis[3]),undr,faceName=fntis[5])
+            ifont = wx.Font()
 
 
         conflst = {u"General properties":[(u'Enum',u"Language", u"Language",u"",language,lan,int(self.config.Read("Language")) ),

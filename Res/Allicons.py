@@ -135,6 +135,23 @@ application_put = PyEmbeddedImage(
 
 #-----------------------------------------------------------------------------------------------------
 
+application_get = PyEmbeddedImage(
+    b'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9i'
+    b'ZSBJbWFnZVJlYWR5ccllPAAAAiNJREFUeNqUUk1IVFEYPfe+O/PuPCefk0GLIFtMuW1VtOiP'
+    b'UILQInARRUUbC4oWRQsJJ6MGAmE2QrgJN61qo2KKjVazCBJJIlCmRUTkokULsVKb99O5b3xp'
+    b'RakXDt+73HfOPfd8n3A7hwa0slrCMMRGlhACi54/qAz5Tuse+EEAuU5yQFhS4ubARIvySKzX'
+    b'CtdHP0JRQaxBNj49KnQ3b4fhUiBERifQuCUNSxhrawhQwScMx3BVhWqHGjTRgI0uw1XBcngz'
+    b'M9O0J6Jw/oiLzhJIKBtSKGblwfcXsLMxCxqAin9L6RRCIf9K2pJJaFWL7mfHMVouomnXEdw4'
+    b'3L8sLVaC1xTQWv9CSjtIO7XIbNqKwos2+JUiRq4+Zh1DodQWcSTFJcJYIAnbjmHDcRy46Trc'
+    b'e3oCS94TXGzqwfPpK7jU3IMf3jDuF89QIAMVj4+2dZRu1bpF2zZu9bdiwR/EuYMdGCtfjs5M'
+    b'Pcv9o4k8ssnPKxlobUdtqVpTBDBP8ql9pzH5KQ+6jVpoMp6czePk3vNwdB9nJw5dWtEgrV7j'
+    b'b4FX5YcRqXChHVOzvdi9rR3XHvSyK310SVrC+vcAv7kb4mWOw0KBefkOsqZaDWW8g2eLr/mE'
+    b'73MlNzd8oOIHCMLfWyjZf8jN2J8Cluz3SLrV6vDmuq4phF/LJfOALOH+b+KOdqJL1OCYucA8'
+    b'OfyGoZHbyPFoTqxzancQ9av2X4gP5uOnAAMA9ZixG4ZCuckAAAAASUVORK5CYII=')
+
+
+#-----------------------------------------------------------------------------------------------------
+
 brain_trainer = PyEmbeddedImage(
     b'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9i'
     b'ZSBJbWFnZVJlYWR5ccllPAAAApZJREFUeNp0U1tIVFEUXefOmXGcUccZn4iPMbHyUWYiFlKp'

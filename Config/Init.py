@@ -72,6 +72,8 @@ Src_mla = os.path.join(SRC_PATH,opj(u'MLA')+SLASH)
 Src_mlp = os.path.join(SRC_PATH,opj(u'MLP')+SLASH)
 Src_prg = os.path.join(SRC_PATH,opj(u'PRG')+SLASH)
 
+Src_Dir = {'PRG':6111,'API':6122,'MLA':6133,'MLP':6144,'AUI':6155,'DBF':6166,'GUI':6177}
+Src_Pth = {Src_prg:'PRG',Src_api:'API',Src_mla:'MLA',Src_mlp:'MLP',Src_aui:'AUI',Src_dbf:'DBF',Src_gui:'GUI'}
 
 ####  List of language to use in application
 LANGUAGE_LIST = {1:"English",2:"Farsi",3:"French",4:"German",5:"Spanish",6:"Turkish"}
