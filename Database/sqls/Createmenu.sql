@@ -86,7 +86,7 @@ INSERT INTO `handler` (handlerid,prgname,prgdir,paramtr,public,prgno) VALUES
  (99004,'TPv1','9999','-1',-1,4),
  (99003,'MLv1','9999','-1',-1,3),
  (99002,'PPv1','9999','-1',-1,2),
- (10000,'Demo','1000','-1',-1,1),
+ --(10000,'Demo','1000','-1',-1,1),
  (99000,'Demo','8888','-1',-1,0);
 
 CREATE TABLE `grpitem` (
@@ -151,14 +151,13 @@ CREATE TABLE "Guidir" (
 
 INSERT INTO `Guidir` (Dir,prgdir,hdddir) VALUES
  ('GUI.Main','9999','..\GUI\Main'),
- --('GUI.AuiPanel','5000','..\GUI\AuiPanel'),
  ('GUI.Temp','8888','..\GUI\Temp'),
+ ('Src.GUI','7777','..\Src\GUI'),
  ('Utility','6666','..\Utility'),
- --('GUI.MLPane','4000','..\GUI\MLPane'),
- ('Src.api','7777','..\Src\API'),
- ('Src.prg.','1000','..\Src\PRG\'),
--- ('Src.prg.File','1011','..\Src\PRG\File'),
+ ('Src.AUI','5555','..\Src\AUI'),
  ('Src.MLP','4444','..\Src\MLP'),
- ('Src.AUI','5555','..\Src\AUI');
-
+ ('Src.MLA','3333','..\Src\MLA'),
+ ('Src.API','2222','..\Src\API'),
+ ('Src.PRG.','1000','..\Src\PRG\')
+ ;
 COMMIT;
