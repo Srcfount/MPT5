@@ -1280,6 +1280,8 @@ class MyPanel3 ( wx.Panel ):
 
 		    #print(mydir)
 		    GenrDemo(mydir)
+		    if not os.path.isfile(Src_gui+u"SamPnl.py"):
+			    shutil.copy(GUI_PATH+'API'+SLASH+'SamPnl.py',Src_gui)
 		    self.SetMenu.Table = u'menubar'
 		    self.SetMenu.Additem(u'mbarid , mbarname , mbardir ,  acclvlid ', (data2,data1,dircod,data3))
 		    data4 = self.box1val
