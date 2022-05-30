@@ -20,8 +20,11 @@ Installation
 
 Appearance of the application
 -----------------------------
+
 ---------------------
   * Menu and Menubar
+     you can create , edit and delete ![Menu Bar](docs/Help/MenuBar.md) and ![Menu Item](docs/Help/MenuItem.md)
+     Also you can Create ![Sub Menu](docs/Help/SubMenu.md) as same as Menu Item 
 ---------------------
   
   * Toolbar

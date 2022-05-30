@@ -166,9 +166,9 @@ class GetData:
         return sq.wxsqltxt(self.DBF,""" select distinct mitem.mbarid , mitem.itemid , mitem.extid , extended.acclvlid 
                                     from mitem left Join extended on mitem.extid = extended.extid 
                                     where mitem.mbarid/10 = %d or mitem.mbarid / 100 = %d """ %(mitm,mitm))
-    def getHndlr(self, prgnam = u''):
+    def getHndlr(self, prgnam = u'', ext=''):
         return sq.wxsqltxt(self.DBF, """ select handler.handlerid, handler.prgdir 
-                                    from handler     where handler.prgname = '%s'  """ %prgnam)
+                                    from handler     where handler.prgname = '%s'  %s """ %( prgnam,ext ) )
 
     def getHndid(self, mid=''):
         return sq.wxsqltxt(self.DBF, """ select handler.handlerid from handler where handler.prgdir = '%s' 

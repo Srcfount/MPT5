@@ -15,6 +15,8 @@
 # import wx.adv
 # import wx.aui
 # import wx.dataview
+import wx
+
 from Allimp import *
 import platform
 
@@ -102,6 +104,7 @@ class MainWin(wx.Frame):
             self.Bind(wx.EVT_RIGHT_DOWN, self.domouse)
             self.Bind(wx.EVT_CONTEXT_MENU, self.setmenu)
         self.Bind(wx.EVT_CLOSE, self.OnClose)
+        #self.Bind(wx.EVT_UPDATE_UI,self.Refreshwin)
 
         self.m_mgr.Update()
         self.Centre(wx.BOTH)
@@ -284,3 +287,8 @@ class MainWin(wx.Frame):
     def NewToolBar(self):
         self.toolbar = MT.MyToolbar()
         self.SetToolBar()
+
+    def Refreshwin(self):
+        self.Refresh()
+        self.Update()
+        #self.UpdateWindowUI(wx.UPDATE_UI_FROMIDLE)

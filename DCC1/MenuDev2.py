@@ -84,7 +84,7 @@ class MyPanel1 ( wx.Panel ):
 
 		#self.btn4.SetBitmap( wx.Bitmap( ICON16_PATH + u'separator.png', wx.BITMAP_TYPE_ANY ))
 		self.btn4.SetBitmap(icon.separator.GetBitmap())
-		self.btn4.SetToolTip(_(u"Seperator"))
+		self.btn4.SetToolTip(_(u"Separator"))
 		Hsz1.Add( self.btn4, 0, wx.ALL, 5 )
 
 		self.btn5 = wx.BitmapButton( self.P1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0 )
@@ -322,8 +322,6 @@ class MyPanel1 ( wx.Panel ):
 			self.chk2.SetValue(Data)
 
 
-
-
 	def fillnull(self):
 	    self.titr.SetLabel(_(u'MenuBar: '))
 	    self.fld1.SetValue('')
@@ -424,14 +422,16 @@ class MyPanel1 ( wx.Panel ):
 
 	def slcchng( self, event ):
 		ps = self.DVC1.GetSelections()
-		self.itmcod = self.DVC1.GetItemText(ps[0], 0)
-		#print(self.itmcod)
-		self.fillflds(int(self.itmcod))
+		if len(ps) > 0:
+			self.itmcod = self.DVC1.GetItemText(ps[0], 0)
+			#print(self.itmcod)
+			self.fillflds(int(self.itmcod))
 		event.Skip()
 
 	def fillflds(self, code):
 		self.fillnull()
 		if code < 1000 and code % 10 == 1:
+			self.disableall(0)
 			#self.bardata = data = self.MyMenu.AmenuBar(Access=u'' ,ext=u'and mbarid = %d' %code)[0]
 			self.bardata = data = self.MyMenu.AllBar( ext=u'left join access on menubar.acclvlid = access.acclvlid\
 			                                          where  mbarid = %d order by menubar.mbarid' % code)[0]
@@ -445,9 +445,9 @@ class MyPanel1 ( wx.Panel ):
 			self.icon1.SetBitmap(icon.image.GetBitmap())
 			self.fld4.SetValue('')
 			self.fld6.SetValue('')
-			mydir = self.MyMenu.GetDirCod(data[2])[0][0]
+			self.mydir = self.MyMenu.GetDirCod(data[2])[0][0]
 			#print(mydir)
-			self.lbl9.SetLabel(_('Directory: ')+mydir)
+			self.lbl9.SetLabel(_('Directory: ')+self.mydir)
 			if data[7] != 1:
 				self.chk1.SetValue(1)
 			else:
@@ -502,9 +502,9 @@ class MyPanel1 ( wx.Panel ):
 				self.ControlHide(1,0)
 
 			if data[17] != None:
-				mydir = self.MyMenu.GetDirCod(data[19])[0][0]
+				self.mydir = self.MyMenu.GetDirCod(data[19])[0][0]
 				self.prgfld.SetValue(data[18])
-				self.lbl9.SetLabel(_('Directory: ')+mydir)
+				self.lbl9.SetLabel(_('Directory: ')+self.mydir)
 
 
 	def addit( self, event ):
@@ -536,7 +536,7 @@ class MyPanel1 ( wx.Panel ):
 		#self.chk2.SetValue(0)
 		self.ControlHide(0,0)
 		self.prgfld.SetValue('')
-		self.lbl9.SetLabel(_('Directory: '))
+		self.lbl9.SetLabel(_('Directory: ')+self.mydir)
 		event.Skip()
 
 	def edtit( self, event ):
@@ -547,6 +547,7 @@ class MyPanel1 ( wx.Panel ):
 		U = self.getfild()
 		#print(U)
 		#print(self.prgfld.GetValue())
+		#print(self.mydir,self.lbl9.GetLabel().split(_('Directory: '))[1],self.bardata[2],self.bardata[17])
 		hnd = self.prgfld.GetValue().replace('.py', '')
 		Hndlid = self.findhandler(hnd)
 
@@ -573,26 +574,29 @@ class MyPanel1 ( wx.Panel ):
 
 	def delit( self, event ):
 		#print('del it',self.itmcod)
-		myitmdel = self.MyMenu.getmItem(int(self.itmcod))[0]
-		#print(myitmdel)
-		if myitmdel[3] == 'S' and self.MyMenu.gBarItm(int(myitmdel[1])) != []:
-			wx.MessageBox(_('Please remove the sub menu item first!'))
+		if int(self.itmcod) > 1000:
+			myitmdel = self.MyMenu.getmItem(int(self.itmcod))[0]
+		    #print(myitmdel)
+			if myitmdel[3] == 'S' and self.MyMenu.gBarItm(int(myitmdel[1])) != []:
+				wx.MessageBox(_('Please remove the sub menu item first!'))
+			else:
+			    self.DoMenu.Table = u'mitem'
+			    self.DoMenu.Delitem(u'mitem.itemid = %d' % myitmdel[1])
+
+			    self.DoMenu.Table = u'extended'
+			    self.DoMenu.Delitem(u'extended.extid = "%s"' % myitmdel[4])
+
+			    self.DoMenu.Table = u'access'
+			    self.DoMenu.Delitem(u'access.acclvlid = "%s"' % myitmdel[11])
+
+			    self.delmenu()
+
+			    self.DVC1.DeleteAllItems()
+			    self.fillList()
+			    self.Refresh()
+			    self.Layout()
 		else:
-			self.DoMenu.Table = u'mitem'
-			self.DoMenu.Delitem(u'mitem.itemid = %d' % myitmdel[1])
-
-			self.DoMenu.Table = u'extended'
-			self.DoMenu.Delitem(u'extended.extid = "%s"' % myitmdel[4])
-
-			self.DoMenu.Table = u'access'
-			self.DoMenu.Delitem(u'access.acclvlid = "%s"' % myitmdel[11])
-
-			self.delmenu()
-
-			self.DVC1.DeleteAllItems()
-			self.fillList()
-			self.Refresh()
-			self.Layout()
+			wx.MessageBox(_("Please use Delete Menu Bar with right click on mouse"))
 
 		event.Skip()
 
@@ -611,7 +615,7 @@ class MyPanel1 ( wx.Panel ):
 
 		mw = self.FindWindowByName('main')
 		mb = mw.GetMenuBar()
-
+		#print(mw,mb)
 		if mb != None:
 			if type(self.bardata[1]) == str:
 				mbr = mb.FindMenu(self.bardata[1])
@@ -619,7 +623,9 @@ class MyPanel1 ( wx.Panel ):
 				mbr = mb._findsubmenu2(self.bardata[2])
 
 			if mw.newmenu:
-				mb.GetMenu(mbr).AppendSeparator()
+				#print(mbr)
+				mbr.AppendSeparator()
+				#mb.GetMenu(mbr).AppendSeparator()
 			else:
 				mb.AddSepar(self.bardata[1])
 		else:
@@ -635,6 +641,9 @@ class MyPanel1 ( wx.Panel ):
 		self.DVC1.DeleteAllItems()
 		self.fillList()
 		self.Refresh()
+		mw = self.FindWindowByName('main')
+		mw.Refreshwin()
+
 		event.Skip()
 
 	def forit( self, event ):
@@ -651,24 +660,27 @@ class MyPanel1 ( wx.Panel ):
 	def aplit( self, event ):
 		D = self.getfild()
 		#print(D, self.newsub, self.newone)
-		if self.newone:
+		#print(self.mydir,self.lbl9.GetLabel().split(_('Directory: '))[1])
+		if self.newone or self.newsub:
 			extid = D[0][0] + D[0][-1] + D[6] + D[2][-1] + D[2][0] + D[0][1:]
-			#print(extid)
-			if self.prgfld.GetValue() == '':
+			if self.prgfld.GetValue() == '' and not self.newsub:
 				hndid = self.findhandler('')
-				#GenrDemo()
+			elif self.prgfld.GetValue() == '' and self.newsub:
+				#print(self.bardata)
+				hndid = self.findhandler('Demo')
 			else:
 				hndid = self.getHandel(self.prgfld.GetValue(), self.lbl9.GetLabel().split(_('Directory: '))[1])
-			if self.newsub:
+			if self.newone :
+				BrM = int(self.itmcod)
+			elif self.newsub :
 				BrM = int(self.itmcod)
 			else:
 				BrM = self.bardata[0]
 
-			Dsri1 = [BrM, int(D[0]), D[2], D[6], extid, hndid]
-			Dsri2 = [extid, D[5], D[3], D[4], D[5], D[1], 1]
-
 			self.Add2Menu(D)
 
+			Dsri1 = [BrM, int(D[0]), D[2], D[6], extid, hndid]
+			Dsri2 = [extid, D[5], D[3], D[4], D[5], D[1], 1]
 			Dsri3 = [D[1], 1, D[8], D[7]]
 			self.DoMenu.Table = u'mitem'
 			self.DoMenu.Additem(u'mbarid, itemid, itemname, itemtyp, extid, handlerid ', Dsri1)
@@ -676,83 +688,31 @@ class MyPanel1 ( wx.Panel ):
 			self.DoMenu.Additem(u'extid, status, icon, shortcut, help, acclvlid, grpid', Dsri2)
 			self.DoMenu.Table = u'access'
 			self.DoMenu.Additem(u'acclvlid, userid, acclvl, disenable', Dsri3)
-			#self.Add2Menu(D)
-			wx.MessageBox(_(u'you successful add menu '))
 
-			self.DVC1.DeleteAllItems()
-			self.fillList()
-			self.Refresh()
+			wx.MessageBox(_(u'you successful add menu '))
 			self.newone = False
-
-		elif self.newsub:
-			extid = D[0][0] + D[0][-1] + D[6] + D[2][-1] + D[2][0] + D[0][1:]
-			# print(extid)
-			if self.prgfld.GetValue() == '':
-				hndid = self.findhandler('')
-			else:
-				hndid = self.getHandel(self.prgfld.GetValue(), self.lbl9.GetLabel().split(_('Directory: '))[1])
-			BrM = int(self.itmcod)
-			Dsri1 = [BrM, int(D[0]), D[2], D[6], extid, hndid]
-			Dsri2 = [extid, D[5], D[3], D[4], D[5], D[1], 1]
-			#print(D[7],D[8])
-
-			self.Add2Menu(D)
-
-			Dsri3 = [D[1], 1, D[8], D[7]]
-			self.DoMenu.Table = u'mitem'
-			self.DoMenu.Additem(u'mbarid, itemid, itemname, itemtyp, extid, handlerid ', Dsri1)
-			self.DoMenu.Table = u'extended'
-			self.DoMenu.Additem(u'extid, status, icon, shortcut, help, acclvlid, grpid', Dsri2)
-			self.DoMenu.Table = u'access'
-			self.DoMenu.Additem(u'acclvlid, userid, acclvl, disenable', Dsri3)
-			#self.Add2Menu(D)
-			wx.MessageBox(_(u'you successful add menu '))
-
-			self.DVC1.DeleteAllItems()
-			self.fillList()
-			self.Refresh()
 		else:
 			wx.MessageBox(_(u'Please Use Edit icon or first Add item'))
 
+
+		self.DVC1.DeleteAllItems()
+		self.fillList()
+		self.Refresh()
+
+		mw = self.FindWindowByName('main')
+		mw.Refreshwin()
 		event.Skip()
 
 	def disableall(self,Do):
+		#print(self.P2.GetChildren())
 		if Do:
-			self.titr.Disable()
-			self.fld1.Disable()
-			self.fld2.Disable()
-			self.fld3.Disable()
-			self.iconfile.Disable()
-			self.icon1.Disable()
-			self.fld4.Disable()
-			self.fld6.Disable()
-			self.rdio1.Disable()
-			self.rdio2.Disable()
-			self.rdio3.Disable()
-			self.rdio4.Disable()
-			self.chk1.Disable()
-			#self.chk2.Disable()
-			self.ControlHide(0,1)
-			self.prgfld.Disable()
-			self.lbl9.Disable()
+			for chld in self.P2.GetChildren():
+				chld.Disable()
+				self.ControlHide(0, 1)
 		else:
-			self.titr.Enable()
-			self.fld1.Enable()
-			self.fld2.Enable()
-			self.fld3.Enable()
-			self.iconfile.Enable()
-			self.icon1.Enable()
-			self.fld4.Enable()
-			self.fld6.Enable()
-			self.rdio1.Enable()
-			self.rdio2.Enable()
-			self.rdio3.Enable()
-			self.rdio4.Enable()
-			self.chk1.Enable()
-			#self.chk2.Enable()
-			self.ControlHide(0,0)
-			self.prgfld.Enable()
-			self.lbl9.Enable()
+			for chld in self.P2.GetChildren():
+				chld.Enable()
+				self.ControlHide(0, 0)
 
 
 	def chkshrtcut(self,Data):
@@ -817,7 +777,7 @@ class MyPanel1 ( wx.Panel ):
 			mitm.SetBitmap(wx.Bitmap(ICONS_MENU+D[3], wx.BITMAP_TYPE_ANY))
 		if D[5] != '':
 			mitm.SetHelp(D[5])
-		mitm.Enable(not D[7])
+		mitm.Enable(D[7])
 
 
 	def delmenu(self):
@@ -872,9 +832,9 @@ class MyPanel1 ( wx.Panel ):
 		event.Skip()
 
 	def icnslct( self, event ):
-		if RES_PATH not in self.iconfile.GetPath():
-			#print(self.iconfile.GetPath())
-			CopyIcon(self.iconfile.GetPath())
+		if ICONS_MENU[1:] not in self.iconfile.GetPath():
+			print(self.iconfile.GetPath(),ICONS_MENU)
+			CopyIcon(self.iconfile.GetPath(),'Menu')
 		self.icon1.SetBitmap(wx.Bitmap(self.iconfile.GetPath(), wx.BITMAP_TYPE_ANY))
 		event.Skip()
 
@@ -930,7 +890,7 @@ class MyPanel1 ( wx.Panel ):
 		event.Skip()
 
 	def getHandel(self, imodel, pathfile):
-		print(imodel,pathfile)
+		#print(imodel,pathfile)
 		pr = self.getMData.AllHndl()
 		# m = imodel.split('.')[1]
 		for p in pr:
@@ -938,11 +898,14 @@ class MyPanel1 ( wx.Panel ):
 				return p[0]
 		return 10000+int(self.bardata[2][1:3])
 
-	def findhandler(self, hndlrnm):
+	def findhandler(self, hndlrnm, prgdir=''):
 		if hndlrnm == '':
 			return 10000+int(self.bardata[2][1:3])
 		else:
-			codid , self.prgdir = self.MyMenu.getHndlr(hndlrnm)[0]
+			if prgdir == '':
+				codid, self.prgdir = self.MyMenu.getHndlr(hndlrnm)[0]
+			else:
+				codid , self.prgdir = self.MyMenu.getHndlr(hndlrnm," and handler.prgdir = '%s' "%prgdir)[0]
 			return codid
 
 	def getfild(self):
@@ -1162,7 +1125,7 @@ class MyPanel3 ( wx.Panel ):
 
         Hsz4.Add((0, 0), 1, wx.EXPAND, 5)
 
-        self.btn1 = wx.Button(self, wx.ID_ANY, _(u"Cancle"), wx.DefaultPosition, wx.DefaultSize, 0)
+        self.btn1 = wx.Button(self, wx.ID_ANY, _(u"Cancel"), wx.DefaultPosition, wx.DefaultSize, 0)
         Hsz4.Add(self.btn1, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
 
         self.btn2 = wx.Button(self, wx.ID_ANY, Buttom, wx.DefaultPosition, wx.DefaultSize, 0)
@@ -1455,8 +1418,13 @@ class MyPanel4 ( wx.Panel ):
 			wx.MessageBox(_("Please selected one item you like to delete it"))
 
 		itexit = self.myMenu.AllBar(" where menubar.mbardir = '%s' "% cl2 )
-		if len(itexit) > 0:
-			wx.MessageBox(" You can not delete this data MenuBar is exist .\n If you want please delete MenuBar first.")
+		hdexit = self.myMenu.AllHndl(" where handler.prgdir = '%s' "% cl2 )
+		if len(itexit) > 0 :
+			wx.MessageBox(_(" You can not delete this Directory, MenuBar is exist .\n If you want please delete MenuBar first."))
+			q = self.GetParent()
+			q.Close()
+		elif  len(hdexit) > 0 :
+			wx.MessageBox(_(" Some program is exist in Hanlder .\n Please remove the programs from the list first and then the directory."))
 			q = self.GetParent()
 			q.Close()
 		else:
@@ -1469,6 +1437,8 @@ class MyPanel4 ( wx.Panel ):
 				wx.MessageBox(_("Your Path in HardDisk is exist you can use it later"))
 			self.doMenu.Table = 'Guidir'
 			self.doMenu.Delitem(" Guidir.prgdir = '%s' and Guidir.Dir = '%s' " % (cl2, cl1))
+			#self.doMenu.Table = 'handler'
+			#self.doMenu.Delitem(" handler.prgdir = '%s' "% cl2)
 			self.DVC1.DeleteAllItems()
 			self.fillist()
 			self.DVC1.Refresh()

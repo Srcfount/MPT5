@@ -122,5 +122,10 @@ def OpenListML():
     #print(MLlst,MLAlg)
     return MLlst,MLAlg
 
-def CopyIcon(iconfile):
-    shutil.copy(iconfile, ICONS_PATH)
+def CopyIcon(iconfile,thssrc=''):
+    if thssrc == 'Menu':
+        shutil.copy(iconfile, ICONS_MENU)
+    elif thssrc == 'Toolbar':
+        shutil.copy(iconfile, ICONS_TOOL)
+    else:
+        shutil.copy(iconfile, ICONS_PATH)

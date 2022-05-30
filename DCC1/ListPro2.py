@@ -333,6 +333,7 @@ class MyPanel1 ( wx.Panel ):
 	def addit( self, event ):
 		def addzip(izipname,chld2):
 			thsfil,pthcod = self.slctfil()
+			#print(thsfil,pthcod)
 			if thsfil == '':
 				wx.MessageBox(_(" The file is in Zip file Please select new file!"))
 			elif thsfil == -1:
@@ -381,8 +382,8 @@ class MyPanel1 ( wx.Panel ):
 		if myfile in self.listfilezip:
 			return '',''
 		for src in Src_Pth:
-			if src in myfile:
-				self.writinfo(myfile.replace(src,''),Src_Dir[Src_Pth[src]],Src_Pth[src],str(os.stat(myfile).st_size))
+			if src.capitalize() in myfile.capitalize():
+				self.writinfo(myfile.capitalize().replace(src.capitalize(),''),Src_Dir[Src_Pth[src]],Src_Pth[src],str(os.stat(myfile).st_size))
 				return myfile,Src_Dir[Src_Pth[src]]
 		return -1,-1
 
@@ -498,7 +499,7 @@ class MyPanel1 ( wx.Panel ):
 		SD1 = {v: k for k, v in Src_Dir.items()}
 
 		chld3 = self.TLC1.AppendItem(child,zipname)
-		self.TLC1.SetItemText(chld3,0,self.listfilezip[-1].replace(SP1[SD1[int(pathcod)]],''))
+		self.TLC1.SetItemText(chld3,0,self.listfilezip[-1].capitalize().replace(SP1[SD1[int(pathcod)]].capitalize(),''))
 		self.TLC1.SetItemText(chld3,1,pathcod)
 
 	def ins2zip(self, itm, filname, pathcod):

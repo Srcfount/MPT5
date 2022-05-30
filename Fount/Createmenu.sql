@@ -59,7 +59,7 @@ INSERT INTO `mitem` (mbarid,itemid,itemname,itemtyp,extid,handlerid) VALUES
  (9999,9994,NULL,NULL,NULL,99004),
  (9999,9993,NULL,NULL,NULL,99003),
  (9999,9992,NULL,NULL,NULL,99002),
- (9999,9990,NULL,NULL,NULL,99000);
+ (9999,9991,NULL,NULL,NULL,99001);
 
 CREATE TABLE "menubar" (
 	`mbarid`	INTEGER,
@@ -87,7 +87,7 @@ INSERT INTO `handler` (handlerid,prgname,prgdir,paramtr,public,prgno) VALUES
  (99003,'MLv1','9999','-1',-1,3),
  (99002,'PPv1','9999','-1',-1,2),
  --(10000,'Demo','1000','-1',-1,1),
- (99000,'Demo','8888','-1',-1,0);
+ (99001,'','9999','-1',-1,1);
 
 CREATE TABLE `grpitem` (
 	`grpid`	INTEGER,
