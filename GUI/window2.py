@@ -38,7 +38,7 @@ class MainWin(wx.Frame):
 
         self.config = wx.GetApp().GetConfig()
 
-        wx.SystemOptions.SetOption("msw.remap", "0")
+        wx.SystemOptions.SetOption("msw.remap", 2)
 
         label = self.config.Read(u'Winname')
         self.SetLabel(label)
@@ -84,7 +84,8 @@ class MainWin(wx.Frame):
                 self.UpdateMenu(self.menu, self.menu.GetMenus())
 
             if self.config.Read('Toolbar') == '1':
-                self.Toolbar()
+                #self.Toolbar()
+                self.ToolBar2()
                 TBBG = self.config.Read("TBGColor").split(',')[1]
                 self.tb.SetBackgroundColour(wx.SystemSettings.GetColour(int(TBBG)))
             elif self.config.Read('Toolbar') == '2':
@@ -205,24 +206,48 @@ class MainWin(wx.Frame):
         win1 = wx.Frame(self, -1)
         a.main(win1)
 
-    def Toolbar(self):
-        #style = wx.TB_BOTTOM|wx.TB_DEFAULT_STYLE|wx.TB_DOCKABLE|wx.TB_FLAT|wx.TB_HORIZONTAL|wx.TB_HORZ_LAYOUT|
-        #wx.TB_HORZ_TEXT|wx.TB_NOALIGN|wx.TB_NODIVIDER|wx.TB_NOICONS|wx.TB_NO_TOOLTIPS|wx.TB_RIGHT|wx.TB_TEXT|wx.TB_VERTICAL
-        self.tb = self.CreateToolBar(wx.TB_HORIZONTAL | wx.NO_BORDER | wx.TB_FLAT|wx.TB_TEXT)
-        Tbd = MT.ToolData()
-        Tbl = Tbd.ToolBarList()
-        #print(Tbl)
-        tsize = (24, 24) #<<<=====use Config
+    def ToolBar2(self):
+        #self.tb = self.CreateToolBar(wx.TB_HORIZONTAL | wx.NO_BORDER | wx.TB_FLAT | wx.TB_TEXT)
+        self.tb = MT.MyToolbar(self,wx.TB_HORIZONTAL | wx.NO_BORDER | wx.TB_FLAT|wx.TB_TEXT)
+        self.tb.data = MT.ToolData()
+        #print(self.tb.data.ToolBarList())
+        tsize = (24, 24)  # <<<=====use Config
         self.tb.SetToolBitmapSize(tsize)
-        for tl in Tbl:
-            for t in Tbl[tl]:
-                if t[1] == '' or t[1] == None:
-                    self.tb.AddSeparator()
-                else:
-                    self.tb.AddTool(t[0], t[1], wx.Bitmap(ICONS_TOOL+t[2],wx.BITMAP_TYPE_ANY), wx.NullBitmap, wx.ITEM_NORMAL, t[1], t[3], None)
-                    self.Bind(wx.EVT_TOOL, self.OnTool, id=t[0])
-            self.tb.AddSeparator()
-        self.tb.Realize()
+        tbdata = self.tb.data.ToolBarList()
+        #print(tbdata)
+        self.tb.CreatTool(tbdata)
+        self.SetToolBar(self.tb)
+        if len(tbdata) > 0:
+            self.Bind(wx.EVT_TOOL_RANGE, self.OnTool, id=tbdata[1][0][0], id2=tbdata[len(tbdata)][-1][0])
+
+
+
+    # def Toolbar(self):
+    #     #style = wx.TB_BOTTOM|wx.TB_DEFAULT_STYLE|wx.TB_DOCKABLE|wx.TB_FLAT|wx.TB_HORIZONTAL|wx.TB_HORZ_LAYOUT|
+    #     #wx.TB_HORZ_TEXT|wx.TB_NOALIGN|wx.TB_NODIVIDER|wx.TB_NOICONS|wx.TB_NO_TOOLTIPS|wx.TB_RIGHT|wx.TB_TEXT|wx.TB_VERTICAL
+    #     self.tb = self.CreateToolBar(wx.TB_HORIZONTAL | wx.NO_BORDER | wx.TB_FLAT|wx.TB_TEXT)
+    #     Tbd = MT.ToolData()
+    #     Tbl = Tbd.ToolBarList()
+    #     #print(Tbl)
+    #     tsize = (24, 24) #<<<=====use Config
+    #     self.tb.SetToolBitmapSize(tsize)
+    #     for tl in Tbl:
+    #         for t in Tbl[tl]:
+    #             #print(t)
+    #             if t[1] == '' or t[1] == None:
+    #                 self.tb.AddSeparator()
+    #                 #self.tb.AddTool(t[0],wx.EmptyString,wx.NullBitmap,wx.NullBitmap,wx.ITEM_MAX)
+    #             elif t[5] == 'C':
+    #                 self.tb.AddTool(t[0], t[1], wx.Bitmap(ICONS_TOOL + t[2], wx.BITMAP_TYPE_ANY), wx.NullBitmap,
+    #                                 wx.ITEM_CHECK, t[1], t[3], None)
+    #             elif t[5] == 'R':
+    #                 self.tb.AddTool(t[0], t[1], wx.Bitmap(ICONS_TOOL + t[2], wx.BITMAP_TYPE_ANY), wx.NullBitmap,
+    #                                 wx.ITEM_RADIO, t[1], t[3], None)
+    #             else:
+    #                 self.tb.AddTool(t[0], t[1], wx.Bitmap(ICONS_TOOL+t[2],wx.BITMAP_TYPE_ANY), wx.NullBitmap, wx.ITEM_NORMAL, t[1], t[3], None)
+    #             self.Bind(wx.EVT_TOOL, self.OnTool, id=t[0])
+    #         self.tb.AddSeparator()
+    #     self.tb.Realize()
 
     def ToolPnl(self):
         self.tool = []

@@ -32,26 +32,36 @@ class ToolData(object):
 
 class MyToolbar(wx.ToolBar):
     data = []          #wx.TB_NODIVIDER | wx.NO_BORDER | wx.TB_FLAT |
-    def __init__(self,parent,style=  wx.TB_FLAT):
+    def __init__(self,parent,style=  wx.TB_HORIZONTAL | wx.NO_BORDER | wx.TB_FLAT|wx.TB_TEXT):
         wx.ToolBar.__init__(self,parent,style=style)
         self.mytb = []
-        self.mytp = {}
-        self.CreatTool(self.data)
-        #tbdata =  ToolData().ToolBarList()
-        #self.CreatList(tbdata)
-        #print(self.mytp)
-        #for data in self.mytp:
-        #    self.CreatTool(self.mytp[data])
+
 
     def CreatTool(self,tbData):
-        for tb in tbData :
-            if str(tb[1]) == '' or tb[1] == None:
-                self.AddSeparator()
-            else:
-                self.mytb.append( self.AddTool(int(tb[0]), str(tb[1]),wx.Bitmap(ICONS_TOOL+tb[2], wx.BITMAP_TYPE_ANY),
-                                               wx.NullBitmap, wx.ITEM_NORMAL, str(tb[3]), wx.EmptyString, None) )
-                #self.mytp[int(tb[0])] = str(tb[4])
+        #print(tbData)
+        for grp in tbData:
+            for tb in tbData[grp] :
+                if str(tb[1]) == '' or tb[1] == None:
+                    #self.mytb.append( self.AddTool(int(tb[0]),wx.EmptyString,wx.NullBitmap,wx.NullBitmap,
+                    #                           wx.ITEM_SEPARATOR,wx.EmptyString,wx.EmptyString, None) )
+                    self.AddSeparator()
+                elif tb[5] == 'C':
+                    self.mytb.append(
+                        self.AddTool(int(tb[0]), str(tb[1]), wx.Bitmap(ICONS_TOOL + tb[2], wx.BITMAP_TYPE_ANY),
+                                     wx.NullBitmap, wx.ITEM_CHECK, str(tb[3]), wx.EmptyString, None)
+                    )
+                elif tb[5] == 'R':
+                    self.mytb.append(
+                        self.AddTool(int(tb[0]), str(tb[1]), wx.Bitmap(ICONS_TOOL + tb[2], wx.BITMAP_TYPE_ANY),
+                                     wx.NullBitmap, wx.ITEM_RADIO, str(tb[3]), wx.EmptyString, None)
+                    )
+                else:
+                    self.mytb.append(
+                        self.AddTool(int(tb[0]), str(tb[1]),wx.Bitmap(ICONS_TOOL+tb[2], wx.BITMAP_TYPE_ANY),
+                                     wx.NullBitmap, wx.ITEM_NORMAL, str(tb[3]), wx.EmptyString, None)
+                    )
 
+            self.AddSeparator()
         self.Realize()
         return self
 

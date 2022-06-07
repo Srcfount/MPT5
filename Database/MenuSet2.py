@@ -132,12 +132,13 @@ class GetData:
         return sq.wxsqltxt(self.DBF,""" select distinct * from handler %s """ % ext)
 
     def GetTB(self):
-        return sq.wxsqltxt(self.DBF,"""select toolbar.toolid,toolbar.toolname,toolbar.toolicon,toolbar.shrttxt,handler.prgname 
+        return sq.wxsqltxt(self.DBF,"""select toolbar.toolid,toolbar.toolname,toolbar.toolicon,toolbar.shrttxt,handler.prgname,toolbar.tooltype
                                        from toolbar left join handler
-                                       on toolbar.handlerid = handler.handlerid """)
+                                       on toolbar.handlerid = handler.handlerid
+                                        order by toolbar.toolid """)
 
     def GetAllTB(self, ext=''):
-        return sq.wxsqltxt(self.DBF,""" select * from toolbar %s""" % ext)
+        return sq.wxsqltxt(self.DBF,""" select DISTINCT * from toolbar %s order  by toolbar.toolid""" % ext)
 
     def MyTogr(self,itolid=''):
         return sq.wxsqltxt(self.DBF,"""SELECT distinct toolbar.handlerid, handler.prgname

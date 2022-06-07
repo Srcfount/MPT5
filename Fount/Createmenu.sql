@@ -8,7 +8,8 @@ CREATE TABLE "toolbar" (
 	`shrttxt`	TEXT,
 	`lngtxt`	TEXT,
 	`handlerid`	INTEGER,
-	`acclvlid`	TEXT
+	`acclvlid`	TEXT,
+	`tooltype`	TEXT
 );
 
 CREATE TABLE "security" (

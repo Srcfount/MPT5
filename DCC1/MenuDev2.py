@@ -277,7 +277,7 @@ class MyPanel1 ( wx.Panel ):
 		self.P2.SetSizer( Vsz3 )
 		self.P2.Layout()
 		Vsz3.Fit( self.P2 )
-		self.Splt1.SplitVertically( self.P1, self.P2, 0 )
+		self.Splt1.SplitVertically( self.P1, self.P2, 255 )
 		Vsz1.Add( self.Splt1, 1, wx.EXPAND, 5 )
 
 		self.ControlHide(0,0)
@@ -341,7 +341,6 @@ class MyPanel1 ( wx.Panel ):
 	    #self.chk2.SetValue(0)
 	    self.prgfld.SetValue('')
 	    self.lbl9.SetLabel(_('Directory: '))
-
 
 	# Virtual event handlers, overide them in your derived class
 	def slctmnu( self, event ):
@@ -415,7 +414,6 @@ class MyPanel1 ( wx.Panel ):
 		self.PopupMenu(self.barmnu)
 		self.barmnu.Destroy()
 		event.Skip()
-
 
 	def endedit( self, event ):
 		event.Skip()
@@ -506,7 +504,6 @@ class MyPanel1 ( wx.Panel ):
 				self.prgfld.SetValue(data[18])
 				self.lbl9.SetLabel(_('Directory: ')+self.mydir)
 
-
 	def addit( self, event ):
 		#print(self.itmcod)
 		if int(self.itmcod) < 1000:
@@ -570,7 +567,6 @@ class MyPanel1 ( wx.Panel ):
 		self.fillList()
 		self.Refresh()
 		self.Layout()
-
 
 	def delit( self, event ):
 		#print('del it',self.itmcod)
@@ -833,7 +829,7 @@ class MyPanel1 ( wx.Panel ):
 
 	def icnslct( self, event ):
 		if ICONS_MENU[1:] not in self.iconfile.GetPath():
-			print(self.iconfile.GetPath(),ICONS_MENU)
+			#print(self.iconfile.GetPath(),ICONS_MENU)
 			CopyIcon(self.iconfile.GetPath(),'Menu')
 		self.icon1.SetBitmap(wx.Bitmap(self.iconfile.GetPath(), wx.BITMAP_TYPE_ANY))
 		event.Skip()
@@ -938,7 +934,7 @@ class MyPanel1 ( wx.Panel ):
 		return [Data1, Data2, Data3, Data4, Data5, Data6, Data7, Data8, Data9]
 
 	def Splt1OnIdle( self, event ):
-		self.Splt1.SetSashPosition( 0 )
+		self.Splt1.SetSashPosition( 255 )
 		self.Splt1.Unbind( wx.EVT_IDLE )
 
 	def Nbar(self, event):

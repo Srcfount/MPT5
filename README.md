@@ -13,6 +13,10 @@ All of this project can change in other computer language , other GUI interface 
 
 Start
 -----
+Befor Use Project ensure that python 3.7+ and wxpython package install in it
+you can see requirement package in file text . this project start from scerach 
+
+
 
 
 Installation
@@ -28,17 +32,17 @@ Appearance of the application
 ---------------------
   
   * Toolbar
+    You can Add Edit and Delete ![Toolbar](docs/Help/ToolBar.md) with Icon to your application
+
 ---------------------
   * Panes
 ---------------------
   
-  * Sources
----------------------
 
 New Program (How to add)
 ------------------------
 
- 1. How Connect to items
+ 1. How Connect each program to each items
  2. Relationship with database
 
 Design Database

@@ -1,7 +1,7 @@
 How Create A Menu Item
 ======================
 after Define Menu Bars you can Add menu Item to application
-![](images/amni1-1.jpg)
+![](images/1/amni1-1.jpg)
 
 1. List of Menu Bar with out any item
 2. Add item 
@@ -19,7 +19,7 @@ after Define Menu Bars you can Add menu Item to application
 Add Menu Item
 --------
 
-![](images/amni2-1.jpg)
+![](images/1/amni2-1.jpg)
 
 1. first Select a MenuBar
 2. press Add button
@@ -47,14 +47,14 @@ you can change this program for this menu item later but that must exist in this
 Icon Size is 16x16 and default Path is ``Res\Icons\Menu`` if you select other path application copy it in this path  
 if select Checkable or Radio Icon NOT useable for menu item better not use it    
 for select SubMenu refer to SubMenuCreate Document  
-![](images/amni3.jpg)
+![](images/1/amni3.jpg)
 
 --------------------------------------------------------------------------------------------
 
 Edit Menu Item
 --------------
 after select a menu item in the list of menu you can change or add other information to item
-![](images/emni4-1.jpg)
+![](images/1/emni4-1.jpg)
 
 1. You can **NOT** Change ID or Access or Use Generate Code Automatic button
 2. You can change Name of menu item
@@ -74,7 +74,7 @@ after select a menu item in the list of menu you can change or add other informa
 
 Delete Menu Item
 ----------------
-![](images/dmni5-1.jpg)
+![](images/1/dmni5-1.jpg)
 
 1. Select Item you like to delete
 2. Note the item number as well as the menu bar
@@ -83,7 +83,7 @@ Delete Menu Item
 
 Add Separator
 -------------
-![](images/sprt6-1.jpg)
+![](images/1/sprt6-1.jpg)
 
 1. Select Menu Bar (or Submenu) that you like to add Separator
 2. Press one time Separator button then open tree list

@@ -10,14 +10,14 @@ from wx import MessageBox, OK, ICON_WARNING
 from .dbinterface import  *
 
 class SFDB(object):
-	def __init__(self, database=':memory:',dbpath=DATABASE_PATH,**kwargs):
+	def __init__(self, database=':memory:',**kwargs):
 		'''
 
 		:param database:
 		:param dbpath:
 		:param kwargs: user pswrd host
 		'''
-		self.database = dbpath + database
+		self.database = database
 		self.infacecon = self.Getinterface()
 		self.connect()
 
@@ -29,7 +29,7 @@ class SFDB(object):
 		'''
 		self.config = wx.GetApp().GetConfig()
 		infaceid = self.config.Read('DBtype')
-		myinface = Database_type[infaceid]
+		myinface = Database_type[int(infaceid)]
 		if myinface == 'sqlite':
 			return ForSqlitDb(self.database)
 		if myinface == 'mysql':
@@ -45,7 +45,7 @@ class SFDB(object):
 	def connect(self):
 		# print self.database
 		try:
-			self.connection = self.infacecon.connect(self.database)
+			self.connection = self.infacecon #.connect(self.database)
 			self.cursor = self.connection.cursor()
 		except:
 			# print( 'No Database find')
@@ -153,10 +153,10 @@ class SQLite(object):
 
 
 def MyDB_Path(database):
-	return SFDB(database, DATABASE_PATH)
+	return SFDB(database)
 
 def MySrc_db_Path(database):
-	return SFDB(database, Src_dbf)
+	return SFDB(database)
 
 def wxsqsel(database, tabels, fields='*', condition=''):
 	# global MAP

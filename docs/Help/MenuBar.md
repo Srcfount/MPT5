@@ -2,7 +2,7 @@ How Create menubar
 =====================
 After right-clicking a mouse, a menu will appear in the menu list
 
-![](images/mnb1-1.jpg)
+![](images/1/mnb1-1.jpg)
 
  1. Create a New MenuBar
  2. Edit an exist MenuBar in List of menu
@@ -14,7 +14,7 @@ After right-clicking a mouse, a menu will appear in the menu list
 Create a New MenuBar
 --------------------
 
-![](images/nmnb2-1.jpg)
+![](images/1/nmnb2-1.jpg)
 
  1. Menu Bar name
  2. ID code in range 101-991
@@ -42,7 +42,7 @@ Also, if ``SamPnl.py`` does not exist in the **Src\GUI** path, It also creates.
 
 Edit a Menu Bar
 ---------------
-![](images/emnb3-1.jpg)
+![](images/1/emnb3-1.jpg)
 
 1. You can Edit or Change you Menu Bar name
 2. you can **NOT** Change ID code
@@ -59,7 +59,7 @@ Make sure the items point in the right direction before changing.
 
 Delete a Menu Bar
 -----------------
-![](images/dmnb4.jpg)
+![](images/1/dmnb4.jpg)
 
 All item in windows only for information about menu Bar that you like to delete it  
 All menu item and submenu of this Menu Bar Also will Delete  
@@ -70,7 +70,7 @@ if you like Delete programs or directory please see the List of Program Part
 
 Manage Directory
 ----------------
-![](images/mdr1-1.jpg)
+![](images/1/mdr1-1.jpg)
 
 1. List of Directory that Application Use
 2. if check this item Directory ***remove*** from your Hard Disk

@@ -302,7 +302,7 @@ class MyPanel1 ( wx.Panel ):
 		self.P2.SetSizer( Vsz3 )
 		self.P2.Layout()
 		Vsz3.Fit( self.P2 )
-		self.Splt1.SplitVertically( self.P1, self.P2, 254 )
+		self.Splt1.SplitVertically( self.P1, self.P2, 255 )
 		Vsz1.Add( self.Splt1, 1, wx.EXPAND, 5 )
 
 
@@ -692,7 +692,7 @@ class MyPanel1 ( wx.Panel ):
 
 
 	def Splt1OnIdle( self, event ):
-		self.Splt1.SetSashPosition( 254 )
+		self.Splt1.SetSashPosition( 255)
 		self.Splt1.Unbind( wx.EVT_IDLE )
 
 
