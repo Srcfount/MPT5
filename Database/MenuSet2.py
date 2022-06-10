@@ -179,10 +179,11 @@ class GetData:
         return sq.wxsqsnd(self.DBF,u'menubar',u'mbarid',u'mbardir',dirct)
 
     def AllPanes(self):
-        return sq.wxsqltxt(self.DBF,""" select * from pans join panifo on pans.paninfoid = panifo.paninfoid """)
+        return sq.wxsqltxt(self.DBF,""" select * from pans join panifo on pans.paninfoid = panifo.paninfoid
+         order by pans.panid""")
 
     def ListPanes(self):
-        return sq.wxsqltxt(self.DBF," select pans.panname from pans ")
+        return sq.wxsqltxt(self.DBF," select pans.panname from pans order by pans.panid")
 
     def ProPane(self, ext=''):
         return sq.wxsqltxt(self.DBF,""" select pans.panid, pans.panname, pans.handlerid, handler.prgname , handler.prgdir

@@ -377,8 +377,12 @@ class MyPanel1 ( wx.Panel ):
 		self.lyrspn.SetValue(Data[4])
 		self.opsint = Data[16]
 
-		mydir,myprgnm = self.MyMenu.RunHdnl(Data[6])[0]
-		#print(mydir,myprgnm)
+		if len(self.MyMenu.RunHdnl(Data[6])) > 0:
+			mydir,myprgnm = self.MyMenu.RunHdnl(Data[6])[0]
+			#print(mydir,myprgnm)
+		else:
+			mydir,myprgnm = self.NewPanePrg()
+
 		self.prgfld.SetValue(myprgnm+'.py')
 		self.lbl9.SetLabel(_(u"Directory: ")+mydir)
 
@@ -461,6 +465,7 @@ class MyPanel1 ( wx.Panel ):
 		event.Skip()
 
 	def publc( self, event ):
+		print(self.thspan)
 		event.Skip()
 
 	def prviw( self, event ):
@@ -583,7 +588,7 @@ class MyPanel1 ( wx.Panel ):
 
 	def dockabl(self, event):
 		iwin = wx.Dialog(self, -1)
-		pnl = MyPanel4(iwin)
+		pnl = MyPanel4(iwin,(self.dokng,self.opsint))
 		iwin.SetSize((400, 350))
 		iwin.ShowModal()
 		#print(pnl.PGrid1.GetPropertyValues())
@@ -612,6 +617,15 @@ class MyPanel1 ( wx.Panel ):
 		else:
 			codid, self.prgdir = self.MyMenu.getHndlr(hndlrnm)[0]
 			return codid
+
+	def NewPanePrg(self):
+		Data = [50000,'tempane', '5555', '-1', -1, 50]
+		self.DoMenu.Table = 'handler'
+		self.DoMenu.Additem(' handlerid, prgname, prgdir, paramtr, public, prgno', Data)
+		if not os.path.isfile(Src_aui+'tempane.py'):
+			shutil.copyfile(GUI_PATH+'AuiPanel'+SLASH+'tempane.py',Src_aui+'tempane.py')
+
+		return '5555','tempane'
 
 	def getdata(self):
 		D1 = self.fld1.GetValue()
@@ -833,7 +847,7 @@ class MyPanel3 ( wx.Panel ):
 		wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
 
 		Vsz1 = wx.BoxSizer( wx.VERTICAL )
-		print(LData)
+		#print(LData)
 		if LData == ['','','']:
 			bsz = wx.Size(-1,-1)
 			mnz = wx.Size(-1,-1)
@@ -945,12 +959,24 @@ class PosProperty(pg.PGProperty):
 
 class MyPanel4 ( wx.Panel ):
 
-	def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 500,320 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
+	def __init__( self, parent,data, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 500,320 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
 		wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
 
 		Vsz1 = wx.BoxSizer( wx.VERTICAL )
 
-		self.data = [False,True,True,True,True,True]
+		#self.data = [False,True,True,True,True,True]
+		self.data = []
+		for d in data[0]:
+			if d == 'T':
+				self.data.append(True)
+			if d == 'F':
+				self.data.append(False)
+		#self.data = data
+		D = data[1].split(';')
+		#print(D)
+		r = int(D[0]);c = int(D[1]); auipos = int(D[2]); auirow = int(D[3])
+		posis = wx.Position(r,c)
+		#print(data[1],r,c,auipos,auirow)
 
 		self.Items = [(u'dock_fixed',self.data[0]),(u'floatable',self.data[1]),(u'bottom Dockable',self.data[2]),
 		              (u'Top Dockable',self.data[3]),(u'Left Dockable',self.data[4]),(u'Right Dockable',self.data[5])]
@@ -963,9 +989,9 @@ class MyPanel4 ( wx.Panel ):
 			self.PGrid1.SetPropertyAttribute(itm[0], "UseCheckbox", True)
 
 
-		self.Item3 = self.PGrid1.Append( PosProperty( u"pane_position", u"pane_position", value=wx.DefaultPosition ) )
-		self.Item4 = self.PGrid1.Append( pg.IntProperty( u"aui_position", u"aui_position" ) )
-		self.Item5 = self.PGrid1.Append( pg.IntProperty( u"aui_row", u"aui_row" ) )
+		self.Item3 = self.PGrid1.Append( PosProperty( u"pane_position", u"pane_position", value=posis ) )
+		self.Item4 = self.PGrid1.Append( pg.IntProperty( u"aui_position", u"aui_position" ,value=auipos) )
+		self.Item5 = self.PGrid1.Append( pg.IntProperty( u"aui_row", u"aui_row" ,value=auirow) )
 
 		Vsz1.Add( self.PGrid1, 1, wx.ALL|wx.EXPAND, 5 )
 

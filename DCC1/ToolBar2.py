@@ -572,9 +572,6 @@ class MyPanel1 ( wx.Panel ):
 			mw = self.FindWindowByName('main')
 			if TBP == '1':
 				tb = mw.GetToolBar()
-				print(tb.FindById(lstcod[-1][0]).GetId())
-				print(tb.GetToolPos(icod))
-				print(self.GetToolPos(tb,icod))
 				#tb.AddSeparator()
 				tb.InsertSeparator(self.GetToolPos(tb,icod))
 				tb.Realize()

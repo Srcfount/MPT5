@@ -55,18 +55,50 @@ How Edit a Toolbar
 
 How Delete a Toolbar
 --------------------
+![](images/2/dtbr4-1.jpg)
+
+1. Select Tool item that like to Delete it
+2. Pay attention to the number and group so that no mistake is made
+3. Also to name , icon and other information
+4. Program **NOT** delete here you must go to program list
+5. After all attentions press Delete button to delete tool from toolbar
+
+> Note: Separator can not remove from toolbar until restart application again  
+> If an empty number is created between the items, you can fill it by creating a new item.  
+> It is enough to put a blank ID number instead of the generated number,  
+> be careful not to repeat the access number, change it as well.
+> Do not try to make the number of IDs the same. This will cause a problem  
+> If you see confusion in the order of icons and items, run the program again from the beginning
 
 
 How Add Separator
 -----------------
+![](images/2/sprt5-1.jpg)
+
+1. Select group that like to add Separator
+2. press Separator button to Add 1 Sperator to last item
+
+> Note: After press button list close and refreshed  
+> Do not select tools becuse you can not Insert Separator even if empty code exist  
+> You can not edit Separator But you can delete it  
+> Between each groups, application add automatic one Separator
 
 
 Refresh List
 ------------
-
+If press Refresh Button list of toolbar refreshed
 
 Information Item
 ----------------
+If press Button application print data of  select tool in to stdout/stderr window
 
 
+Type of Toolbar
+---------------
+if you change setting you have toolbar in AUI mode after reset application
 
+![](images/2/settbr.jpg)
+![](images/2/auitbr.jpg)
+
+Each group is created in a separate panel
+You can move them within the program
