@@ -892,11 +892,11 @@ class MyPanel1 ( wx.Panel ):
 		for p in pr:
 			if imodel in p:
 				return p[0]
-		return 10000+int(self.bardata[2][1:3])
+		return 10000+int(self.bardata[2][1:3])*100
 
 	def findhandler(self, hndlrnm, prgdir=''):
 		if hndlrnm == '':
-			return 10000+int(self.bardata[2][1:3])
+			return 10000+int(self.bardata[2][1:3])*100
 		else:
 			if prgdir == '':
 				codid, self.prgdir = self.MyMenu.getHndlr(hndlrnm)[0]
@@ -1248,7 +1248,7 @@ class MyPanel3 ( wx.Panel ):
 		    self.SetMenu.Table = u'access'
 		    self.SetMenu.Additem(u'acclvlid , userid , acclvl , disenable ',(data3, 1, data5, data4))
 		    self.SetMenu.Table = u'handler'
-		    self.SetMenu.Additem(u' handlerid, prgname, prgdir, paramtr, public, prgno',(10000+int(dircod[1:3]),'Demo',dircod, '-1',-1,100*int(dircod[1])))
+		    self.SetMenu.Additem(u' handlerid, prgname, prgdir, paramtr, public, prgno',(10000+int(dircod[1:3])*100,'Demo',dircod, '-1',-1,100*int(dircod[1])))
 		    mb.Append(wx.Menu(),data1)
 
 	    elif event.GetEventObject().GetLabel() == _('Change'):

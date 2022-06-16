@@ -303,7 +303,7 @@ class MyPanel1 ( wx.Panel ):
 		self.root1 = self.DVC1.AppendItem(Aroot, "One page program All-in-One")   #code 1100-1999 dir PRG 1101+
 		self.root2 = self.DVC1.AppendItem(Aroot, "One page program for aui panes")  #code 5000-5999 dir 5555
 		self.root3 = self.DVC1.AppendItem(Aroot, "Program with one import panel ")  #code 1000-1999 dir 1101+
-		self.root4 = self.DVC1.AppendItem(Aroot, "Multi program with some import ")  #code 2000+ with 2+ import dir 1101+
+		#self.root4 = self.DVC1.AppendItem(Aroot, "Multi program with some import ")  #code 2000+ with 2+ import dir 1101+
 		self.root5 = self.DVC1.AppendItem(Aroot, "Other python file NOT in Handler ")    #Not in allprgnm
 
 		#alldir = self.getMData.AllGuiDir(
@@ -395,11 +395,13 @@ class MyPanel1 ( wx.Panel ):
 
 	def slctitm( self, event ):
 		self.nullfield()
-		#print('selct', self.DVC1.GetSelection())
+		txt = ''
+		cod = ''
 		itm = self.DVC1.GetSelection()
 		#print('selct',self.DVC1.GetItemText(itm))
-		txt = self.DVC1.GetItemText(itm,0)
-		cod = self.DVC1.GetItemText(itm,1)
+		if itm:
+			txt = self.DVC1.GetItemText(itm,0)
+			cod = self.DVC1.GetItemText(itm,1)
 		#print(txt,cod)
 		if cod != '':
 			if cod[2:] == '??':
@@ -430,16 +432,21 @@ class MyPanel1 ( wx.Panel ):
 				self.fillfield(data,'')
 				self.PrgDir1.SetPath(Src_gui)   #(SRC_PATH+"api"+SLASH)
 		else:
-			if 'All-in-One' in txt:
+			if 'Src\API' in txt:
+				self.Desc.SetValue(u"Here a list of files that exist in Src\API Path that you can use in application ")
+			elif 'All-in-One' in txt:
 				self.Desc.SetValue(u"Here a list of program that only in one file and when you do it all command execute")
-			if 'aui' in txt:
+			elif 'aui' in txt:
 				self.Desc.SetValue(u"Here a list of files that contains a panel class that you like to select for AuiPane Develop")
-			if 'one import' in txt:
+			elif 'one import' in txt:
 				self.Desc.SetValue(u"Here a List of files that contains a import module in Src\GUI directory and it open that file ")
-			if 'some import' in txt:
-				self.Desc.SetValue(u"Here a List of files with some imports that contain several file and command part")
-			if 'HDD' in txt:
+			#elif 'some import' in txt:
+			#	self.Desc.SetValue(u"Here a List of files with some imports that contain several file and command part")
+			elif 'NOT' in txt:
 				self.Desc.SetValue(u"Here a List of files in your GUI path and Utility that NOT listed in handlers data ")
+			else:
+				self.Desc.SetValue("")
+
 
 	def nullfield(self):
 		data = ('','','','','','','','','',None,None)
@@ -680,6 +687,9 @@ class MyPanel1 ( wx.Panel ):
 		else:
 			wx.MessageBox(_(u"You can only generate the unlisted program with end with this code '??'"))
 
+		self.DVC1.DeleteAllItems()
+		self.filllist()
+		self.Refresh()
 		#event.Skip()
 
 	def gencod( self, event ):

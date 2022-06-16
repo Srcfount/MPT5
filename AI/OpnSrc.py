@@ -117,7 +117,7 @@ class PythonSTC(stc.StyledTextCtrl):
         # self.RegisterImage(3,
         #    wx.ArtProvider.GetBitmap(wx.ART_COPY, size=(16,16)))
 
-        with open(PyFile) as fobj:
+        with open(PyFile, encoding=u'utf-8') as fobj:
             text = fobj.read()
 
         self.SetText(text)
@@ -326,6 +326,9 @@ class MyMenuBar1 ( wx.MenuBar ):
 			pathname = fileDialog.GetPath()
 			# print(pathname)
 			self.SrcTxt.SaveFile(pathname)
+			self.pnl.pyFile = pathname
+			self.pnl.opnstc(pathname)
+			self.GetParent().SetLabel(pathname)
 		event.Skip()
 
 	def closit(self, event):

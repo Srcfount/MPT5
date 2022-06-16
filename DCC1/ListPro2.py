@@ -147,7 +147,7 @@ class MyPanel1 ( wx.Panel ):
 
 		Hsz12 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.btndon = wx.Button(self.P2, wx.ID_ANY, u"Download", wx.DefaultPosition, wx.DefaultSize, wx.BU_EXACTFIT)
+		self.btndon = wx.Button(self.P2, wx.ID_ANY, _(u"Download"), wx.DefaultPosition, wx.DefaultSize, wx.BU_EXACTFIT)
 		Hsz12.Add(self.btndon, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
 
 		self.gug1 = wx.Gauge(self.P2, wx.ID_ANY, 100, wx.DefaultPosition, wx.DefaultSize, wx.GA_HORIZONTAL)
@@ -158,7 +158,7 @@ class MyPanel1 ( wx.Panel ):
 
 		Hsz13 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.extchk = wx.Button(self.P2, wx.ID_ANY, u"Extract, Check and Show File", wx.DefaultPosition, wx.DefaultSize,
+		self.extchk = wx.Button(self.P2, wx.ID_ANY, _(u"Extract, Check and Show File"), wx.DefaultPosition, wx.DefaultSize,
 		                        0)
 		Hsz13.Add(self.extchk, 1, wx.ALL, 5)
 
@@ -287,7 +287,7 @@ class MyPanel1 ( wx.Panel ):
 			Discrpt = "Programs you download from Site in to your HardDisk"
 			Pathsrc = UTILITY_PATH+'Downloads'
 		elif 'Upload' in txt:
-			Discrpt = "Programs that you Upload to your Account for Sell"
+			Discrpt = "Programs that you Upload to your Account for Sell or Send"
 			Pathsrc = UTILITY_PATH+'Uploads'
 		elif 'Unpacked' in txt:
 			Discrpt = "Unpacked program that download from Site and see files in it"
@@ -337,7 +337,7 @@ class MyPanel1 ( wx.Panel ):
 			if thsfil == '':
 				wx.MessageBox(_(" The file is in Zip file Please select new file!"))
 			elif thsfil == -1:
-				wx.MessageBox(_("Only file in Src Directory execpt DBF send to zip file"))
+				wx.MessageBox(_("Only file in Src Directory path send to zip file"))
 			else:
 				self.listfilezip.append(thsfil)
 				self.add2zip(izipname, chld2,str(pthcod) )
@@ -383,13 +383,12 @@ class MyPanel1 ( wx.Panel ):
 			return '',''
 		for src in Src_Pth:
 			if src.capitalize() in myfile.capitalize():
-				self.writinfo(myfile.capitalize().replace(src.capitalize(),''),Src_Dir[Src_Pth[src]],Src_Pth[src],str(os.stat(myfile).st_size))
+				#self.writinfo(myfile.capitalize().replace(src.capitalize(),''),Src_Dir[Src_Pth[src]],Src_Pth[src],str(os.stat(myfile).st_size))
+				self.writinfo(myfile.split("\\")[-1], Src_Dir[Src_Pth[src]], Src_Pth[src],str(os.stat(myfile).st_size))
 				return myfile,Src_Dir[Src_Pth[src]]
 		return -1,-1
 
 	def writinfo(self, file, code,titl,size):
-		if SLASH in file:
-			file = file.split(SLASH)[-1]
 		self.infopacktxt.append((titl,str(code),file,size))
 
 	def editit( self, event ):
@@ -467,6 +466,7 @@ class MyPanel1 ( wx.Panel ):
 		if 'packzip' in txt and 'Upload' in roottxt:
 			with open(TEMPS_PATH + 'infopack.sfn', 'a', encoding='utf-8') as f:
 				for t in self.infopacktxt:
+					#print(t[2])
 					f.write(t[0]+','+t[1]+','+t[2]+','+t[3]+'\n')
 
 			for fil in self.listfilezip:
@@ -494,12 +494,12 @@ class MyPanel1 ( wx.Panel ):
 	# def mnuid( self, event ):
 	# 	event.Skip()
 	def add2zip(self,zipname,child,pathcod):
-		#print(self.listfilezip)
 		SP1 = {v: k for k, v in Src_Pth.items()}
 		SD1 = {v: k for k, v in Src_Dir.items()}
-
 		chld3 = self.TLC1.AppendItem(child,zipname)
-		self.TLC1.SetItemText(chld3,0,self.listfilezip[-1].capitalize().replace(SP1[SD1[int(pathcod)]].capitalize(),''))
+		#print(self.listfilezip[-1].split('\\')[-1])
+		#self.TLC1.SetItemText(chld3,0,self.listfilezip[-1].capitalize().replace(SP1[SD1[int(pathcod)]].capitalize(),''))
+		self.TLC1.SetItemText(chld3, 0,self.listfilezip[-1].split('\\')[-1])
 		self.TLC1.SetItemText(chld3,1,pathcod)
 
 	def ins2zip(self, itm, filname, pathcod):
@@ -524,7 +524,7 @@ class MyPanel1 ( wx.Panel ):
 		roottxt = self.TLC1.GetItemText(rot, 0)
 		msg = ''
 		if 'Unpacked' in roottxt:
-			print(txt)
+			#print(txt)
 			with zipfile.ZipFile(UTILITY_PATH+'Account'+SLASH+txt,'r') as fz:
 				#fz.printdir()
 				fz.extract('infopack.sfn',TEMPS_PATH)
@@ -532,7 +532,7 @@ class MyPanel1 ( wx.Panel ):
 				lstfil = f.readlines()
 			for fl in lstfil:
 				finfo = fl.split(',')
-				msg += 'Copy file Src/%s [%s] zise %s'%(finfo[0]+'/'+finfo[2],finfo[1],finfo[3])
+				msg += 'Copy file Src/%s [%s] size %s'%(finfo[0]+'/'+finfo[2],finfo[1],finfo[3])
 				self.msag.SetValue(msg)
 				with zipfile.ZipFile(UTILITY_PATH + 'Account' + SLASH + txt, 'r') as fz:
 					fz.extract(finfo[2],TEMPS_PATH)

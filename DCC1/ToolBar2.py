@@ -628,9 +628,9 @@ class MyPanel1 ( wx.Panel ):
 				hndlrid = self.findhandler(hnd)
 				if hndlrid == -1:
 					self.prgdir = self.DemoGenerate()
-					#print(ThsData,int(ThsData[1])//10)
-					hndlrid = 10000+int(ThsData[1])//10
-					iData3 = [hndlrid,'Demo',self.prgdir,'-1',-1,(int(ThsData[0])//10)*10]
+					print(ThsData,(int(ThsData[1])//10)*100)
+					hndlrid = 10000+(int(ThsData[1])//10)*100
+					iData3 = [hndlrid,'Demo',self.prgdir,'-1',-1,(int(ThsData[1])//10)*100]
 					self.DoMenu.Table = u"handler"
 					self.DoMenu.Additem(u"handlerid, prgname, prgdir, paramtr, public, prgno",iData3)
 
