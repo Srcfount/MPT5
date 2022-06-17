@@ -1,6 +1,8 @@
 How Create A Menu Item
 ======================
+
 after Define Menu Bars you can Add menu Item to application
+
 ![](images/1/amni1-1.jpg)
 
 1. List of Menu Bar with out any item
