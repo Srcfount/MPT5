@@ -8,15 +8,14 @@ Introduction
 This is a new idea for made an application and develop base on GUI and Relation between components,
 you can start work and change for each Time, each Position, each Conditions, with or without other, at your likely style.
 Also you can Test your own code with use own Machine Learning Algorithm codes for own Data and Dataset for own Design.
-All of this project can change in other computer language , other GUI interface , other option and tools and ...
+If you help us , all of this project can change in other computer language , other GUI interface , other option and tools and ...  
+If you sponsor to us , we can write for you at your own design on this idea base.
 
 
 Start
 -----
-Befor Use Project ensure that python 3.7+ and wxpython package install in it
+Befor Use Project ensure that ``python 3.7+`` and ``wxpython`` package install on your system .  
 you can see requirement package in file text . this project start from scerach 
-
-
 
 
 Installation

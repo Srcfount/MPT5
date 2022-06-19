@@ -129,7 +129,7 @@ class AppMenu(wx.MenuBar):
 
     def AddItem2(self, Mbar, Data, Bar=''):
         lbl = self.ChkShrtCut(Data)
-        #print(self.FindMenu(Mbar))
+
         if self.FindMenu(Mbar) != -1:
             imnu = self.GetMenu(self.FindMenu(Mbar))
         else:
@@ -138,8 +138,12 @@ class AppMenu(wx.MenuBar):
             else:
                 imnu = self._findmenu2(Mbar, Bar)
             #imnu = self.FindMenuItem(mb.GetMenu,Mbar)
-
-        iitm = imnu.Append(int(Data[0]), lbl, Data[5])
+        #print(imnu)
+        if imnu == None:
+            imnu = self._findmenu3(Mbar, Bar)
+            iitm = imnu.Append(int(Data[0]), lbl, Data[5])
+        else:
+            iitm = imnu.Append(int(Data[0]), lbl, Data[5])
         if Data[3] != '':
             iitm.SetBitmap(wx.Bitmap(ICONS_MENU + Data[3], wx.BITMAP_TYPE_ANY))
 
@@ -183,7 +187,11 @@ class AppMenu(wx.MenuBar):
                 imnu = self._findsubmenu2(Mbar)
             else:
                 imnu = self._findmenu2(Mbar, Bar)
-        iitm = imnu.AppendCheckItem(int(Data[0]),lbl,Data[5])
+        if imnu == None:
+            imnu = self._findmenu3(Mbar, Bar)
+            iitm = imnu.AppendCheckItem(int(Data[0]),lbl,Data[5])
+        else:
+            iitm = imnu.AppendCheckItem(int(Data[0]),lbl,Data[5])
 
     # def AddRadio(self,Mbar,Data,Bar=''):
     #     imnu = self._BackMyMenu(Mbar)
@@ -199,7 +207,11 @@ class AppMenu(wx.MenuBar):
                 imnu = self._findsubmenu2(Mbar)
             else:
                 imnu = self._findmenu2(Mbar, Bar)
-        iitm = imnu.AppendRadioItem(int(Data[0]), lbl)
+        if imnu == None:
+            imnu = self._findmenu3(Mbar, Bar)
+            iitm = imnu.AppendRadioItem(int(Data[0]), lbl)
+        else:
+            iitm = imnu.AppendRadioItem(int(Data[0]), lbl)
 
     def _findmenu2(self, Mbar, Bar):
         mw = self.FindWindowByName('main')
@@ -214,6 +226,18 @@ class AppMenu(wx.MenuBar):
                     #print(m)
                     return m
 
+    def _findmenu3(self, Mbar, Bar):
+        mw = self.FindWindowByName('main')
+        mb = mw.GetMenuBar()
+        if Bar == 'S':
+            for m in mb.GetMenus():
+                mbr, lbl = m
+                #print(mbr, lbl)
+                if mbr.FindItem(Mbar) != -1:
+                    #print( mbr.FindItem(Mbar) )
+                    iid = mbr.FindItem(Mbar)
+                    #print(mbr.FindItem(iid)[0].GetSubMenu())
+                    return mbr.FindItem(iid)[0].GetSubMenu()
 
     def _BackMyMenu(self,Mbar):
         imnubar = self.FindMenu(Mbar)

@@ -65,8 +65,14 @@ class mainApp(wx.App):
         else:
             wx.MessageBox("Language support not found please sending an email to us for update new language!")
 
+def main(argv):
+    #print(argv)
+    if len(argv) > 0:
+        if argv[0] == '-c':
+            app = mainApp()
+    else:
+        app = mainApp(redirect=True)
+    app.MainLoop()
 
 if __name__ == '__main__':
-    #app = mainApp()
-    app = mainApp(redirect=True)
-    app.MainLoop()
+    main(sys.argv[1:])

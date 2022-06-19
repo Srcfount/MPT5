@@ -27,6 +27,9 @@ class GetData:
     def gBarN(self, mbar=1):
         return sq.wxsqsnd(self.DBF,u'menubar',u'mbarname',u'mbarid',mbar)
 
+    def gBarId(self, mbnm=''):
+        return sq.wxsqsnd(self.DBF,u'menubar',u'mbarid',u'mbarname',mbnm)
+
 
     def AmenuBar(self, Access=u'FFFF',ext=''):
         return sq.wxsqltxt(self.DBF, """ SELECT distinct *

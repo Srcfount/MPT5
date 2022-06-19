@@ -611,22 +611,33 @@ class MyPanel1 ( wx.Panel ):
 
 		mw = self.FindWindowByName('main')
 		mb = mw.GetMenuBar()
-		#print(mw,mb)
+
 		if mb != None:
+
 			if type(self.bardata[1]) == str:
 				mbr = mb.FindMenu(self.bardata[1])
 			else:
-				mbr = mb._findsubmenu2(self.bardata[2])
+				#mbr = mb._findsubmenu2(self.bardata[2])
+				for m in mb.GetMenus():
+					mbr, lbl = m
+					if self.MyMenu.gBarId(lbl)[0][0] == self.bardata[0]:
+						imbr, ilbl = m
+				iid = mb.FindMenuItem(ilbl,self.bardata[2])
+				mbr = imbr.FindItem(iid)[0].GetSubMenu()
 
-			if mw.newmenu:
+				#mb.FindMenuItem(self.bardata[1]).AppendSeparator()
+			#print(mbr,mw.newmenu)
+			if mw.newmenu and type(mbr) == int:
 				#print(mbr)
+				#mbr.AppendSeparator()
+				mb.GetMenu(mbr).AppendSeparator()
+			elif mw.newmenu and type(mbr) != int:
 				mbr.AppendSeparator()
-				#mb.GetMenu(mbr).AppendSeparator()
 			else:
 				mb.AddSepar(self.bardata[1])
 		else:
 			print(dir(mb))
-
+		wx.MessageBox(_(" Add Successful Separator"))
 		self.DVC1.DeleteAllItems()
 		self.fillList()
 		self.Refresh()
@@ -719,13 +730,8 @@ class MyPanel1 ( wx.Panel ):
 
 	def Add2Menu(self, D):
 		mw = self.FindWindowByName('main')
-		#mb = mw.GetMenuBar()
-		#lmb = mb.GetMenus()
-		#print(self.bardata,D)
-		#mnuitm = [i[0] for i in lmb if self.bardata[1] in i]
-		#print(mnuitm,lmb,mb)
-		#print(mw.menu)
 		mb = mw.menu
+		#print(self.bardata,D)
 		if D[6] == 'N':
 			if type(self.bardata[1]) == str:
 				mb.AddItem2(self.bardata[1],D)
@@ -763,6 +769,7 @@ class MyPanel1 ( wx.Panel ):
 			#mb.CngSubMenu(mitm,D,1)
 			mitm.SetSubMenu(mnu)
 			wx.MessageBox(_('Please Close Application Now!'))
+			mw.Close()
 		#print(mitm.IsSubMenu())
 		if D[4] != '':
 			lbl = D[2] + '\t' + D[4]
@@ -1238,18 +1245,24 @@ class MyPanel3 ( wx.Panel ):
 					    f.write('')
 
 		    #print(mydir)
-		    GenrDemo(mydir)
+		    if not os.path.isfile(mydir+SLASH+u'Demo.py'):
+			    GenrDemo(mydir)
 		    if not os.path.isfile(Src_gui+u"SamPnl.py"):
 			    shutil.copy(GUI_PATH+'API'+SLASH+'SamPnl.py',Src_gui)
+
 		    self.SetMenu.Table = u'menubar'
 		    self.SetMenu.Additem(u'mbarid , mbarname , mbardir ,  acclvlid ', (data2,data1,dircod,data3))
 		    data4 = self.box1val
 		    data5 = self.box2val
 		    self.SetMenu.Table = u'access'
 		    self.SetMenu.Additem(u'acclvlid , userid , acclvl , disenable ',(data3, 1, data5, data4))
-		    self.SetMenu.Table = u'handler'
-		    self.SetMenu.Additem(u' handlerid, prgname, prgdir, paramtr, public, prgno',(10000+int(dircod[1:3])*100,'Demo',dircod, '-1',-1,100*int(dircod[1])))
+		    if len(self.GetMenu.getHndlr('Demo',' and handler.prgdir = %d ' %int(dircod))) == 0:
+			    self.SetMenu.Table = u'handler'
+			    self.SetMenu.Additem(u' handlerid, prgname, prgdir, paramtr, public, prgno',
+			                         (10000+int(dircod[1:3])*100,'Demo',dircod, '-1',-1,100*int(dircod[1])))
+			    pass
 		    mb.Append(wx.Menu(),data1)
+
 
 	    elif event.GetEventObject().GetLabel() == _('Change'):
 		    data1 = self.fld1.GetValue()
