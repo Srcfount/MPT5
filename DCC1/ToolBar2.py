@@ -738,7 +738,8 @@ class MyPanel1 ( wx.Panel ):
 			dircod = self.finddir(Src_prg)
 			return dircod
 		else:
-			dircod = '1' + self.fld1.GetValue()  # +'1'
+			#dircod = '1' + self.fld1.GetValue()  # +'1'
+			dircod = '1' + '0' + str(self.grup.GetValue()) + '1'
 			self.iSrc_prg = self.MyMenu.GetImpCod('1000')[0][0]
 			self.iSrc_dir = self.MyMenu.GetDirCod('1000')[0][0]
 			mydir = Src_prg+'TB'

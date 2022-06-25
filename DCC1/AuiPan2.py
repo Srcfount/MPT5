@@ -619,7 +619,7 @@ class MyPanel1 ( wx.Panel ):
 			return codid
 
 	def NewPanePrg(self):
-		Data = [50000,'tempane', '5555', '-1', -1, 50]
+		Data = [50000,'tempane', '5555', '-1', -1, 500]
 		self.DoMenu.Table = 'handler'
 		self.DoMenu.Additem(' handlerid, prgname, prgdir, paramtr, public, prgno', Data)
 		if not os.path.isfile(Src_aui+'tempane.py'):

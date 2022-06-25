@@ -15,8 +15,10 @@ main_direct = ['AI', 'Config', 'Database', 'DCC1', 'GUI', 'GUI\\Temp', 'GUI\\API
                'Src', 'Src\\API', 'Src\\AUI', 'Src\\DBF', 'Src\\DBF\\sqls', 'Src\\GUI', 'Src\\MLA', 'Src\\MLP', 'Src\\PRG',
                'Temps', 'Utility', 'Utility\\Fount', 'Utility\\Fount\\GUI', 'Utility\\Fount\\MLA', 'Utility\\Fount\\MLP',
                'Utility\\Fount\\AUI', 'Utility\\Fount\\PRG', 'Utility\\Fount\\API', 'Utility\\UpdateApp',
-               'Utility\\Free','Utility\\Account','Utility\\Uploads','Utility\\Downloads'
+               'Utility\\Uploads','Utility\\Downloads'
                ]
+
+local_direct = ['Locale', 'Locale\\en', 'Locale\\fa', 'Locale\\fr', 'Locale\\gr', 'Locale\\sp', 'Locale\\tr']
 
 main_file = {
 	'AI': ['OpnSrc.py', 'Generats.py', 'DBgen.py', 'Analiz.py'],
@@ -34,6 +36,7 @@ main_file = {
 creat_file = {
 	'Config': ['MLmethod.ini', 'option.ini', 'system1.ini'],
 	'Database': ['Menu2.db'],
+	#'Locale':[''],{'en':'','fa':'','fr':,'','gr':'','sp':'','tr':''},
 	'..': ['Mainpro.py','update.py','requirements.txt','Allimp.py']
 }
 
@@ -75,6 +78,11 @@ def main(argv):
 				with open(mydir +dir+'\\'+'__init__.py','w') as f:
 					f.write('')
 					print('.', end='')
+
+	for dir in local_direct:
+		if not os.path.isdir(dir):
+			os.mkdir(dir)
+			print('.', end='')
 
 	for dir in main_file:
 		for fil in main_file[dir]:

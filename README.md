@@ -35,6 +35,7 @@ Appearance of the application
 
 ---------------------
   * Panes
+    You can Design or placed ![Pane](docs/Help/Panes.md) in your application
 ---------------------
   
 

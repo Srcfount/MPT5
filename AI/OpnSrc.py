@@ -175,14 +175,14 @@ class SrcPanel ( wx.Panel ):
 
 	def newstc(self, pyFile):
 		self.SrcAlg.ClearAll()
-		with open(pyFile) as fobj:
+		with open(pyFile, encoding=u'utf-8') as fobj:
 			text = fobj.read()
 		self.SrcAlg.SetText(text)
 		#self.SrcAlg.SetTextRaw(pyFile)
 
 	def opnstc(self, pyFile):
 		self.SrcAlg.ClearAll()
-		with open(pyFile) as fobj:
+		with open(pyFile, encoding=u'utf-8') as fobj:
 			text = fobj.read()
 		self.SrcAlg.SetText(text)
 

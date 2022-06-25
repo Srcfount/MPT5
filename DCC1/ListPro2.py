@@ -70,13 +70,13 @@ class MyPanel1 ( wx.Panel ):
 
 		#Vsz2.Add( Hsz1, 0, wx.EXPAND, 5 )
 
-		Hsz2 = wx.BoxSizer( wx.HORIZONTAL )
-
-		self.CntSrv = wx.Button( self.P1, wx.ID_ANY, _(u"Connect to server "), wx.DefaultPosition, wx.DefaultSize, 0 )
-		Hsz2.Add( self.CntSrv, 1, wx.ALL, 5 )
-
-
-		Vsz2.Add( Hsz2, 0, wx.EXPAND, 5 )
+		# Hsz2 = wx.BoxSizer( wx.HORIZONTAL )
+		#
+		# self.CntSrv = wx.Button( self.P1, wx.ID_ANY, _(u"Connect to server "), wx.DefaultPosition, wx.DefaultSize, 0 )
+		# Hsz2.Add( self.CntSrv, 1, wx.ALL, 5 )
+		#
+		#
+		# Vsz2.Add( Hsz2, 0, wx.EXPAND, 5 )
 
 		Hsz3 = wx.BoxSizer( wx.HORIZONTAL )
 
@@ -145,24 +145,22 @@ class MyPanel1 ( wx.Panel ):
 
 		Vsz3.Add( Hsz11, 1, wx.EXPAND, 5 )
 
-		Hsz12 = wx.BoxSizer( wx.HORIZONTAL )
-
-		self.btndon = wx.Button(self.P2, wx.ID_ANY, _(u"Download"), wx.DefaultPosition, wx.DefaultSize, wx.BU_EXACTFIT)
-		Hsz12.Add(self.btndon, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
-
-		self.gug1 = wx.Gauge(self.P2, wx.ID_ANY, 100, wx.DefaultPosition, wx.DefaultSize, wx.GA_HORIZONTAL)
-		self.gug1.SetValue(0)
-		Hsz12.Add(self.gug1, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
-
-		Vsz3.Add( Hsz12, 0, wx.EXPAND, 5 )
+		# Hsz12 = wx.BoxSizer( wx.HORIZONTAL )
+		#
+		# self.btndon = wx.Button(self.P2, wx.ID_ANY, _(u"Download"), wx.DefaultPosition, wx.DefaultSize, wx.BU_EXACTFIT)
+		# Hsz12.Add(self.btndon, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+		#
+		# self.gug1 = wx.Gauge(self.P2, wx.ID_ANY, 100, wx.DefaultPosition, wx.DefaultSize, wx.GA_HORIZONTAL)
+		# self.gug1.SetValue(0)
+		# Hsz12.Add(self.gug1, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+		#
+		# Vsz3.Add( Hsz12, 0, wx.EXPAND, 5 )
 
 		Hsz13 = wx.BoxSizer( wx.HORIZONTAL )
 
 		self.extchk = wx.Button(self.P2, wx.ID_ANY, _(u"Extract, Check and Show File"), wx.DefaultPosition, wx.DefaultSize,
 		                        0)
 		Hsz13.Add(self.extchk, 1, wx.ALL, 5)
-
-
 
 
 		Vsz3.Add( Hsz13, 0, wx.EXPAND, 5 )
@@ -222,7 +220,7 @@ class MyPanel1 ( wx.Panel ):
 
 		# Connect Events
 		self.TLC1.Bind(wx.dataview.EVT_DATAVIEW_SELECTION_CHANGED, self.slctitm, id=wx.ID_ANY)
-		self.CntSrv.Bind( wx.EVT_BUTTON, self.consrv )
+		#self.CntSrv.Bind( wx.EVT_BUTTON, self.consrv )
 		self.btn1.Bind( wx.EVT_BUTTON, self.addit )
 		self.btn2.Bind( wx.EVT_BUTTON, self.editit )
 		self.btn3.Bind( wx.EVT_BUTTON, self.delit )
@@ -231,7 +229,7 @@ class MyPanel1 ( wx.Panel ):
 		self.btn6.Bind( wx.EVT_BUTTON, self.aply )
 		self.btn7.Bind( wx.EVT_BUTTON, self.gnrt )
 		#self.btn8.Bind( wx.EVT_BUTTON, self.mnuid )
-		self.btndon.Bind(wx.EVT_BUTTON, self.dnlod)
+		#self.btndon.Bind(wx.EVT_BUTTON, self.dnlod)
 		self.extchk.Bind(wx.EVT_BUTTON, self.extrc)
 		self.dir2.Bind( wx.EVT_DIRPICKER_CHANGED, self.thsdir )
 		#self.btn9.Bind( wx.EVT_BUTTON, self.dnlod )
@@ -245,7 +243,7 @@ class MyPanel1 ( wx.Panel ):
 	def filllist(self):
 
 		Aroot = self.TLC1.GetRootItem()
-		self.root1 = self.TLC1.AppendItem(Aroot, "Programs you can Download")
+		self.root1 = self.TLC1.AppendItem(Aroot, "Programs you Download it")
 		#self.root2 = self.TLC1.AppendItem(Aroot, "Programs in your Account")
 		self.root3 = self.TLC1.AppendItem(Aroot, "Programs that you Upload ")
 		self.root4 = self.TLC1.AppendItem(Aroot, "Unpacked downloaded Programs")
@@ -272,7 +270,6 @@ class MyPanel1 ( wx.Panel ):
 		self.dir2.SetPath(Data[1])
 		self.Refresh()
 		self.Layout()
-
 
 	def slctitm(self, event):
 		D = ['','','']
@@ -305,30 +302,30 @@ class MyPanel1 ( wx.Panel ):
 			self.thsfile = ''
 		#print(self.thsfile)
 
-	def consrv( self, event ):
-		import socket
-		# s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		# #host = socket.gethostbyname(socket.gethostname())
-		# ip = socket.gethostbyname('http:\\srcfount.pythonanywhere.com')
-		# print(ip)
-		# event.Skip()
-		try:
-			s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-			print("Socket successfully created")
-		except socket.error as err:
-			print("socket creation failed with error %s" % (err))
-
-		# default port for socket
-		port = 80
-		try:
-			self.host_ip = socket.gethostbyname('srcfount.pythonanywhere.com')
-		except socket.gaierror:
-			# this means could not resolve the host
-			print("there was an error resolving the host")
-		# connecting to the server
-		print(self.host_ip)
-		s.connect((self.host_ip, port))
-		print("the socket has successfully connected ")
+	# def consrv( self, event ):
+	# 	import socket
+	# 	# s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	# 	# #host = socket.gethostbyname(socket.gethostname())
+	# 	# ip = socket.gethostbyname('http:\\srcfount.pythonanywhere.com')
+	# 	# print(ip)
+	# 	# event.Skip()
+	# 	try:
+	# 		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	# 		print("Socket successfully created")
+	# 	except socket.error as err:
+	# 		print("socket creation failed with error %s" % (err))
+	#
+	# 	# default port for socket
+	# 	port = 80
+	# 	try:
+	# 		self.host_ip = socket.gethostbyname('srcfount.pythonanywhere.com')
+	# 	except socket.gaierror:
+	# 		# this means could not resolve the host
+	# 		print("there was an error resolving the host")
+	# 	# connecting to the server
+	# 	print(self.host_ip)
+	# 	s.connect((self.host_ip, port))
+	# 	print("the socket has successfully connected ")
 
 	def addit( self, event ):
 		def addzip(izipname,chld2):
@@ -515,17 +512,17 @@ class MyPanel1 ( wx.Panel ):
 	def thsdir( self, event ):
 		event.Skip()
 
-	def dnlod( self, event ):
-		event.Skip()
+	# def dnlod( self, event ):
+	# 	event.Skip()
 
 	def extrc(self, event):
 		txt = self.TLC1.GetItemText(self.TLC1.GetSelection(), 0)
 		rot = self.TLC1.GetItemParent(self.TLC1.GetSelection())
 		roottxt = self.TLC1.GetItemText(rot, 0)
 		msg = ''
-		if 'Unpacked' in roottxt:
+		if 'Download' in roottxt:
 			#print(txt)
-			with zipfile.ZipFile(UTILITY_PATH+'Account'+SLASH+txt,'r') as fz:
+			with zipfile.ZipFile(UTILITY_PATH+'Downloads'+SLASH+txt,'r') as fz:
 				#fz.printdir()
 				fz.extract('infopack.sfn',TEMPS_PATH)
 			with open(TEMPS_PATH+'infopack.sfn','r') as f:
@@ -534,12 +531,10 @@ class MyPanel1 ( wx.Panel ):
 				finfo = fl.split(',')
 				msg += 'Copy file Src/%s [%s] size %s'%(finfo[0]+'/'+finfo[2],finfo[1],finfo[3])
 				self.msag.SetValue(msg)
-				with zipfile.ZipFile(UTILITY_PATH + 'Account' + SLASH + txt, 'r') as fz:
+				with zipfile.ZipFile(UTILITY_PATH + 'Downloads' + SLASH + txt, 'r') as fz:
 					fz.extract(finfo[2],TEMPS_PATH)
 
 				#shutil.copy(TEMPS_PATH+fl,)
-
-
 
 		event.Skip()
 
@@ -549,6 +544,4 @@ class MyPanel1 ( wx.Panel ):
 	def Splt1OnIdle( self, event ):
 		self.Splt1.SetSashPosition( 255 )
 		self.Splt1.Unbind( wx.EVT_IDLE )
-
-
 

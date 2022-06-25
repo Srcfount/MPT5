@@ -128,21 +128,18 @@ CREATE TABLE "MLinfo" (
 	`MLcod`	TEXT
 );
 
--- INSERT INTO `MLinfo` (MLPid,MLname,MLcod) VALUES (11701,'NeruNetwork','NN');
 
 CREATE TABLE "MLPane" (
 	`MLPid`	INTEGER,
 	`MLPfile`	TEXT
 );
 
--- INSERT INTO `MLPane` (MLPid,MLPfile) VALUES (11701,'NeruPanel');
 
 CREATE TABLE `MLAlgo` (
 	`MLcod`	TEXT,
 	`MLAsrc`	TEXT
 );
 
--- INSERT INTO `MLAlgo` (MLcod,MLAsrc) VALUES ('NN','NeruNet');
 
 CREATE TABLE "Guidir" (
 	`Dir`	TEXT,

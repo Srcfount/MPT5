@@ -114,6 +114,7 @@ class MainWin(wx.Frame):
         if platform.system() == 'windows':
             self.m_mgr.UnInit()
 
+
     def OnClose(self, event):
         if 'timer' in dir(self):
             if self.timer.IsRunning():

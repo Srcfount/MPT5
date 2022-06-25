@@ -1259,7 +1259,7 @@ class MyPanel3 ( wx.Panel ):
 		    if len(self.GetMenu.getHndlr('Demo',' and handler.prgdir = %d ' %int(dircod))) == 0:
 			    self.SetMenu.Table = u'handler'
 			    self.SetMenu.Additem(u' handlerid, prgname, prgdir, paramtr, public, prgno',
-			                         (10000+int(dircod[1:3])*100,'Demo',dircod, '-1',-1,100*int(dircod[1])))
+			                         (10000+int(dircod[1:3])*100,'Demo',dircod, '-1',-1,1000*int(dircod[1])))
 			    pass
 		    mb.Append(wx.Menu(),data1)
 
