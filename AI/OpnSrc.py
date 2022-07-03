@@ -22,7 +22,8 @@ _ = wx.GetTranslation
 if wx.Platform == '__WXMSW__':
     faces = {'times': 'Times New Roman',
              'mono': 'Courier New',
-             'helv': 'Arial',
+             'helv': 'Arial', #'Tahoma', #'Arial',
+
              'other': 'Comic Sans MS',
              'size': 10,
              'size2': 8,
@@ -51,25 +52,44 @@ class PythonSTC(stc.StyledTextCtrl):
     def __init__(self, parent, PyFile):
         stc.StyledTextCtrl.__init__(self, parent)
 
+        self.StyleClearAll()  # Reset all to be like the default
+
         self.CmdKeyAssign(ord('B'), stc.STC_SCMOD_CTRL, stc.STC_CMD_ZOOMIN)
         self.CmdKeyAssign(ord('N'), stc.STC_SCMOD_CTRL, stc.STC_CMD_ZOOMOUT)
+
 
         self.SetLexer(stc.STC_LEX_PYTHON)
         self.SetKeyWords(0, " ".join(keyword.kwlist))
 
         self.SetProperty("fold", "1")
         self.SetProperty("tab.timmy.whinge.level", "1")
-        self.SetMargins(0, 0)
+        #self.SetMargins(0, 0)
+
+        # Indentation and tab stuff
+        self.SetIndent(4)  # Proscribed indent size for wx
+        self.SetIndentationGuides(True)  # Show indent guides
+        self.SetBackSpaceUnIndents(True)  # Backspace unindents rather than delete 1 space
+        self.SetTabIndents(True)  # Tab key indents
+        self.SetTabWidth(4)  # Proscribed tab size for wx
+        self.SetUseTabs(False)  # Use spaces rather than tabs, or
+        # TabTimmy will complain!
 
         self.SetViewWhiteSpace(False)
+        self.SetIndentationGuides(stc.STC_STYLE_INDENTGUIDE)
+
+        self.SetEOLMode(stc.STC_EOL_LF)
         # self.SetBufferedDraw(False)
-        # self.SetViewEOL(True)
-        # self.SetEOLMode(stc.STC_EOL_CRLF)
-        # self.SetUseAntiAliasing(True)
+        self.SetViewEOL(False)
+        self.SetEOLMode(stc.STC_EDGE_NONE)
+        #self.SetUseAntiAliasing(True)
+        self.SetMarginType(1, stc.STC_MARGIN_NUMBER)
+        self.SetMarginMask(1, 0)
+        self.SetMarginWidth(1, 40)
 
         # Global default styles for all languages
         self.StyleSetSpec(stc.STC_STYLE_DEFAULT, "face:%(helv)s,size:%(size)d" % faces)
-        self.StyleClearAll()  # Reset all to be like the default
+
+
 
         # Global default styles for all languages
         self.StyleSetSpec(stc.STC_STYLE_DEFAULT, "face:%(helv)s,size:%(size)d" % faces)
@@ -102,13 +122,21 @@ class PythonSTC(stc.StyledTextCtrl):
         # Operators
         self.StyleSetSpec(stc.STC_P_OPERATOR, "bold,size:%(size)d" % faces)
         # Identifiers
-        self.StyleSetSpec(stc.STC_P_IDENTIFIER, "fore:#000000,face:%(helv)s,size:%(size)d" % faces)
+        #self.StyleSetSpec(stc.STC_P_IDENTIFIER, "fore:#000000,face:%(helv)s,size:%(size)d" % faces)
+        self.StyleSetSpec(wx.stc.STC_P_IDENTIFIER, 'fore:#000000')
         # Comment-blocks
         self.StyleSetSpec(stc.STC_P_COMMENTBLOCK, "fore:#7F7F7F,size:%(size)d" % faces)
         # End of line where string is not closed
         self.StyleSetSpec(stc.STC_P_STRINGEOL, "fore:#000000,face:%(mono)s,back:#E0C0E0,eol,size:%(size)d" % faces)
 
+        #self.StyleSetSpec(stc.STC_TD_STRIKEOUT)
+        #self.SetTabDrawMode(stc.STC_TD_STRIKEOUT)
+
         self.SetCaretForeground("BLUE")
+
+        self.StyleSetFontEncoding(stc.STC_STYLE_DEFAULT,wx.FONTENCODING_CP1256)#    wx.FONTENCODING_UTF8)
+
+        #print(self.GetCodePage())
 
         # register some images for use in the AutoComplete box.
         # self.RegisterImage(1, images.Smiles.GetBitmap())
@@ -121,6 +149,7 @@ class PythonSTC(stc.StyledTextCtrl):
             text = fobj.read()
 
         self.SetText(text)
+
 
     def slctal(self):
         self.SelectAll()
@@ -143,7 +172,7 @@ class SrcPanel ( wx.Panel ):
 
 		self.SrcAlg = PythonSTC(self, pyFile)
 
-		#self.SrcAlg.
+		#self.SrcAlg.GetCurrentPos()
 
 		Hsz1.Add( self.SrcAlg, 1, wx.EXPAND |wx.ALL, 5 )
 
@@ -155,7 +184,6 @@ class SrcPanel ( wx.Panel ):
 
 		self.Bind(wx.stc.EVT_STC_CHARADDED, self.editfile, id=wx.ID_ANY)
 		self.SrcAlg.Bind(wx.EVT_CHAR_HOOK, self.kyhok)
-
 
 
 	def __del__( self ):
@@ -191,6 +219,7 @@ class SrcPanel ( wx.Panel ):
 
 
 
+
 ###########################################################################
 ## Class MyMenuBar1
 ###########################################################################
@@ -220,6 +249,7 @@ class MyMenuBar1 ( wx.MenuBar ):
 			                 (95,_(u'MLA Utility(Y select)'),u'',self.impmlu),(96,_(u'MLA Utility(Show Matrix)'),u'',self.impmlu)]
 			#mymnu[_(u'MLA Dev')] = [(50, _(u'Add this file'), u'', self.toML)]
 
+
 		self.Itms = []
 		m = 0
 		self.Mnus = []
@@ -248,6 +278,7 @@ class MyMenuBar1 ( wx.MenuBar ):
 			self.DfDir = MAP
 
 		self.Bind(wx.EVT_MENU_OPEN, self.Doinit, id=self.GetId())
+
 
 
 	def __del__(self):
@@ -308,9 +339,18 @@ class MyMenuBar1 ( wx.MenuBar ):
 				# save the current contents in the file
 				pathname = fileDialog.GetPath()
 				# print(pathname)
-				self.SrcTxt.SaveFile(pathname)
+				try:
+					with open(pathname, 'w', encoding='utf-8') as f:
+						f.write(self.SrcTxt.GetText())
+				except IOError:
+					print('file error')
 		else:
-			self.SrcTxt.SaveFile(self.pyfile)
+			try:
+				with open(self.pyfile, 'w', encoding='utf-8') as f:
+					f.write(self.SrcTxt.GetText())
+					#self.SrcTxt.SaveFile(self.pyfile)
+			except IOError:
+				print('File not write had error')
 			wx.MessageBox(_(u'You save to file change successful.'))
 			self.pnl.ischanged = False
 			self.GetParent().SetLabel(self.pyfile)
@@ -325,7 +365,12 @@ class MyMenuBar1 ( wx.MenuBar ):
 			# save the current contents in the file
 			pathname = fileDialog.GetPath()
 			# print(pathname)
-			self.SrcTxt.SaveFile(pathname)
+			try:
+				with open(pathname, 'w', encoding='utf-8') as f:
+					f.write(self.SrcTxt.GetText())
+			except IOError:
+				print('file error')
+			#self.SrcTxt.SaveFile(pathname)
 			self.pnl.pyFile = pathname
 			self.pnl.opnstc(pathname)
 			self.GetParent().SetLabel(pathname)
@@ -443,89 +488,90 @@ class MyMenuBar1 ( wx.MenuBar ):
 	def impmlu(self, event):
 		pass
 
-	def toML(self, event):
-		print(self.pnl.pyFile)
-		ifil = self.pnl.pyFile.split('\\')[-1].replace(u'.py',u'')
-		print(ifil)
-		if self.pnl.pyFile == GUI_PATH+u'Temp\\untitle.py':
-			wx.MessageBox(_(u'Please save your work then Do this perosse.'))
-			self.savasit(event)
-		elif self.pnl.pyFile == GUI_PATH+u'Temp\\Muntitle.py':
-			wx.MessageBox(_(u'Please save your work then Do this perosse.'))
-			self.savasit(event)
-		else:
-			print(self.DfDir)
-			MLpnl = self.GetGrandParent()
-			if self.DfDir == Src_mlp: #SRC_PATH+u'mlp\\':
-				mylstml = MLpnl.getMData.AllML(u'join MLPane on MLinfo.MLPid = MLPane.MLPid')
-				print(mylstml)
-				tclslct = MLpnl.TLC1.GetSelection()
-				if MLpnl.getMData.MLPansFils(u" where MLPane.MLPfile = '%s' " %ifil ) != []:
-					wx.MessageBox(_(u'File is exist please change it'))
-				else:
-					lebls = [u'Par. Pane Name', u'Par. Pane code', u'Par. Pane file']
-					data = [ifil]
-					dlg = wx.Dialog(self.GetFrame(), -1)
-					pnl = MyPanel4(dlg, lebls, data)
-					dlg.SetSize((480, 190))
-					dlg.SetLabel(_(u'Add MLA to List'))
-					dlg.ShowModal()
-					if pnl.acpt:
-						algnm = pnl.fld1.GetValue()
-						algcd = pnl.fld2.GetValue()
-						algid = pnl.fld4.GetValue()
-					dlg.Destroy()
-					#print(algid, algnm, algcd)
-					#print(MLpnl.codings)
-					if algnm != u'' or algcd != u'' or algid != u'':
-						if int(algid) > MLpnl.codings[0] and int(algid) < MLpnl.codings[1]:
-							#print(u'to database')
-							#MLpnl.setMDate.Table = u'MLinfo'
-							#MLpnl.setMDate.Additem(u' MLPid, MLname, MLcod', [int(algid), algnm, algcd])
-							MLpnl.setMDate.Table = u'MLPane'
-							MLpnl.setMDate.Additem(u' MLPid, MLPfile', [algid, ifil])
-							wx.MessageBox(_(u'Your source Add to list Successfully.'))
-						else:
-							wx.MessageBox(_(u'Please attend to coding range!'))
-					else:
-						wx.MessageBox(_(u'Some fields is empty or wrong ! try again!'))
 
-
-			if self.DfDir == Src_mla: #SRC_PATH+u'mla\\':
-				mylstml = MLpnl.getMData.AllML(u'join MLAlgo on MLAlgo.MLcod = MLinfo.MLcod')
-				print(mylstml)
-				tclslct = MLpnl.TLC1.GetSelection()
-				#algnm = MLpnl.TLC1.GetItemText(tclslct, 0)
-				#algcd = MLpnl.TLC1.GetItemText(tclslct, 1)
-				if MLpnl.getMData.MLAlgoFils(u" where MLAlgo.MLAsrc = '%s' " %ifil ) != []:
-					wx.MessageBox(_(u'File is exist please change it'))
-				else:
-					lebls = [u'Algorithm Name', u'Algorithm Code', u'Algorithm file']
-					data = [ifil]
-					dlg = wx.Dialog(self.GetFrame(), -1)
-					pnl = MyPanel4(dlg, lebls, data)
-					dlg.SetSize((480, 190))
-					dlg.SetLabel(_(u'Add MLA to List'))
-					dlg.ShowModal()
-					if pnl.acpt:
-						algnm = pnl.fld1.GetValue()
-						algcd = pnl.fld2.GetValue()
-						algid = pnl.fld4.GetValue()
-					dlg.Destroy()
-					#print(algid,algnm,algcd)
-					#print(MLpnl.codings)
-					if algnm != u'' or algcd != u'' or algid != u'':
-						if int(algid) > MLpnl.codings[0] and int(algid) < MLpnl.codings[1]:
-							#print(u'to database')
-							MLpnl.setMDate.Table = u'MLinfo'
-							MLpnl.setMDate.Additem(u' MLPid, MLname, MLcod',[int(algid), algnm, algcd])
-							MLpnl.setMDate.Table = u'MLAlgo'
-							MLpnl.setMDate.Additem(u' MLcod, MLAsrc',[algcd, ifil])
-							wx.MessageBox(_(u'Your source Add to list Successfully.'))
-						else:
-							wx.MessageBox(_(u'Please attend to coding range!'))
-					else:
-						wx.MessageBox(_(u'Some fields is empty or wrong ! try again!'))
+	# def toML(self, event):
+	# 	print(self.pnl.pyFile)
+	# 	ifil = self.pnl.pyFile.split('\\')[-1].replace(u'.py',u'')
+	# 	print(ifil)
+	# 	if self.pnl.pyFile == GUI_PATH+u'Temp\\untitle.py':
+	# 		wx.MessageBox(_(u'Please save your work then Do this perosse.'))
+	# 		self.savasit(event)
+	# 	elif self.pnl.pyFile == GUI_PATH+u'Temp\\Muntitle.py':
+	# 		wx.MessageBox(_(u'Please save your work then Do this perosse.'))
+	# 		self.savasit(event)
+	# 	else:
+	# 		print(self.DfDir)
+	# 		MLpnl = self.GetGrandParent()
+	# 		if self.DfDir == Src_mlp: #SRC_PATH+u'mlp\\':
+	# 			mylstml = MLpnl.getMData.AllML(u'join MLPane on MLinfo.MLPid = MLPane.MLPid')
+	# 			print(mylstml)
+	# 			tclslct = MLpnl.TLC1.GetSelection()
+	# 			if MLpnl.getMData.MLPansFils(u" where MLPane.MLPfile = '%s' " %ifil ) != []:
+	# 				wx.MessageBox(_(u'File is exist please change it'))
+	# 			else:
+	# 				lebls = [u'Par. Pane Name', u'Par. Pane code', u'Par. Pane file']
+	# 				data = [ifil]
+	# 				dlg = wx.Dialog(self.GetFrame(), -1)
+	# 				pnl = MyPanel4(dlg, lebls, data)
+	# 				dlg.SetSize((480, 190))
+	# 				dlg.SetLabel(_(u'Add MLA to List'))
+	# 				dlg.ShowModal()
+	# 				if pnl.acpt:
+	# 					algnm = pnl.fld1.GetValue()
+	# 					algcd = pnl.fld2.GetValue()
+	# 					algid = pnl.fld4.GetValue()
+	# 				dlg.Destroy()
+	# 				#print(algid, algnm, algcd)
+	# 				#print(MLpnl.codings)
+	# 				if algnm != u'' or algcd != u'' or algid != u'':
+	# 					if int(algid) > MLpnl.codings[0] and int(algid) < MLpnl.codings[1]:
+	# 						#print(u'to database')
+	# 						#MLpnl.setMDate.Table = u'MLinfo'
+	# 						#MLpnl.setMDate.Additem(u' MLPid, MLname, MLcod', [int(algid), algnm, algcd])
+	# 						MLpnl.setMDate.Table = u'MLPane'
+	# 						MLpnl.setMDate.Additem(u' MLPid, MLPfile', [algid, ifil])
+	# 						wx.MessageBox(_(u'Your source Add to list Successfully.'))
+	# 					else:
+	# 						wx.MessageBox(_(u'Please attend to coding range!'))
+	# 				else:
+	# 					wx.MessageBox(_(u'Some fields is empty or wrong ! try again!'))
+	#
+	#
+	# 		if self.DfDir == Src_mla: #SRC_PATH+u'mla\\':
+	# 			mylstml = MLpnl.getMData.AllML(u'join MLAlgo on MLAlgo.MLcod = MLinfo.MLcod')
+	# 			print(mylstml)
+	# 			tclslct = MLpnl.TLC1.GetSelection()
+	# 			#algnm = MLpnl.TLC1.GetItemText(tclslct, 0)
+	# 			#algcd = MLpnl.TLC1.GetItemText(tclslct, 1)
+	# 			if MLpnl.getMData.MLAlgoFils(u" where MLAlgo.MLAsrc = '%s' " %ifil ) != []:
+	# 				wx.MessageBox(_(u'File is exist please change it'))
+	# 			else:
+	# 				lebls = [u'Algorithm Name', u'Algorithm Code', u'Algorithm file']
+	# 				data = [ifil]
+	# 				dlg = wx.Dialog(self.GetFrame(), -1)
+	# 				pnl = MyPanel4(dlg, lebls, data)
+	# 				dlg.SetSize((480, 190))
+	# 				dlg.SetLabel(_(u'Add MLA to List'))
+	# 				dlg.ShowModal()
+	# 				if pnl.acpt:
+	# 					algnm = pnl.fld1.GetValue()
+	# 					algcd = pnl.fld2.GetValue()
+	# 					algid = pnl.fld4.GetValue()
+	# 				dlg.Destroy()
+	# 				#print(algid,algnm,algcd)
+	# 				#print(MLpnl.codings)
+	# 				if algnm != u'' or algcd != u'' or algid != u'':
+	# 					if int(algid) > MLpnl.codings[0] and int(algid) < MLpnl.codings[1]:
+	# 						#print(u'to database')
+	# 						MLpnl.setMDate.Table = u'MLinfo'
+	# 						MLpnl.setMDate.Additem(u' MLPid, MLname, MLcod',[int(algid), algnm, algcd])
+	# 						MLpnl.setMDate.Table = u'MLAlgo'
+	# 						MLpnl.setMDate.Additem(u' MLcod, MLAsrc',[algcd, ifil])
+	# 						wx.MessageBox(_(u'Your source Add to list Successfully.'))
+	# 					else:
+	# 						wx.MessageBox(_(u'Please attend to coding range!'))
+	# 				else:
+	# 					wx.MessageBox(_(u'Some fields is empty or wrong ! try again!'))
 
 
 
@@ -545,7 +591,6 @@ class MyMenuBar1 ( wx.MenuBar ):
 			#dlg.SetLabel(u'Add MLA to List')
 			#dlg.ShowModal()
 			#dlg.Destroy()
-
 
 	def tst(self, event):
 		event.Skip()

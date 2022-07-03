@@ -106,8 +106,8 @@ class MyPanel1 ( wx.Panel ):
 
 		self.btn5 = wx.BitmapButton( self.P1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0 )
 		#self.btn5.SetBitmap(wx.Bitmap(ICON16_PATH + u'update.png', wx.BITMAP_TYPE_ANY))
-		self.btn5.SetBitmap(icon.application_get.GetBitmap())
-		self.btn5.SetToolTip(_(u"Upload"))
+		self.btn5.SetBitmap(icon.update.GetBitmap())
+		self.btn5.SetToolTip(_(u"UpDate"))
 		Hsz3.Add( self.btn5, 0, wx.ALL, 5 )
 
 		self.btn6 = wx.BitmapButton( self.P1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0 )
@@ -244,25 +244,45 @@ class MyPanel1 ( wx.Panel ):
 
 		Aroot = self.TLC1.GetRootItem()
 		self.root1 = self.TLC1.AppendItem(Aroot, "Programs you Download it")
-		#self.root2 = self.TLC1.AppendItem(Aroot, "Programs in your Account")
+		self.root2 = self.TLC1.AppendItem(Aroot, "Programs in your Account")
 		self.root3 = self.TLC1.AppendItem(Aroot, "Programs that you Upload ")
 		self.root4 = self.TLC1.AppendItem(Aroot, "Unpacked downloaded Programs")
 		#self.root5 = self.TLC1.AppendItem(Aroot, "Programs file in your HDD ")
 
-
-		dirct = ['Downloads','Uploads','Account']
-		#roots = [self.root1,self.root2,self.root3,self.root4]
-		roots = [self.root1,  self.root3, self.root4]
+		dirct = ['Downloads','Account','Uploads','Fount']
+		dirdt2 = ['API', 'AUI', 'GUI', 'MLA', 'MLP', 'PRG']
+		dcods = {'API': 6122, 'AUI': 6155, 'PRG': 6111, 'GUI': 6177, 'MLA': 6133, 'MLP': 6144}
+		roots = [self.root1,self.root2,self.root3,self.root4]
+		#roots = [self.root1,  self.root3, self.root4]
 		i=0
 		for d in dirct:
 			mylist = os.listdir(UTILITY_PATH+d+'\\')
-			for fil in mylist:
-				if fil != '__init__.py':
-					myfil = fil.replace(UTILITY_PATH+d+'\\','')
-					mychld = self.TLC1.AppendItem(roots[i],d)
-					self.TLC1.SetItemText(mychld,0,myfil)
-					self.TLC1.SetItemText(mychld,1,'>>>')
+			if i == 3:
+				for d in dirdt2:
+					mylist2 = os.listdir(UTILITY_PATH + 'Fount\\' + d + '\\')
+					mychild = self.TLC1.AppendItem(self.root4, 'Unpacked')
+					self.TLC1.SetItemText(mychild, 0, d)
+					self.TLC1.SetItemText(mychild, 1, str(dcods[d])[-3:])
+					for file in mylist2:
+						if file != '__init__.py' and file != '__pycache__':
+							child2 = self.TLC1.AppendItem(mychild, d)
+							self.TLC1.SetItemText(child2, 0, file)
+							self.TLC1.SetItemText(child2, 1, str(dcods[d]))
+				for f in mylist:
+					if f != '__init__.py' and f != '__pycache__' and f not in dirdt2:
+						mychld = self.TLC1.AppendItem(self.root4,d)
+						self.TLC1.SetItemText(mychld,0,f)
+						self.TLC1.SetItemText(mychld,1,'^^^')
+
+			else:
+				for fil in mylist:
+					if fil != '__init__.py' and fil != '__pycache__':
+						myfil = fil.replace(UTILITY_PATH+d+'\\','')
+						mychld = self.TLC1.AppendItem(roots[i],d)
+						self.TLC1.SetItemText(mychld,0,myfil)
+						self.TLC1.SetItemText(mychld,1,'>>>')
 			i += 1
+
 
 	def fillfilds(self, Data):
 		self.Descr.SetValue(Data[0])
@@ -275,12 +295,16 @@ class MyPanel1 ( wx.Panel ):
 		D = ['','','']
 		self.fillfilds(D)
 		itm = self.TLC1.GetSelection()
-		txt = self.TLC1.GetItemText(itm, 0)
-		cod = self.TLC1.GetItemText(itm, 1)
-		par = self.TLC1.GetItemParent(itm)
-		rot = self.TLC1.GetItemText(par, 0)
-		#print(txt)
-		if 'Download' in txt:
+		if itm:
+			txt = self.TLC1.GetItemText(itm, 0)
+			cod = self.TLC1.GetItemText(itm, 1)
+			par = self.TLC1.GetItemParent(itm)
+			rot = self.TLC1.GetItemText(par, 0)
+		else:
+			txt = ''
+			code = 6666
+		#print(txt,rot)
+		if 'Download' in txt :
 			Discrpt = "Programs you download from Site in to your HardDisk"
 			Pathsrc = UTILITY_PATH+'Downloads'
 		elif 'Upload' in txt:
@@ -291,41 +315,44 @@ class MyPanel1 ( wx.Panel ):
 			Pathsrc = UTILITY_PATH+'Account'
 
 		else:
-		 	Discrpt = ""
-		 	Pathsrc = ""
+			if 'pack' in txt and not '.sfn' in txt and cod == '>>>': # and 'Download' in rot:
+				if 'Download' in rot:
+					ipath = UTILITY_PATH+'Downloads'+SLASH
+				if 'Upload' in rot:
+					ipath = UTILITY_PATH+'Uploads'+SLASH
+				with zipfile.ZipFile(ipath+txt,'r') as zf:
+					for ifi in zf.namelist():
+						if '.sfn' in ifi:
+							itxt = zf.read(ifi)
+				Discrpt = self.ShowDscr(itxt)
+				Pathsrc = UTILITY_PATH+"Fount"
+			elif '.sfn' in txt:
+				with open(UTILITY_PATH+"Fount"+SLASH+txt, 'r', encoding='utf-8') as f:
+					itxt=bytes(f.read(), 'utf-8')
+				Discrpt = self.ShowDscr(itxt)
+				Pathsrc = UTILITY_PATH+"Fount"
+			else:
+				Discrpt = ""
+				Pathsrc = ""
 
 		D = [Discrpt,Pathsrc]
 		self.fillfilds(D)
 		if '.py' in txt:
 			self.thsfile = UTILITY_PATH+'Fount\\'+rot+SLASH+txt
 		else:
-			self.thsfile = ''
+		 	self.thsfile = ''
 		#print(self.thsfile)
 
-	# def consrv( self, event ):
-	# 	import socket
-	# 	# s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	# 	# #host = socket.gethostbyname(socket.gethostname())
-	# 	# ip = socket.gethostbyname('http:\\srcfount.pythonanywhere.com')
-	# 	# print(ip)
-	# 	# event.Skip()
-	# 	try:
-	# 		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	# 		print("Socket successfully created")
-	# 	except socket.error as err:
-	# 		print("socket creation failed with error %s" % (err))
-	#
-	# 	# default port for socket
-	# 	port = 80
-	# 	try:
-	# 		self.host_ip = socket.gethostbyname('srcfount.pythonanywhere.com')
-	# 	except socket.gaierror:
-	# 		# this means could not resolve the host
-	# 		print("there was an error resolving the host")
-	# 	# connecting to the server
-	# 	print(self.host_ip)
-	# 	s.connect((self.host_ip, port))
-	# 	print("the socket has successfully connected ")
+	def ShowDscr( self, sfntxt):
+		#print(sfntxt)
+		txt = sfntxt.decode('utf-8')
+		#print(txt.find('*/'))
+		idx = txt.find('*/')
+		if idx != -1:
+			#print(txt[idx+2:])
+			return txt[idx+2:]
+		else:
+			return ''
 
 	def addit( self, event ):
 		def addzip(izipname,chld2):
@@ -431,29 +458,61 @@ class MyPanel1 ( wx.Panel ):
 		event.Skip()
 
 	def prw( self, event ):
-		event.Skip()
-
-	def upd( self, event ):
 		txt = self.TLC1.GetItemText(self.TLC1.GetSelection(), 0)
 		rot = self.TLC1.GetItemParent(self.TLC1.GetSelection())
 		roottxt = self.TLC1.GetItemText(rot, 0)
-		if 'packzip' in txt:
-			with open(UTILITY_PATH+'Uploads'+SLASH+txt,'rb') as f:
-				url = "http://SrcFount.pythonanywhere.com"
+		self.Frm = wx.Frame(self, style=wx.CAPTION | wx.CLOSE_BOX | wx.FRAME_FLOAT_ON_PARENT | wx.TAB_TRAVERSAL)
+		self.Pnl = OS.SrcPanel(self.Frm, self.thsfile)
+		self.Frm.SetMenuBar(OS.MyMenuBar1(u'Pro'))
+		self.Frm.SetSize((700, 560))
+		self.Frm.SetLabel(self.thsfile)
+		self.Frm.Show()
+		event.Skip()
 
-				tstpos = requests.post(self.host_ip,data=f) #,files = {"UPLOAD_FOLDER": f})
-			if tstpos.ok:
-				self.msag.write("Upload completed successfully!")
-				self.msag.write(tstpos.text)
-			else:
-				self.msag.write("Something went wrong!")
-
-
-
+	def upd( self, event ):
+		self.TLC1.DeleteAllItems()
+		self.filllist()
+		self.Refresh()
 		event.Skip()
 
 	def aply( self, event ):
+		itm = self.TLC1.GetSelection()
+		if itm:
+			txt = self.TLC1.GetItemText(itm, 0)
+			cod = self.TLC1.GetItemText(itm, 1)
+			par = self.TLC1.GetItemParent(itm)
+			rot = self.TLC1.GetItemText(par, 0)
+		if self.dir2.GetPath() == '' or self.dir2.GetPath() == UTILITY_PATH+'Fount':
+			wx.MessageBox(_("Please Change your path or select a correct path"))
+			return
+
+		if '.sfn' in txt:
+			with open(UTILITY_PATH+'Fount'+SLASH+txt, 'r', encoding='utf-8') as f:
+				if_lst = self.list_py_file( f.readlines() )
+			#print(if_lst)
+			if SRC_PATH not in self.dir2.GetPath():
+				print(SRC_PATH, self.dir2.GetPath())
+			for i in if_lst:
+				if 'PRG' in i[0]:
+					shutil.copy(UTILITY_PATH+'Fount'+SLASH+i[0]+SLASH+i[2],self.dir2.GetPath())
+				else:
+					shutil.copy(UTILITY_PATH + 'Fount' + SLASH + i[0] + SLASH + i[2], SRC_PATH+i[0])
+
+			wx.MessageBox(_(" All file Successfull copy to Src path"))
+
+			shutil.make_archive( UTILITY_PATH+'Account'+SLASH+txt , 'tar', UTILITY_PATH + 'Fount')
+			#os.remove(UTILITY_PATH+'Fount'+SLASH+txt)
+			#for j in if_lst:
+			#	os.remove(UTILITY_PATH+'Fount'+SLASH+j[0]+SLASH+j[2])
+			pass
 		event.Skip()
+
+	def list_py_file(self, txtlins):
+		mylst = []
+		for t in txtlins:
+			if '/*' not in t:
+				mylst.append(t.replace('\n','').split(','))
+		return mylst
 
 	def gnrt( self, event ):
 
@@ -461,10 +520,11 @@ class MyPanel1 ( wx.Panel ):
 		rot = self.TLC1.GetItemParent(self.TLC1.GetSelection())
 		roottxt = self.TLC1.GetItemText(rot,0)
 		if 'packzip' in txt and 'Upload' in roottxt:
-			with open(TEMPS_PATH + 'infopack.sfn', 'a', encoding='utf-8') as f:
+			with open(TEMPS_PATH + 'infopack'+txt.lstrip('packzip').rstrip('.tm5')+'.sfn', 'a', encoding='utf-8') as f:
 				for t in self.infopacktxt:
 					#print(t[2])
 					f.write(t[0]+','+t[1]+','+t[2]+','+t[3]+'\n')
+				f.write('/*=========Desc.=========*/\n'+self.Descr.GetValue())
 
 			for fil in self.listfilezip:
 				shutil.copy(fil, TEMPS_PATH)
@@ -520,26 +580,30 @@ class MyPanel1 ( wx.Panel ):
 		rot = self.TLC1.GetItemParent(self.TLC1.GetSelection())
 		roottxt = self.TLC1.GetItemText(rot, 0)
 		msg = ''
+		nmlst = ''
+
 		if 'Download' in roottxt:
 			#print(txt)
 			with zipfile.ZipFile(UTILITY_PATH+'Downloads'+SLASH+txt,'r') as fz:
-				#fz.printdir()
-				fz.extract('infopack.sfn',TEMPS_PATH)
-			with open(TEMPS_PATH+'infopack.sfn','r') as f:
-				lstfil = f.readlines()
-			for fl in lstfil:
-				finfo = fl.split(',')
-				msg += 'Copy file Src/%s [%s] size %s'%(finfo[0]+'/'+finfo[2],finfo[1],finfo[3])
-				self.msag.SetValue(msg)
-				with zipfile.ZipFile(UTILITY_PATH + 'Downloads' + SLASH + txt, 'r') as fz:
-					fz.extract(finfo[2],TEMPS_PATH)
-
+				namelist = fz.namelist()
+				#print(namelist)
+				for nl in namelist:
+					if '.sfn' in nl:
+						fz.extract(nl,UTILITY_PATH+'Fount')
+						nmlst = nl
+			if nmlst != '':
+				with open(UTILITY_PATH+'Fount'+SLASH+nmlst,'r') as f:
+					lstfil = f.readlines()
+				for fl in lstfil:
+					if '/*' in fl:
+						break
+					finfo = fl.split(',')
+					msg += 'Copy file Src/%s [%s] size %s'%(finfo[0]+'/'+finfo[2],finfo[1],finfo[3])
+					self.msag.SetValue(msg)
+					with zipfile.ZipFile(UTILITY_PATH + 'Downloads' + SLASH + txt, 'r') as fz:
+						fz.extract(finfo[2],UTILITY_PATH+'Fount'+SLASH+finfo[0])
 				#shutil.copy(TEMPS_PATH+fl,)
-
 		event.Skip()
-
-	# def chkdon( self, event ):
-	# 	event.Skip()
 
 	def Splt1OnIdle( self, event ):
 		self.Splt1.SetSashPosition( 255 )

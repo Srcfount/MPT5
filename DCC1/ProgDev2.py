@@ -417,7 +417,10 @@ class MyPanel1 ( wx.Panel ):
 						self.PrgDir1.SetPath(l)
 						self.thsfile = l
 						self.thspath = l.replace(txt,'')
-						self.thsdcod = self.getMData.AllGuiDir(" where Guidir.hdddir = '%s' "%self.thspath.replace(MAP,'..').rstrip(SLASH) )[0][1]
+						if len(self.getMData.AllGuiDir(" where Guidir.hdddir = '%s' "%self.thspath.replace(MAP,'..').rstrip(SLASH) ))>0:
+							self.thsdcod = self.getMData.AllGuiDir(" where Guidir.hdddir = '%s' "%self.thspath.replace(MAP,'..').rstrip(SLASH) )[0][1]
+						else:
+							self.thsdcod = '1000'
 
 			elif cod != '7777':
 				for item in self.my_data:
@@ -616,48 +619,43 @@ class MyPanel1 ( wx.Panel ):
 
 		#print(txt,cod,self.thsdcod,self.thsfile,self.thspath)
 		if cod[2:] == '??':
-			# if af.ishasifin():
-			# 	m = af.ishasmain()
-			# 	#print(m)
-			# 	if af.ishasmain():
-			# 		#print(self.thsdcod)
-			# 		lstcod = self.getMData.getHndid(self.thsdcod)
-			# 		#print(lstcod)
-			# 		#newcod = (int(self.thsdcod[0]) * 10000) + (int(self.thsdcod[1]) * 1000) + len(lstcod) #+ 1
-			# 		newcod = int(self.thsdcod[0]) * 10 + len(lstcod)
-			# 		newnom = int(self.thsdcod[0]) * 10 + len(lstcod) #+ 1
-			# 		data = [newcod, txt.replace('.py', ''), self.thsdcod, '-1', -1, newnom]
-			# 		self.setMDate.Table = 'handler'
-			# 		self.setMDate.Additem(" handlerid, prgname, prgdir, paramtr, public, prgno", data)
-			# 		wx.MessageBox(_("Program Successfull add to list"))
-			#
-			# if af.ishasmain() :
-			# 	#print(u'This file main')
-			# 	if af.ishasifin():
-			# 		print(af.checkSyntx())
-			# 	else:
-			# 		print("Please Add if __name__=='__main__' to end of file")
+			def Add2List():
+				# print(self.thsdcod)
+				lstcod = self.getMData.getHndid(self.thsdcod)
+				# print(lstcod)
+				# newcod = (int(self.thsdcod[0]) * 10000) + (int(self.thsdcod[1]) * 1000) + len(lstcod) #+ 1
+				newcod = int(self.thsdcod[0]) * 10 + len(lstcod)
+				newnom = int(self.thsdcod[0]) * 10 + len(lstcod)  # + 1
+				data = [newcod, txt.replace('.py', ''), self.thsdcod, '-1', -1, newnom]
+				self.setMDate.Table = 'handler'
+				self.setMDate.Additem(" handlerid, prgname, prgdir, paramtr, public, prgno", data)
+				wx.MessageBox(_("Program Successfull add to list"))
+				self.DVC1.DeleteAllItems()
+				self.filllist()
+				self.Refresh()
 
-			if af.ishasframe():
-				if af.ishasmain():
-					if af.ishasifin():
-						#print(self.thsdcod)
-						lstcod = self.getMData.getHndid(self.thsdcod)
-						#print(lstcod)
-						#newcod = (int(self.thsdcod[0]) * 10000) + (int(self.thsdcod[1]) * 1000) + len(lstcod) #+ 1
-						newcod = int(self.thsdcod[0]) * 10 + len(lstcod)
-						newnom = int(self.thsdcod[0]) * 10 + len(lstcod) #+ 1
-						data = [newcod, txt.replace('.py', ''), self.thsdcod, '-1', -1, newnom]
-						self.setMDate.Table = 'handler'
-						self.setMDate.Additem(" handlerid, prgname, prgdir, paramtr, public, prgno", data)
-						wx.MessageBox(_("Program Successfull add to list"))
-						return 1
-					else:
-						wx.MessageBox(_("You forgot add [if __name__=='__main__'] to end of file. We add it!!"))
-						mygnrt = Genrate2(self.thsfile)
-						mygnrt.gnratLine(False, False, False, True, af.ishasframe())
-
-				elif af.ishasimport("Src.GUI"):
+			a,b,c,d = af.checkSyntx2()
+			#print(a,b,c,d)
+			if a and not b and c and not d:
+				wx.MessageBox(_("You Forgot add main function! Please add it"))
+				return 1
+			if a and b and not c and not d:
+				Add2List()
+				self.updat(event)
+				return 1
+			if a and b and c and d:
+				Add2List()
+				self.updat(event)
+				return 1
+			if not a and b and c and not d:
+				wx.MessageBox(_("You forgot add [if __name__=='__main__'] to end of file. We add it!!"))
+				mygnrt = Genrate2(self.thsfile)
+				mygnrt.gnratLine(False, False, False, True, af.ishasframe())
+				Add2List()
+				self.updat(event)
+				return 1
+			if a and b and c and not d:
+				if af.ishasimport("Src.GUI"):
 					mygnrt = Genrate2(self.thsfile)
 					mygnrt.gnratLine(False, True, True, True, af.ishasframe())
 					mygnrt.appendFile()
@@ -668,15 +666,42 @@ class MyPanel1 ( wx.Panel ):
 					self.setMDate.Table = 'handler'
 					self.setMDate.Additem(" handlerid, prgname, prgdir, paramtr, public, prgno", data)
 					wx.MessageBox(_("Program Successfull add to list"))
-
+					self.updat(event)
+					return 1
 				else:
-					wx.MessageBox(_("You not use main function please edit your file! "))
+					print('Src.GUI not found')
 					return 1
 
-				# self.DVC1.DeleteAllItems()
-				# self.filllist()
-				# self.Refresh()
-			elif af.ishaspanel():
+			# if af.ishasframe():
+			#
+			# 	if af.ishasmain():
+			# 		if af.ishasifin():
+			# 			Add2List()
+			# 			return 1
+			# 		else:
+			# 			wx.MessageBox(_("You forgot add [if __name__=='__main__'] to end of file. We add it!!"))
+			# 			mygnrt = Genrate2(self.thsfile)
+			# 			mygnrt.gnratLine(False, False, False, True, af.ishasframe())
+			# 			Add2List()
+
+				# elif af.ishasimport("Src.GUI"):
+				# 	mygnrt = Genrate2(self.thsfile)
+				# 	mygnrt.gnratLine(False, True, True, True, af.ishasframe())
+				# 	mygnrt.appendFile()
+				# 	lstcod = self.getMData.getHndid(self.thsdcod)
+				# 	newcod = int(self.thsdcod[0]) * 10000 + (int(self.thsdcod[1]) * 1000) + len(lstcod)  # +1
+				# 	newnom = int(self.thsdcod[0]) * 1000 + len(lstcod)  # +1
+				# 	data = [newcod, txt.replace('.py', ''), self.thsdcod, '-1', -1, newnom]
+				# 	self.setMDate.Table = 'handler'
+				# 	self.setMDate.Additem(" handlerid, prgname, prgdir, paramtr, public, prgno", data)
+				# 	wx.MessageBox(_("Program Successfull add to list"))
+
+				# else:
+				# 	wx.MessageBox(_("You not use main function please edit your file! "))
+				# 	return 1
+			if not a and not b and not c and d:
+
+			#elif af.ishaspanel():
 				if af.ishaspanel() == 'MyPanel1':
 					dlg = MyDialog1(self)
 					dlg.ShowModal()
@@ -692,29 +717,35 @@ class MyPanel1 ( wx.Panel ):
 						mygnrt = Genrate(patfil.replace('..', MAP) + SLASH + newname + '.py')
 						mygnrt.createFrm(self.thsfile)
 
-					elif dlg.box1:
+					elif dlg.box1.GetValue():
 						newname = txt.replace('.py','')
 						dircode = self.thsdcod #'5555'
 						patfil = self.thspath
 						lstcod = self.getMData.getHndid(dircode)
 						newcod = int(dircode[0]) * 10000 + len(lstcod) #+ 1
 						newnom = int(dircode[0]) * 100 + len(lstcod) #+ 1
+						#print('Do 5555',dlg.box1.GetValue())
+					elif dlg.ensrf:   #Cancel MyDialog
+						return 1
 					else:
-						newname = txt[0].upper()+txt[len(txt)/2].upper()
-						dircode = '8888'
+						newname = txt[0].upper()+txt[int(len(txt)/2)].upper()
+						dircode = self.getMData.GetDirCod2(dlg.pathfil)[0][0]
 						lstcod = self.getMData.getHndid(dircode)
-						newcod = int(dircode[0]) * 10000 + len(lstcod) #+ 1
-						newnom = int(dircode[0]) * 100 + len(lstcod) #+ 1
+						patfil = dlg.pathfil
+						newcod = int(dircode[1]) * 1000 + 10000 + len(lstcod) #+ 1
+						newnom = int(dircode[1]) * 1000 + len(lstcod) #+ 1
+						#print('Do this 6666')
+						mygnrt = Genrate(patfil.replace('..', MAP) + SLASH + newname + '.py')
+						mygnrt.createFrm(self.thsfile)
+
 					dlg.Destroy()
-					#print(newname,dircode,patfil)
+					#print(newcod,newname,dircode,newnom,patfil)
 					data = [newcod, newname, dircode, '-1', -1, newnom]
 					self.setMDate.Table = 'handler'
 					self.setMDate.Additem(" handlerid, prgname, prgdir, paramtr, public, prgno", data)
-					self.DVC1.DeleteAllItems()
-					self.filllist()
-					self.Refresh()
-
-			else:
+					self.updat(event)
+			if not a and not b and not c and not d:
+			#else:
 				wx.MessageBox("Please move your file to API directory or use correct form! ")
 
 			if af.hasDesc():
@@ -778,6 +809,7 @@ class MyDialog1 ( wx.Dialog ):
 
 		self.filname = ''
 		self.pathfil = ''
+		self.ensrf = False
 		self.myMenu = MS.GetData(u'Menu2.db',u'')
 
 		V1 = wx.BoxSizer( wx.VERTICAL )
@@ -809,7 +841,7 @@ class MyDialog1 ( wx.Dialog ):
 
 		H3.Add( self.lbl2, 1, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
-		chs1Choices = [ d[2] for d in self.myMenu.AllGuiDir(u" where Guidir.prgdir < '5000' ") ]
+		chs1Choices = [ d[2] for d in self.myMenu.AllGuiDir(u" where Guidir.prgdir < '2000' and Guidir.prgdir > '1000' ") ]
 		self.chs1 = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, chs1Choices, 0 )
 		self.chs1.SetSelection( 0 )
 		H3.Add( self.chs1, 1, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
@@ -854,6 +886,7 @@ class MyDialog1 ( wx.Dialog ):
 		event.Skip()
 
 	def cncl( self, event ):
+		self.ensrf = True
 		self.Destroy()
 		event.Skip()
 
@@ -862,6 +895,7 @@ class MyDialog1 ( wx.Dialog ):
 		self.pathfil = self.chs1.GetStringSelection()
 		#print(self.filname,self.pathfil)
 		#print(self.myMenu.GetDirCod2(self.pathfil))
+		self.ensrf = False
 		self.Destroy()
 		event.Skip()
 

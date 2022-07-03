@@ -58,6 +58,32 @@ class Anlzfil(object):
             #print(whmis)
             return whris
 
+    def checkSyntx2(self):
+        '''
+        A : if __name__=='__main__': stetement
+        B : def main(panel=None): statement
+        C : class telframe(wx.Frame): statemenr
+        D : class MyPanel1(wx.Panel): statement
+        :return: A,B,C,D
+        '''
+        with open(self.pyFile, 'r', encoding=u'utf-8') as f:
+            txt = f.read()
+        whris = re.findall(r"if\s__name__\s?==\s?\'__main__\'\s?:", txt)
+        #print('if __name__',whris)
+        A = len(whris)
+        mainis2 = re.findall(r'def\smain\(panel.+\)\:|def\smain\s?\(\s?panel.+\)\:', txt)
+        #print('main(panel=None)', mainis2)
+        B = len(mainis2)
+        whfis = re.findall(r'class\s.+\(\s?wx\.Frame.+:',txt)
+        #print('wx.Frame',whfis)
+        C = len(whfis)
+
+        panlis = re.findall(r'class\sMyPanel1\s?\(\s?wx\.Panel.+:',txt)
+        #print('class wx.Panel',panlis)
+        D = len(panlis)
+        #     return False
+        return A,B,C,D
+
 
     def ishasmain(self):
         with open(self.pyFile, 'r', encoding=u'utf-8') as f:
@@ -100,6 +126,20 @@ class Anlzfil(object):
             if whris2:
                 #print(whris2)
                 return whris2
+
+    def ismainexist(self, txt=''):
+        with open(self.pyFile, 'r', encoding=u'utf-8') as f:
+            whris2 = re.findall(r'main',f.read())
+            print(whris2)
+            if whris2:
+                return whris2
+    def iswxframeexist(self, txt=''):
+        with open(self.pyFile, 'r', encoding=u'utf-8') as f:
+            whris2 = re.findall(r'wx\.Frame',f.read())
+            print(whris2)
+            if whris2:
+                return whris2
+
 
 
 def GetPanelImport(filewopy):
