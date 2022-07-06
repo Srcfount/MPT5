@@ -501,9 +501,11 @@ class MyPanel1 ( wx.Panel ):
 			wx.MessageBox(_(" All file Successfull copy to Src path"))
 
 			shutil.make_archive( UTILITY_PATH+'Account'+SLASH+txt , 'tar', UTILITY_PATH + 'Fount')
-			#os.remove(UTILITY_PATH+'Fount'+SLASH+txt)
-			#for j in if_lst:
-			#	os.remove(UTILITY_PATH+'Fount'+SLASH+j[0]+SLASH+j[2])
+			answer=wx.MessageBox(_("We Pack tar file all file to Account path Do you like delete file ?"),style=wx.YES_NO)
+			if answer==2:
+				os.remove(UTILITY_PATH+'Fount'+SLASH+txt)
+				for j in if_lst:
+					os.remove(UTILITY_PATH+'Fount'+SLASH+j[0]+SLASH+j[2])
 			pass
 		event.Skip()
 

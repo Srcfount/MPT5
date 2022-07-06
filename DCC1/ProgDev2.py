@@ -292,10 +292,13 @@ class MyPanel1 ( wx.Panel ):
 			self.lbl1.SetLabel(_("List of Programs:")+"    %s" %frmname)
 	def filllist(self):
 		#self.DVC1.AppendTextColumn()
+		# self.my_data = self.getMData.AllHndl("""left join Guidir on Guidir.prgdir = handler.prgdir
+		#                                      left join PrgDesc on PrgDesc.handlerid = handler.handlerid
+		#                                      where handler.handlerid < 99000
+		#                                      and handler.prgdir <> '8888' order by handler.handlerid """)
 		self.my_data = self.getMData.AllHndl("""left join Guidir on Guidir.prgdir = handler.prgdir 
-		                                     left join PrgDesc on PrgDesc.handlerid = handler.handlerid 
-		                                     where handler.handlerid < 99000 
-		                                     and handler.prgdir <> '8888' order by handler.handlerid """)
+				                                     where handler.handlerid < 99000 
+				                                     and handler.prgdir <> '8888' order by handler.handlerid """)
 		#print(self.my_data)
 		allprgnm = [n[1] for n in self.my_data ]
 		Aroot = self.DVC1.GetRootItem()
@@ -429,7 +432,9 @@ class MyPanel1 ( wx.Panel ):
 					    self.fillfield(item,item[2])
 				if cod == '2222':
 					self.thsfile = Src_api+txt
-
+					data = (cod, txt, '', '-1', '-1', '-', 'Src.API', '', '..\\Src\\API')
+					self.fillfield(data, '')
+					self.PrgDir1.SetPath(Src_api)
 
 			# elif cod[0] == '7':
 			# 	self.thsfile = GUI_PATH+"API"+SLASH+txt+'.py'
@@ -438,7 +443,7 @@ class MyPanel1 ( wx.Panel ):
 			# 	self.PrgDir1.SetPath(GUI_PATH+"API"+SLASH)
 			elif cod == '7777':
 				self.thsfile = Src_gui+txt+'.py' #SRC_PATH+"api"+SLASH+txt+'.py'
-				data = (cod,txt,'','-1','-1','-','Src.API','','',None,None)
+				data = (cod,txt,'','-1','-1','-','Src.GUI','','..\\Src\\GUI',None,None)
 				self.fillfield(data,'')
 				self.PrgDir1.SetPath(Src_gui)   #(SRC_PATH+"api"+SLASH)
 		else:
@@ -464,11 +469,7 @@ class MyPanel1 ( wx.Panel ):
 		self.fillfield(data,cods)
 
 	def fillfield(self, data, cods):
-		if data[10] == '' or data[10] == None:
-			self.Desc.SetValue('')
-		else:
-			self.Desc.SetValue(data[10])
-
+		#print(data)
 		self.fld1.SetValue(str(data[0]))
 		self.fld2.SetValue(str(data[5]))
 		#AI.Analiz.GetImport
@@ -480,15 +481,31 @@ class MyPanel1 ( wx.Panel ):
 			iim = myimp.ishasimport()
 			iim2 = myimp.ishasfromim()
 			#print(ii,iim,iim2)
-		self.fld3.SetValue(Src_gui+'')
-		#Get Path From handler directory data[6]+data[1]
-		if data[8]!= '':
 			self.thsfile = MAP+data[8][2:]+SLASH+data[1]+'.py'
 			self.thspath = MAP+data[8][2:]
 		    #print(self.thsfile,self.thspath)
 			self.PrgDir1.SetPath(self.thspath)
+		self.fld3.SetValue(Src_gui + '')
 		self.fld4.SetValue(str(data[3]))
 		self.fld6.SetValue(str(data[4]))
+
+		if data[8] != '':
+			#print(myimp.hasDesc())
+			if myimp.hasDesc():
+				self.Desc.SetValue(myimp.hasDesc())
+			else:
+				self.Desc.SetValue('')
+		else:
+			self.Desc.SetValue('')
+		# if data[10] == '' or data[10] == None:
+		# 	if cods != '':
+		# 		mydes = AI.Analiz.Anlzfil(self.thsfile)
+		# 		if mydes.hasDesc():
+		# 			self.Desc.SetValue(mydes.hasDesc())
+		# 	else:
+		# 		self.Desc.SetValue('')
+		# else:
+		# 	self.Desc.SetValue(data[10])
 
 
 	def conxmnu( self, event ):
@@ -629,10 +646,19 @@ class MyPanel1 ( wx.Panel ):
 				data = [newcod, txt.replace('.py', ''), self.thsdcod, '-1', -1, newnom]
 				self.setMDate.Table = 'handler'
 				self.setMDate.Additem(" handlerid, prgname, prgdir, paramtr, public, prgno", data)
+				#CheckDes(newcod)
 				wx.MessageBox(_("Program Successfull add to list"))
 				self.DVC1.DeleteAllItems()
 				self.filllist()
 				self.Refresh()
+
+			# def CheckDes(icod):
+			# 	if af.hasDesc():
+			# 		Desc = af.hasDesc()
+			# 		#print(Desc.replace('#', '').replace('Description', '').replace('End', ''))
+			# 		data = [icod, Desc.replace('#', '').replace('Description', '').replace('End', '')]
+			# 		self.setMDate.Table = 'PrgDesc'
+			# 		self.setMDate.Additem(" handlerid, Description ", data)
 
 			a,b,c,d = af.checkSyntx2()
 			#print(a,b,c,d)
@@ -666,41 +692,14 @@ class MyPanel1 ( wx.Panel ):
 					self.setMDate.Table = 'handler'
 					self.setMDate.Additem(" handlerid, prgname, prgdir, paramtr, public, prgno", data)
 					wx.MessageBox(_("Program Successfull add to list"))
+					#CheckDes(newcod)
 					self.updat(event)
 					return 1
 				else:
 					print('Src.GUI not found')
 					return 1
 
-			# if af.ishasframe():
-			#
-			# 	if af.ishasmain():
-			# 		if af.ishasifin():
-			# 			Add2List()
-			# 			return 1
-			# 		else:
-			# 			wx.MessageBox(_("You forgot add [if __name__=='__main__'] to end of file. We add it!!"))
-			# 			mygnrt = Genrate2(self.thsfile)
-			# 			mygnrt.gnratLine(False, False, False, True, af.ishasframe())
-			# 			Add2List()
-
-				# elif af.ishasimport("Src.GUI"):
-				# 	mygnrt = Genrate2(self.thsfile)
-				# 	mygnrt.gnratLine(False, True, True, True, af.ishasframe())
-				# 	mygnrt.appendFile()
-				# 	lstcod = self.getMData.getHndid(self.thsdcod)
-				# 	newcod = int(self.thsdcod[0]) * 10000 + (int(self.thsdcod[1]) * 1000) + len(lstcod)  # +1
-				# 	newnom = int(self.thsdcod[0]) * 1000 + len(lstcod)  # +1
-				# 	data = [newcod, txt.replace('.py', ''), self.thsdcod, '-1', -1, newnom]
-				# 	self.setMDate.Table = 'handler'
-				# 	self.setMDate.Additem(" handlerid, prgname, prgdir, paramtr, public, prgno", data)
-				# 	wx.MessageBox(_("Program Successfull add to list"))
-
-				# else:
-				# 	wx.MessageBox(_("You not use main function please edit your file! "))
-				# 	return 1
 			if not a and not b and not c and d:
-
 			#elif af.ishaspanel():
 				if af.ishaspanel() == 'MyPanel1':
 					dlg = MyDialog1(self)
@@ -743,17 +742,11 @@ class MyPanel1 ( wx.Panel ):
 					data = [newcod, newname, dircode, '-1', -1, newnom]
 					self.setMDate.Table = 'handler'
 					self.setMDate.Additem(" handlerid, prgname, prgdir, paramtr, public, prgno", data)
+					#CheckDes(newcod)
 					self.updat(event)
 			if not a and not b and not c and not d:
 			#else:
-				wx.MessageBox("Please move your file to API directory or use correct form! ")
-
-			if af.hasDesc():
-				Desc = af.hasDesc()
-				print(Desc.replace('#','').replace('Description','').replace('End',''))
-				data = [newcod, Desc.replace('#','').replace('Description','').replace('End','')]
-				self.setMDate.Table = 'PrgDesc'
-				self.setMDate.Additem(" handlerid, Description ", data)
+				wx.MessageBox(_("Please move your file to API directory or use correct form! "))
 
 		else:
 			wx.MessageBox(_(u"You can only generate the unlisted program with end with this code '??'"))

@@ -35,8 +35,10 @@ class Anlzfil(object):
 
     def hasDesc(self):
         with open(self.pyFile,'r', encoding=u'utf-8') as f:
-            whris = re.search(r'##### Description #####',f.read())
-            whrhs = re.findall(r'^#{5,}.Desc.*#{5,}\n##.*.*\n#{5,}.End.#{5,}',f.read(),re.MULTILINE)
+            txt = f.read()
+        whris = re.search(r'############ Description ############',txt)
+        whrhs = re.findall(r'^#{12,}.Desc.*#{12,}\n##.*.*\n##.*.*\n##.*.*\n##.*.*\n#{15,}.End.#{15,}',txt,re.MULTILINE)
+        #print(whrhs,whris)
         if whris:
             return whrhs[0]
 
@@ -95,21 +97,21 @@ class Anlzfil(object):
     def ishasifin(self):
         with open(self.pyFile, 'r', encoding=u'utf-8') as f:
             #whris = re.search(r"if\s__name__", f.read())
-            whris = re.search(r"if\s__name__\s==\s\'__main__\':", f.read())
+            whris = re.search(r"if\s__name__\s?==\s?\'__main__\'\s?:", f.read())
             if whris:
                 #print(whris.group().split(' '))
                 return whris.group().split(' ')[1]
 
     def ishasframe(self):
         with open(self.pyFile, 'r', encoding=u'utf-8') as f:
-            whris = re.search(r'class\s.+\s+(wx\.Frame).+', f.read())
+            whris = re.search(r'class\s.+\s+?(wx\.Frame).+', f.read())
             if whris:
                 #print(whris.group().split(' ')[1])
                 return whris.group().split(' ')[1]
 
     def ishaspanel(self):
         with open(self.pyFile, 'r' , encoding=u'utf-8') as f:
-            whris = re.search(r"class\s+.+\s+(wx\.Panel)", f.read())
+            whris = re.search(r"class\s+.+\s+?(wx\.Panel)", f.read())
             if whris:
                 #print(whris.group().split(' ')[1])
                 return whris.group().split(' ')[1]
@@ -130,13 +132,13 @@ class Anlzfil(object):
     def ismainexist(self, txt=''):
         with open(self.pyFile, 'r', encoding=u'utf-8') as f:
             whris2 = re.findall(r'main',f.read())
-            print(whris2)
+            #print(whris2)
             if whris2:
                 return whris2
     def iswxframeexist(self, txt=''):
         with open(self.pyFile, 'r', encoding=u'utf-8') as f:
             whris2 = re.findall(r'wx\.Frame',f.read())
-            print(whris2)
+            #print(whris2)
             if whris2:
                 return whris2
 

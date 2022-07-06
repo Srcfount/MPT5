@@ -1,6 +1,12 @@
 # In the name of God
-# -*- coding: utf-8 -*-
 # Windows and Panels main Frame File
+############ Description ############
+##  This is a Sample Demo File
+##  Only four line you can use for
+##  Description
+##
+############### End ###############
+# -*- coding: utf-8 -*-
 # ! /usr/bin/env python
 
 import wx

@@ -25,10 +25,16 @@ class Genrate(object):
 
 
     def gnr_lins(self):
-        line1 = u"#In the name of GOD\n"
-        line2 = u"# -*- coding: utf-8 -*-\n"
-        line3 = u"#!usr/bin/env python\n\n"
-        self.lin_wrt = line1 + line2 + line3
+        line0 = u"#In the name of GOD\n"
+        line1 = u"#"*12+u" Description "+u"#"*12+"\n"
+        line2 = "##"+" This is a Sample Demo File"+"\n"
+        line3 = "##"+" Only four line you can use for"+"\n"
+        line4 = "##"+"  Description"+"\n"
+        line5 = "##"+"\n"
+        line6 = u"#"*15+u" End "+u"#"*15+"\n"
+        line7 = u"# -*- coding: utf-8 -*-\n"
+        line8 = u"#!usr/bin/env python\n\n"
+        self.lin_wrt = line0 + line1 + line2 + line3 + line4 + line5 + line6 + line7 + line8
         self.lin_wrt += self.gnr_imps()
         self.lin_wrt += self.gnr_frm()
         self.lin_wrt += self.gnr_siz()

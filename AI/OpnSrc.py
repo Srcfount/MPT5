@@ -63,7 +63,7 @@ class PythonSTC(stc.StyledTextCtrl):
 
         self.SetProperty("fold", "1")
         self.SetProperty("tab.timmy.whinge.level", "1")
-        #self.SetMargins(0, 0)
+        self.SetMargins(0, 0)
 
         # Indentation and tab stuff
         self.SetIndent(4)  # Proscribed indent size for wx
@@ -79,12 +79,12 @@ class PythonSTC(stc.StyledTextCtrl):
 
         self.SetEOLMode(stc.STC_EOL_LF)
         # self.SetBufferedDraw(False)
-        self.SetViewEOL(False)
-        self.SetEOLMode(stc.STC_EDGE_NONE)
+        #self.SetViewEOL(True)
+        #self.SetEOLMode(stc.STC_EDGE_NONE)
         #self.SetUseAntiAliasing(True)
         self.SetMarginType(1, stc.STC_MARGIN_NUMBER)
-        self.SetMarginMask(1, 0)
-        self.SetMarginWidth(1, 40)
+        #self.SetMarginMask(1, 0)
+        #self.SetMarginWidth(1, 40)
 
         # Global default styles for all languages
         self.StyleSetSpec(stc.STC_STYLE_DEFAULT, "face:%(helv)s,size:%(size)d" % faces)
@@ -122,8 +122,8 @@ class PythonSTC(stc.StyledTextCtrl):
         # Operators
         self.StyleSetSpec(stc.STC_P_OPERATOR, "bold,size:%(size)d" % faces)
         # Identifiers
-        #self.StyleSetSpec(stc.STC_P_IDENTIFIER, "fore:#000000,face:%(helv)s,size:%(size)d" % faces)
-        self.StyleSetSpec(wx.stc.STC_P_IDENTIFIER, 'fore:#000000')
+        self.StyleSetSpec(stc.STC_P_IDENTIFIER, "fore:#000000,face:%(helv)s,size:%(size)d" % faces)
+        #self.StyleSetSpec(wx.stc.STC_P_IDENTIFIER, 'fore:#000000')
         # Comment-blocks
         self.StyleSetSpec(stc.STC_P_COMMENTBLOCK, "fore:#7F7F7F,size:%(size)d" % faces)
         # End of line where string is not closed
@@ -344,6 +344,9 @@ class MyMenuBar1 ( wx.MenuBar ):
 						f.write(self.SrcTxt.GetText())
 				except IOError:
 					print('file error')
+				self.pnl.pyFile = pathname
+				self.pnl.opnstc(pathname)
+				self.GetParent().SetLabel(pathname)
 		else:
 			try:
 				with open(self.pyfile, 'w', encoding='utf-8') as f:
