@@ -405,7 +405,7 @@ class MyMenuBar1 ( wx.MenuBar ):
 
 	def get_lin(self, event):
 		self.AnalizFile()
-		if self.ctltxt == [] and self.chosls == [] and self.chkbox == [] and self.rdobox == []:
+		if self.ctltxt == [] and self.chosls == [] and self.chkbox == [] and self.rdobox == [] and self.rdobtn == []:
 			wx.MessageBox(_(u'No any part of Panel for get data! Please use one of this object: \
 		                  wx.TextCtrl wx.Choice wx.CheckBox wx.RadioBox'))
 		else:
@@ -422,15 +422,18 @@ class MyMenuBar1 ( wx.MenuBar ):
 			for obj in self.rdobox:
 				self.SrcTxt.AddText("\t\tD%s = " % str(i) + obj + ".GetSelection()\n")
 				i += 1
+			for obj in self.rdobtn:
+				self.SrcTxt.AddText("\t\tD%s = " % str(i) + obj + ".GetValue()\n")
+				i += 1
 
 		self.SrcTxt.AddText("\t\t#### you can return data in your own format here ###\n")
 		event.Skip()
 
 	def put_lin(self, event):
 		self.AnalizFile()
-		if self.ctltxt == [] and self.chosls == [] and self.chkbox == [] and self.rdobox == []:
+		if self.ctltxt == [] and self.chosls == [] and self.chkbox == [] and self.rdobox == [] and self.rdobtn == []:
 			wx.MessageBox(_(u'No any part of Panel for Put data! Please use one of this object: \
-				                  wx.TextCtrl wx.Choice wx.CheckBox wx.RadioBox'))
+				                  wx.TextCtrl wx.Choice wx.CheckBox wx.RadioBox wx.RadioButton'))
 		else:
 
 			self.SrcTxt.AddText("\t\t#Data = [] #Put your data in list or use at argumant in function\n")
@@ -446,6 +449,9 @@ class MyMenuBar1 ( wx.MenuBar ):
 				i += 1
 			for obj in self.rdobox:
 				self.SrcTxt.AddText("\t\t"  + obj + ".SetSelection( Data[%s] )\n" % str(i) )
+				i += 1
+			for obj in self.rdobtn:
+				self.SrcTxt.AddText("\t\t"  + obj + ".SetValue( Data[%s] )\n" % str(i) )
 				i += 1
 
 		event.Skip()
@@ -465,6 +471,7 @@ class MyMenuBar1 ( wx.MenuBar ):
 		self.ctltxt = []
 		self.chkbox = []
 		self.rdobox = []
+		self.rdobtn = []
 		self.chosls = []
 		lins = self.SrcTxt.GetLineCount()
 		for l in range(lins):
@@ -476,7 +483,10 @@ class MyMenuBar1 ( wx.MenuBar ):
 				self.chkbox.append(self.SrcTxt.GetLineText(l).split('=')[0].lstrip('\t').rstrip(' '))
 			if u'wx.RadioBox' in self.SrcTxt.GetLine(l):
 				self.rdobox.append(self.SrcTxt.GetLineText(l).split('=')[0].lstrip('\t').rstrip(' '))
+			if u'wx.RadioButton' in self.SrcTxt.GetLine(l):
+				self.rdobtn.append(self.SrcTxt.GetLineText(l).split('=')[0].lstrip('\t').rstrip(' '))
 		#wx.MessageBox(u"We Successful Analyzing file for field and data")
+
 
 	def impnum(self, event):
 		self.SrcTxt.AddText(u"import numpy as np \n")

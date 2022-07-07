@@ -25,25 +25,25 @@ Appearance of the application
 -----------------------------
 
 ---------------------
-  * Menu and Menubar
-     you can create , edit and delete ![Menu Bar](docs/Help/MenuBar.md) and ![Menu Item](docs/Help/MenuItem.md)
-     Also you can Create ![Sub Menu](docs/Help/SubMenu.md) as same as Menu Item 
+  * Menu and Menubar  
+     you can create , edit and delete [Menu Bar](docs/Help/MenuBar.md) and [Menu Item](docs/Help/MenuItem.md)
+     Also you can Create [Sub Menu](docs/Help/SubMenu.md) as same as Menu Item 
 ---------------------
   
-  * Toolbar
-    You can Add Edit and Delete ![Toolbar](docs/Help/ToolBar.md) with Icon to your application
+  * Toolbar  
+    You can Add Edit and Delete [Toolbar](docs/Help/ToolBar.md) with Icon to your application
 
 ---------------------
-  * Panes
-    You can Design or placed ![Pane](docs/Help/Panes.md) in your application
+  * Panes  
+    You can Design or placed [Pane](docs/Help/Panes.md) in your application
 ---------------------
   
 
 New Program (How to add)
 ------------------------
 
- 1. How Connect each program to each items
- 2. Relationship with database
+ 1. How Connect each [program](docs/Help/Programs.md) to each items
+ 2. Relationship with [database](docs/Help/Databases.md)
 
 Design Database
 ---------------
