@@ -64,7 +64,7 @@ Delete a Menu Bar
 All item in windows only for information about menu Bar that you like to delete it  
 All menu item and submenu of this Menu Bar Also will Delete  
 Only Programs and Directory remain for use in future  
-if you like Delete programs or directory please see the List of Program Part  
+if you like Delete programs or directory please see the [List of Program](Programs.md) Part  
 
 ---------------------------------------------------------------------------------------------------
 

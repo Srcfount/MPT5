@@ -104,14 +104,14 @@ class Anlzfil(object):
 
     def ishasframe(self):
         with open(self.pyFile, 'r', encoding=u'utf-8') as f:
-            whris = re.search(r'class\s.+\s+?(wx\.Frame).+', f.read())
+            whris = re.search(r'class\s.*\s?(\s?wx\.Frame\s?).+', f.read())
             if whris:
                 #print(whris.group().split(' ')[1])
                 return whris.group().split(' ')[1]
 
     def ishaspanel(self):
         with open(self.pyFile, 'r' , encoding=u'utf-8') as f:
-            whris = re.search(r"class\s+.+\s+?(wx\.Panel)", f.read())
+            whris = re.search(r"class\s.*\s?(\s?wx\.Panel\s?)", f.read())
             if whris:
                 #print(whris.group().split(' ')[1])
                 return whris.group().split(' ')[1]
@@ -142,7 +142,38 @@ class Anlzfil(object):
             if whris2:
                 return whris2
 
+    def isDBimexist(self, txt=''):
+        with open(self.pyFile, 'r', encoding=u'utf-8') as f:
+            whris2 = re.findall(r'import\s+Database\.PostGet\s+as\s+PG',f.read())
+            if whris2:
+                return whris2
 
+    def isFiledbexist(self, txt=''):
+        with open(self.pyFile, 'r', encoding=u'utf-8') as f:
+            itxt = f.read()
+        whris1 = re.findall(r'\s+PG\.Get2\s?\(.*.\)',itxt)
+        whris2 = re.findall(r'\s+PG\.Post2\s?\(.*.\)',itxt)
+
+        if whris1 or whris2:
+            return whris1,whris2
+
+    def findDBintxt(self, txt):
+        whris1 = re.findall(r'\'.*.\\Src\\DBF\\.*.\'', txt)
+        if whris1:
+            dbfile = whris1[0].replace("'",'').replace(',','')
+            #print(dbfile)
+            return dbfile
+
+    def indexImpline(self):
+        with open(self.pyFile, 'r', encoding=u'utf-8') as f:
+            itxt = f.readlines()
+        i = 0
+        imprtlist = []
+        for t in itxt:
+            i += 1
+            if 'import' in t:
+                imprtlist.append((t,i))
+        return imprtlist
 
 def GetPanelImport(filewopy):
     f = filewopy+'.py'

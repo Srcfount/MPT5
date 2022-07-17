@@ -11,6 +11,7 @@ if field program was empty in Menu Develop or Toolbar Develop , list of program 
 if you wrote a mistake program or name had error, please type ``Demo`` in field and then press __Edit__ Button.
 
 Orginal window is this:
+
 ![](images/5/prg1-1.jpg)
 
 1. All file in ``Src\API`` path show here. this script maybe import with other script
@@ -26,8 +27,10 @@ Orginal window is this:
 11. if you come from menu or toolbar or pane , apply to select program for that part
 12. generat a source that not in handler 
 
+----------------------------------------------------------------
 
 When you come from Menu Develop window:
+
 ![](images/5/mdprg2d-1.jpg)
 
 1. Select your menu that to change or see its program
@@ -42,6 +45,8 @@ When you come from Menu Develop window:
 10. this part is not work now (We predicted for the future )
 11. if program use database show here
 
+-----------------------------------------------------------------
+
 How Add a new Program
 ---------------------
 
@@ -51,7 +56,9 @@ There is 2 way to add or change a program of one item:
 
 after select a menu item and press program button:
 if you press Add button in this window you can write your code
+
 ![](images/5/aprg3-1.jpg)
+
 1. f you save the file, the path of the new file will be replaced
 2. with this menu you can open save and edit file
 3. if like to add description about your program use this part
@@ -97,7 +104,9 @@ class MyPanel1 ( wx.Panel ):
 ````
 and not and other part in code when you press Generate code this window dialog shown
 for choise your Path and type :
+
 ![](images/5/aprg3df-1.jpg)
+
 1. If you check this Box you can add source to Src\AUI path and will have a Pane
 2. If you like a Frame for this Panel write name of this program here
 3. select path of program you like to add it
@@ -109,9 +118,13 @@ for choise your Path and type :
 
 for help about add program from AddTool go [Here](AddTool.md)
 
+-----------------------------------------------------------------
+
 How to Edit a Program
 ---------------------
+
 ![](images/5/eprg4.jpg)
+
 if select a file you can edit it also you can open several windows
 
 > Note: this Editor is sample and not good for code write
@@ -121,11 +134,13 @@ you can see more help about editor [here](Editor.md)
 
 How to Delete a program
 -----------------------
+
 if press delete button program delete from handler list in database
 if file in unlisted handler program (No.5) and you delete it file remove from hard disk
 
 How to preview a program
 ------------------------
+
 if you select a item and press preview button you can see it in sample frame  
 
 > Note: only file that have GUI show in preview otherwise you have an error
@@ -134,30 +149,46 @@ if you select a item and press preview button you can see it in sample frame
 
 Refresh the List
 ----------------
+
 if press refresh button your list and new program add to list
+
+---------------------------------------------------------------
 
 Apply Button
 ------------
 if you select a program and press apply button you back to window that come from it  
 for example:
+
 ![](images/5/aply1-1.jpg)
+
 1. Select Menuitem
 2. press List Program button
+
 > Attended to Path , Program must be here
 
 ![](images/5/aply2-1.jpg)
+
 3. Choise you program in list
 4. press Apply button
+
 > Attended to Directory that in correct path
 
 ![](images/5/aply3-1.jpg)
+
 5. your program must appear here
 6. press Edit button to Change item program
 
 if your program be correct it must work good
 
+---------------------------------------------------------------
+
 How Generate a Program
 ----------------------
+
+if you have some source file that NOT use in application you can 
+Generate it for use  
+In Other python file NOT in Handler list you can find this files
+that is ended ID's code with '??'
 
 
 

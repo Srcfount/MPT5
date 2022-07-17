@@ -28,6 +28,7 @@ def ForSqlitDb(database):
 	'''
 	import sqlite3
 	mydb = sqlite3.connect(database)
+	mydb.row_factory = sqlite3.Row
 	return mydb
 
 def ForMySqldb(database,user,pswrd,host="localhost"):
@@ -93,6 +94,7 @@ def ForOraclSqldb(database,user,userpwd,host="localhost"):
 	# Establish the database connection
 	#mydb = cx_Oracle.connect(user=user, password=userpwd,dsn=host+'/'+database)
 	with cx_Oracle.connect(user=user, password=userpwd,dsn=host+'/'+database) as mydb:
+
 		return mydb
 	#return mydb
 '''
@@ -118,6 +120,7 @@ def ForMsSqlOdbc(database,user,pswrd,host='localhost\sqlexpress'):
 	password = pswrd
 	cnxn = pyodbc.connect(
 		'DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
+
 	return cnxn
 
 def ForMsSqlSrv(database,user,pswrd,host='localhost\sqlexpress'):

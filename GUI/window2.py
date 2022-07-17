@@ -58,9 +58,10 @@ class MainWin(wx.Frame):
         # If like Back Gorund or Aui Center =============================
         if eval(self.config.Read('BGActive')):
             self.BGrnd(self.config.Read('Background'))
+        # If like use login =============================================
         if os.path.isfile(Src_aui+"login_pane.py"):
             import Src.AUI.login_pane as Lg
-            dlg = wx.Dialog(self, -1)
+            dlg = wx.Dialog(self, -1, style=0)
             pnl = Lg.MyPanel1(dlg)
             dlg.SetSize((300,150))
             disply = wx.GetDisplaySize()
@@ -75,7 +76,7 @@ class MainWin(wx.Frame):
             userid = 1
 
 
-        # Menu of Program==============
+        # Menu of Program Toolbar and Status ==========================
         if self.config.Read("Menu") == '1':
             self.menu = MM.AppMenu(userid)
             #self.menu.m.userid = userid
@@ -221,34 +222,6 @@ class MainWin(wx.Frame):
         if len(tbdata) > 0:
             self.Bind(wx.EVT_TOOL_RANGE, self.OnTool, id=tbdata[1][0][0], id2=tbdata[len(tbdata)][-1][0])
 
-
-
-    # def Toolbar(self):
-    #     #style = wx.TB_BOTTOM|wx.TB_DEFAULT_STYLE|wx.TB_DOCKABLE|wx.TB_FLAT|wx.TB_HORIZONTAL|wx.TB_HORZ_LAYOUT|
-    #     #wx.TB_HORZ_TEXT|wx.TB_NOALIGN|wx.TB_NODIVIDER|wx.TB_NOICONS|wx.TB_NO_TOOLTIPS|wx.TB_RIGHT|wx.TB_TEXT|wx.TB_VERTICAL
-    #     self.tb = self.CreateToolBar(wx.TB_HORIZONTAL | wx.NO_BORDER | wx.TB_FLAT|wx.TB_TEXT)
-    #     Tbd = MT.ToolData()
-    #     Tbl = Tbd.ToolBarList()
-    #     #print(Tbl)
-    #     tsize = (24, 24) #<<<=====use Config
-    #     self.tb.SetToolBitmapSize(tsize)
-    #     for tl in Tbl:
-    #         for t in Tbl[tl]:
-    #             #print(t)
-    #             if t[1] == '' or t[1] == None:
-    #                 self.tb.AddSeparator()
-    #                 #self.tb.AddTool(t[0],wx.EmptyString,wx.NullBitmap,wx.NullBitmap,wx.ITEM_MAX)
-    #             elif t[5] == 'C':
-    #                 self.tb.AddTool(t[0], t[1], wx.Bitmap(ICONS_TOOL + t[2], wx.BITMAP_TYPE_ANY), wx.NullBitmap,
-    #                                 wx.ITEM_CHECK, t[1], t[3], None)
-    #             elif t[5] == 'R':
-    #                 self.tb.AddTool(t[0], t[1], wx.Bitmap(ICONS_TOOL + t[2], wx.BITMAP_TYPE_ANY), wx.NullBitmap,
-    #                                 wx.ITEM_RADIO, t[1], t[3], None)
-    #             else:
-    #                 self.tb.AddTool(t[0], t[1], wx.Bitmap(ICONS_TOOL+t[2],wx.BITMAP_TYPE_ANY), wx.NullBitmap, wx.ITEM_NORMAL, t[1], t[3], None)
-    #             self.Bind(wx.EVT_TOOL, self.OnTool, id=t[0])
-    #         self.tb.AddSeparator()
-    #     self.tb.Realize()
 
     def ToolPnl(self):
         self.tool = []

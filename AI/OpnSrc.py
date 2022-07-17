@@ -154,6 +154,7 @@ class PythonSTC(stc.StyledTextCtrl):
     def slctal(self):
         self.SelectAll()
 
+
 ###########################################################################
 ## Class MyPanel2
 ###########################################################################
@@ -501,6 +502,9 @@ class MyMenuBar1 ( wx.MenuBar ):
 	def impmlu(self, event):
 		pass
 
+	def getCurntLineNumber(self):
+		print(self.SrcTxt.gtcurLine())
+
 
 	# def toML(self, event):
 	# 	print(self.pnl.pyFile)
@@ -605,5 +609,5 @@ class MyMenuBar1 ( wx.MenuBar ):
 			#dlg.ShowModal()
 			#dlg.Destroy()
 
-	def tst(self, event):
-		event.Skip()
+	# def tst(self, event):
+	# 	event.Skip()

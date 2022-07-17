@@ -2,6 +2,8 @@
 # ! use/bin/env python
 
 import os
+import sqlite3
+
 import wx
 
 from Config.Init import *
@@ -181,6 +183,12 @@ def wxsqsel1(database, tabels, fields='*', condition=''):
 	mylist = Mydb.execute(sql1)
 	return mylist
 
+def wxsqsel2(database, tabels, fields='*'):
+	Mydb = MyDB_Path(database)
+	Mydb.connect()
+	# print sql1
+	mylist = Mydb.execute1(tabels,fields)
+	return mylist
 
 def wxsqltxt(database, text):
 	# global MAP

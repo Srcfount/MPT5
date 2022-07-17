@@ -15,10 +15,11 @@ from Config.Init import *
 import Res.Allicons as icon
 
 import Database.PostGet as PG
-import Database.PostGet2 as PG2
+#import Database.PostGet2 as PG2
 
 from AI.Analiz import *
 import AI.DBgen as DBG
+import AI.OpnSrc as OS
 
 _ = wx.GetTranslation
 
@@ -131,7 +132,7 @@ class MyPanel1 ( wx.Panel ):
 
 		chs1Choices = [ u"set", u"get", u"both" ]
 		self.chs1 = wx.Choice( self.P2, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, chs1Choices, 0 )
-		self.chs1.SetSelection( 0 )
+		self.chs1.SetSelection( 2 )
 		Hsz2.Add( self.chs1, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
 
@@ -197,14 +198,15 @@ class MyPanel1 ( wx.Panel ):
 		self.SetSizer( Vsz1 )
 		self.Layout()
 
-		#Init program
-		self.fromHere()
 
 		#Parameter init
 		self.table = u''
 		self.field = u''
 		self.data = u''
 		self.sqfile = u''
+
+		# Init program
+		self.fromHere()
 
 		# Connect Events
 		self.dbfile.Bind(wx.EVT_FILEPICKER_CHANGED, self.dbopn)
@@ -231,25 +233,26 @@ class MyPanel1 ( wx.Panel ):
 	def fromHere(self):
 		if len(self.FTF) > 0:
 			frmname = self.FTF[0].GetTitle()
-			print(frmname)
+
+			lbl0 = self.lbl0.GetLabel()
+			nlbl = lbl0 + ' from ' + frmname
+			#print(frmname,self.dbfil)
+			self.lbl0.SetLabel(nlbl)
+			if self.FTF[1] != '':
+				self.dbfil = self.FTF[1]
+				self.dbfile.SetPath(self.dbfil)
+				self.idbfl2 = PG.Get2(self.dbfil, u'', u'')
+				self.dbdata = self.idbfl2.GetFromString('select * from sqlite_master')
+				self.DVC1.DeleteAllItems()
+				self.filllist()
+				self.chgmtd(None)
 
 
 	def dbopn(self, event):
 		dbftype = Database_type[int(self.config.Read('DBtype'))]
 		self.dbfil = self.dbfile.GetPath()
-		#print(self.dbfil,self.dbfile.GetPath())
-		#self.idbfl = PG.Get(self.dbfil, u'', u'DBFields')
-
-		self.idbfl2 = PG2.Get(self.dbfil,dbftype)
-		conn = self.idbfl2.myengin.connect()
-		Rprox = conn.execute('select * from sqlite_master')
-		#print(Rprox.fetchall())
-		self.dbdata = Rprox.fetchall()
-		#print(self.dbdata2)
-		#self.dbdata = self.idbfl.GetFromDbf()
-		#mytxt = self.idbfl.openSQL(Src_dbf+'sqls'+SLASH+'DBFields')
-		#self.dbdata = self.idbfl.GetFromSql()
-		#print(self.dbdata)
+		self.idbfl2 = PG.Get2(self.dbfil, u'',u'')
+		self.dbdata = self.idbfl2.GetFromString('select * from sqlite_master')
 		self.DVC1.DeleteAllItems()
 		self.filllist()
 		self.chgmtd(None)
@@ -266,7 +269,6 @@ class MyPanel1 ( wx.Panel ):
 				ifld = self.DVC1.AppendItem(tbl, fld[0])
 				self.DVC1.SetItemText(ifld, 0, fld[0])
 				self.DVC1.SetItemText(ifld, 1, fld[1])
-
 
 	def chkit(self, event):
 		self.gtslt = self.DVC1.GetSelections()
@@ -285,8 +287,6 @@ class MyPanel1 ( wx.Panel ):
 				self.DVC1.CheckItemRecursively(self.gtslt[0], 1)
 			elif self.DVC1.GetCheckedState(self.gtslt[0]) == 0:
 				self.DVC1.CheckItemRecursively(self.gtslt[0], 0)
-
-
 
 	def ChkTicks(self):
 		frstitm = self.DVC1.GetRootItem()
@@ -448,46 +448,146 @@ class MyPanel1 ( wx.Panel ):
 		#self.fldsql.SetValue(sqltxt)
 
 	def brwit( self, event ):
-		dbtype = Database_type[int(self.config.Read('DBtype'))]
+
+		#dbtype = Database_type[int(self.config.Read('DBtype'))]
 		self.gtslt = self.DVC1.GetSelections()
 		if self.fldsql.GetValue() != u'':
 			sqlcomnd = self.fldsql.GetValue()
-			brsdb = PG2.Get(self.dbfil, dbtype)
+			#brsdb = PG2.Get(self.dbfil, dbtype)
+			brsdb = PG.Get2(self.dbfil, u'',u'')
 			#brsdb = PG.Get(self.dbfil, u'', u'')
 			self.idata = brsdb.GetFromString(sqlcomnd)
-			#print(self.ChkTicks())
-			thstbl = [T for T in self.ChkTicks().keys()]
-			#print([F for t in self.ChkTicks() for F in self.ChkTicks()[t]])
-			thsfld = [F for t in self.ChkTicks() for F in self.ChkTicks()[t]]
+			if len(self.idata) == 0:
+				wx.MessageBox("0 row in %s"%sqlcomnd)
+				thsfld = []
+			else:
+				thsfld = self.idata[0].keys()
 
 		else:
 			self.gtslt = self.DVC1.GetSelections()
-			myfild = self.DVC1.GetItemText(self.gtslt[0], 0)
-			#print(myfild)
-			for fld in self.Tfilds:
-				if myfild == fld:
-					thsfld = [f[0] for f in self.Tfilds[fld]]
-					#print(thsfld)
-			#self.idbfl = PG.Get(self.dbfil, u'', u'')
-			self.idbfl = PG2.Get(self.dbfil, dbtype)
-			self.idata = self.idbfl.GetFromString(u' select * from %s' % myfild)
-		frm = wx.Dialog(self, -1)
-		pnl = MyPanel2(frm, thsfld, self.idata)
-		frm.SetSize((600, 300))
-		frm.SetLabel(_(u'Select Table'))
-		frm.ShowModal()
+			if self.DVC1.GetItemText(self.gtslt[0], 1) == '' and self.DVC1.GetItemText(self.gtslt[0], 0) not in ['Table','Indices']:
+				myfild = self.DVC1.GetItemText(self.gtslt[0], 0)
+				#print(self.ChkTicks())
+				if len(self.ChkTicks()) > 0:
+					thstbl = [T for T in self.ChkTicks().keys()]
+					thsfld = [t+'.'+F for t in self.ChkTicks() for F in self.ChkTicks()[t]]
+					ftxt = ' ,'.join(thsfld)
+					Ttxt = ' ,'.join(thstbl)
 
-		frm.Destroy()
+					#print(ftxt,thsfld,thstbl)
+					self.idbfl = PG.Get2(self.dbfil, u'', u'')
+					self.idata = self.idbfl.GetFromString(u'select %s from %s' %(ftxt,Ttxt))
+
+				else:
+					for fld in self.Tfilds:
+						if myfild == fld:
+							thsfld = [f[0] for f in self.Tfilds[fld]]
+					self.idbfl = PG.Get2(self.dbfil, u'', u'')
+					#self.idbfl = PG2.Get(self.dbfil, dbtype)
+					self.idata = self.idbfl.GetFromString(u' select * from %s' % myfild)
+			else:
+				self.idata = []
+				thsfld = []
+		#print(thsfld,self.idata)
+		if len(thsfld) > 0 and len(self.idata) > 0 :
+			frm = wx.Dialog(self, -1)
+			pnl = MyPanel2(frm, thsfld, self.idata)
+			frm.SetSize((600, 300))
+			frm.SetLabel(_(u'Select Table'))
+			frm.ShowModal()
+
+			frm.Destroy()
 
 	def aplit( self, event ):
+		pdwf = wx.FindWindowByName("Program Develop")
+		#print(dir(pdwf))
+		pitm = pdwf.DVC1.GetSelection()
+		pdtxt = pdwf.DVC1.GetItemText(pitm,0)
+		pdcod = pdwf.DVC1.GetItemText(pitm,1)
+		pdfil = pdwf.thsfile
+		pdpth = pdwf.thspath
+		#print(pdtxt,pdcod,pdfil,pdpth)
+		if self.fldinit.GetValue() != '':
+			if pdcod != None or pdcod != '':
+				if '.py' in pdfil :
+					mycod = Anlzfil(pdfil)
+					if not mycod.ishaspanel():
+						wx.MessageBox("Please use wx.Panel in source file")
+						return 1
+					#print(mycod.indexImpline())
+					ex = 0
+					for imlin,inx in mycod.indexImpline():
+						if 'Database.PostGet' in imlin:
+							ex = 1
+
+					self.Frm = wx.Frame(self,
+					                    style=wx.CAPTION | wx.CLOSE_BOX | wx.FRAME_FLOAT_ON_PARENT | wx.TAB_TRAVERSAL)
+					self.Pnl = OS.SrcPanel(self.Frm, pdfil)
+					self.Frm.SetMenuBar(OS.MyMenuBar1(u'Pro'))
+					self.Frm.SetSize((700, 560))
+					self.Frm.SetLabel(pdfil)
+					self.Frm.Show()
+					if ex == 0:
+						linnum = mycod.indexImpline()[-1][1]
+						#print(linnum)
+						self.Pnl.SrcAlg.GotoLine(linnum+1)
+						ipos = self.Pnl.SrcAlg.GetCurrentPos()
+						#print(ipos,self.Pnl.SrcAlg.GetLastPosition())
+						self.Pnl.SrcAlg.SetInsertionPoint(ipos-1)
+						#self.Pnl.SrcAlg.SetInsertionPointEnd()
+						self.Pnl.SrcAlg.AddText("\nimport Database.PostGet as PG\n")
+
+					if mycod.isDBimexist():
+						getit,postit = mycod.isFiledbexist()
+						#print(getit,postit)
+						print("If you change Database Please change it manually")
+					else:
+						#print(self.fldinit.GetValue())
+						#print(self.Pnl.SrcAlg.GetCurrentPos())
+						rsult=self.Pnl.SrcAlg.SearchInTarget('wx.Panel.__init__')
+						self.Pnl.SrcAlg.SearchAnchor()
+						if rsult == -1:
+							self.Pnl.SrcAlg.SearchNext(1,'wx.Panel.__init__')
+						npline=self.Pnl.SrcAlg.GetCurrentLine()
+						#print(npline)
+						self.Pnl.SrcAlg.GotoLine(npline + 2)
+						ipos = self.Pnl.SrcAlg.GetCurrentPos()
+						#print(ipos, self.Pnl.SrcAlg.GetLastPosition())
+						self.Pnl.SrcAlg.SetInsertionPoint(ipos)
+						self.Pnl.SrcAlg.AddText("\n")
+						self.Pnl.SrcAlg.AddText(self.fldinit.GetValue())
+						self.Pnl.SrcAlg.AddText("\n")
+						wx.MessageBox("Please Add Program Statements to correct line of source file for Use database.\n"
+						              "And Then Save file to Apply change.Do Not forget Save File!")
+
+				else:
+					print(pdfil)
+			else:
+				print(pdcod,type(pdcod))
+		else:
+			print(u'Please select your database')
 		event.Skip()
 
 	def gnrit( self, event ):
+		if self.fldsql.GetValue() != '':
+			self.dlg = wx.FileDialog(self, _("Save as SQL file"),
+			                         defaultDir=Src_dbf+SLASH+'sqls',
+			                         defaultFile="",
+			                         wildcard="SQL file(*.sql)|*.sql|All file(*.*)|*.*",
+			                         style=wx.FD_SAVE | wx.FD_CHANGE_DIR | wx.FD_OVERWRITE_PROMPT)
+			if self.dlg.ShowModal() == wx.ID_OK:
+				sqlfpath = self.dlg.GetPaths()[0]
+			self.dlg.Destroy()
+			with open(sqlfpath+'.sql','w+',encoding='utf-8') as f:
+				f.write(self.fldsql.GetValue())
+			wx.MessageBox("SQL file successful create in Src\DBF\sqls path.")
+
 		event.Skip()
 
 	def chgmtd( self, event ):
-		inittxt = "## Add this lines to import part of program \nimport Database.PostGet as PG\n"
-		inittxt2 = "\t## Please Add this line in Panel __init__ function\n"
+		#inittxt = "## Add this lines to import part of program \nimport Database.PostGet as PG\n"
+		inittxt = ''
+		inittxt2 = "\t\t## Please Add this line in Panel __init__ function\n"
 		dbf = self.dbfil
 		if self.table != '':
 			table = self.table
@@ -506,12 +606,12 @@ class MyPanel1 ( wx.Panel ):
 		else:
 			file = u''
 		if self.chs1.GetStringSelection() == 'set':
-			self.fldinit.SetValue(inittxt+inittxt2+f"\tself.MySet = PG.Post('{dbf}','{table}','{field}','{data}')\n".format(dbf,table,field,data))
+			self.fldinit.SetValue(inittxt+inittxt2+f"\t\tself.MySet = PG.Post2('{dbf}','{table}','{field}','{data}')\n".format(dbf,table,field,data))
 		elif self.chs1.GetStringSelection() == 'get':
-			self.fldinit.SetValue(inittxt+inittxt2+f"\tself.MyGet = PG.Get('{dbf}','{data}','{file}')\n".format(dbf,data,file))
+			self.fldinit.SetValue(inittxt+inittxt2+f"\t\tself.MyGet = PG.Get2('{dbf}','{data}','{file}')\n".format(dbf,data,file))
 		elif self.chs1.GetStringSelection() == 'both':
-			self.fldinit.SetValue(inittxt+inittxt2+f"\tself.MySet = PG.Post('{dbf}','{table}','{field}','{data}')\n".format(dbf,table,field,data)
-			                      +f"\tself.MyGet = PG.Get('{dbf}','{data}','{file}')\n".format(dbf,data,file))
+			self.fldinit.SetValue(inittxt+inittxt2+f"\t\tself.MySet = PG.Post2('{dbf}','{table}','{field}','{data}')\n".format(dbf,table,field,data)
+			                      +f"\t\tself.MyGet = PG.Get2('{dbf}','{data}','{file}')\n".format(dbf,data,file))
 		else:
 			print('What method is')
 
@@ -529,14 +629,27 @@ class MyPanel1 ( wx.Panel ):
 		event.Skip()
 
 	def sqlstm( self, event ):
-		txt1 = self.fldsql.GetValue()
-		#print(txt1)
-		self.Frm = wx.Frame(self, style=wx.CAPTION | wx.CLOSE_BOX | wx.FRAME_FLOAT_ON_PARENT | wx.TAB_TRAVERSAL)
-		if txt1 != u'':
-			self.Pnl = DBG.TxtPanel(self.Frm)
-			self.Pnl.Txt.SetValue(txt1)
-			self.Frm.SetMenuBar(DBG.MyMenuBar2(u'sql'))
-			self.Frm.Show()
+		# txt1 = self.fldsql.GetValue()
+		# #print(txt1)
+		# self.Frm = wx.Frame(self, style=wx.CAPTION | wx.CLOSE_BOX | wx.FRAME_FLOAT_ON_PARENT | wx.TAB_TRAVERSAL)
+		# if txt1 != u'':
+		# 	self.Pnl = DBG.TxtPanel(self.Frm)
+		# 	self.Pnl.Txt.SetValue(txt1)
+		# 	self.Frm.SetMenuBar(DBG.MyMenuBar2(u'sql'))
+		# 	self.Frm.Show()
+		self.dlg = wx.FileDialog(self, _("Open sql file"),
+		                         defaultDir=Src_dbf+SLASH+'sqls',
+		                         defaultFile="",
+		                         wildcard="SQL file(*.sql)|*.sql",
+		                         style=wx.FD_OPEN |wx.FD_CHANGE_DIR )
+		if self.dlg.ShowModal() == wx.ID_OK:
+			sqlfil = self.dlg.GetPaths()[0]
+		self.dlg.Destroy()
+		with open(sqlfil,'r') as f:
+			sqltxt = f.read()
+		self.fldsql.SetValue(sqltxt)
+
+
 		event.Skip()
 
 	def tocvs( self, event ):
@@ -552,7 +665,7 @@ class MyPanel1 ( wx.Panel ):
 		self.dlg.Destroy()
 		#print(paths)
 		sqlcomnd = self.fldsql.GetValue()
-		brsdb = PG.Get(self.dbfil, u'', u'')
+		brsdb = PG.Get2(self.dbfil, u'', u'')
 		self.idata = brsdb.GetFromString(sqlcomnd)
 		thsfld = [F.strip('`') for t in self.ChkTicks() for F in self.ChkTicks()[t]]
 		with open(paths, 'w',newline='') as csvfile:
@@ -573,7 +686,7 @@ class MyPanel1 ( wx.Panel ):
 			paths = self.dlg.GetPaths()[0]
 		self.dlg.Destroy()
 		sqlcomnd = self.fldsql.GetValue()
-		brsdb = PG.Get(self.dbfil, u'', u'')
+		brsdb = PG.Get2(self.dbfil, u'', u'')
 		self.idata = brsdb.GetFromString(sqlcomnd)
 
 		workbook = Workbook(paths)

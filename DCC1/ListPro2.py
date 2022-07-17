@@ -82,19 +82,19 @@ class MyPanel1 ( wx.Panel ):
 
 		self.btn1 = wx.BitmapButton( self.P1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0 )
 		#self.btn1.SetBitmap(wx.Bitmap(ICON16_PATH + u'application_add.png', wx.BITMAP_TYPE_ANY))
-		self.btn1.SetBitmap(icon.application_add.GetBitmap())
+		self.btn1.SetBitmap(icon.add_package.GetBitmap())
 		self.btn1.SetToolTip(_(u"Add"))
 		Hsz3.Add( self.btn1, 0, wx.ALL, 5 )
 
 		self.btn2 = wx.BitmapButton( self.P1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0 )
 		#self.btn2.SetBitmap(wx.Bitmap(ICON16_PATH + u'application_edit.png', wx.BITMAP_TYPE_ANY))
-		self.btn2.SetBitmap(icon.application_edit.GetBitmap())
+		self.btn2.SetBitmap(icon.edit_package.GetBitmap())
 		self.btn2.SetToolTip(_(u"Edit"))
 		Hsz3.Add( self.btn2, 0, wx.ALL, 5 )
 
 		self.btn3 = wx.BitmapButton( self.P1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0 )
 		#self.btn3.SetBitmap(wx.Bitmap(ICON16_PATH + u'application_delete.png', wx.BITMAP_TYPE_ANY))
-		self.btn3.SetBitmap(icon.application_delete.GetBitmap())
+		self.btn3.SetBitmap(icon.delete_package.GetBitmap())
 		self.btn3.SetToolTip(_(u"Delete"))
 		Hsz3.Add( self.btn3, 0, wx.ALL, 5 )
 
@@ -422,6 +422,7 @@ class MyPanel1 ( wx.Panel ):
 		#print(txt,cod)
 		if cod != '' and cod.isdigit() and cod != '6666':
 			myindx = iter(self.infopacktxt)
+			#print(self.infopacktxt)
 			for i in range(len(self.infopacktxt)):
 				if txt in next(myindx):
 					#print(i)
@@ -461,12 +462,13 @@ class MyPanel1 ( wx.Panel ):
 		txt = self.TLC1.GetItemText(self.TLC1.GetSelection(), 0)
 		rot = self.TLC1.GetItemParent(self.TLC1.GetSelection())
 		roottxt = self.TLC1.GetItemText(rot, 0)
-		self.Frm = wx.Frame(self, style=wx.CAPTION | wx.CLOSE_BOX | wx.FRAME_FLOAT_ON_PARENT | wx.TAB_TRAVERSAL)
-		self.Pnl = OS.SrcPanel(self.Frm, self.thsfile)
-		self.Frm.SetMenuBar(OS.MyMenuBar1(u'Pro'))
-		self.Frm.SetSize((700, 560))
-		self.Frm.SetLabel(self.thsfile)
-		self.Frm.Show()
+		if '.py' in txt:
+			self.Frm = wx.Frame(self, style=wx.CAPTION | wx.CLOSE_BOX | wx.FRAME_FLOAT_ON_PARENT | wx.TAB_TRAVERSAL)
+			self.Pnl = OS.SrcPanel(self.Frm, self.thsfile)
+			self.Frm.SetMenuBar(OS.MyMenuBar1(u'Pro'))
+			self.Frm.SetSize((700, 560))
+			self.Frm.SetLabel(self.thsfile)
+			self.Frm.Show()
 		event.Skip()
 
 	def upd( self, event ):
@@ -565,7 +567,7 @@ class MyPanel1 ( wx.Panel ):
 		SP1 = {v: k for k, v in Src_Pth.items()}
 		SD1 = {v: k for k, v in Src_Dir.items()}
 
-		self.TLC1.SetItemText(itm, 0, filname.replace(SP1[SD1[int(pathcod)]],''))
+		self.TLC1.SetItemText(itm, 0, filname.replace(SP1[SD1[int(pathcod)]],'').split('\\')[-1])
 		self.TLC1.SetItemText(itm, 1, pathcod)
 
 	def del2zip(self, itm):

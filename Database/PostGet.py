@@ -1,6 +1,7 @@
 #In The name of God
 #!/usr/bin/env python
 # -*- codnig: utf-8 -*-
+import sqlite3
 
 from . import wxsq as sq
 from . import  srcsql as ss
@@ -95,6 +96,11 @@ class Get2:
 
     def GetFromString(self, string):
         return ss.wxsqltxt(self.DBF, string)
+
+    def GetFromString2(self, string, fields):
+        cur = ss.SFDB(self.DBF)
+
+        return cur.cursor.execute(string,fields)
 
     def __del__(self):
         pass

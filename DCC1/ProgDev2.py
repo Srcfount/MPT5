@@ -34,7 +34,7 @@ _ = wx.GetTranslation
 
 class MyPanel1 ( wx.Panel ):
 
-	def __init__( self, parent,For_This_Frame=[], id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 544,450 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
+	def __init__( self, parent,For_This_Frame=[], id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 544,450 ), style = wx.TAB_TRAVERSAL, name = u'Program Develop' ):
 		wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
 
 		Vsz1 = wx.BoxSizer( wx.VERTICAL )
@@ -262,7 +262,6 @@ class MyPanel1 ( wx.Panel ):
 		self.Layout()
 
 
-
 		# Connect Events
 		self.DVC1.Bind( wx.dataview.EVT_DATAVIEW_ITEM_ACTIVATED, self.slctmnu, id = wx.ID_ANY )
 		self.DVC1.Bind(wx.dataview.EVT_DATAVIEW_SELECTION_CHANGED, self.slctitm, id=wx.ID_ANY)
@@ -290,6 +289,7 @@ class MyPanel1 ( wx.Panel ):
 			frmname = self.FTF[0].GetTitle()
 			#print(frmname)
 			self.lbl1.SetLabel(_("List of Programs:")+"    %s" %frmname)
+
 	def filllist(self):
 		#self.DVC1.AppendTextColumn()
 		# self.my_data = self.getMData.AllHndl("""left join Guidir on Guidir.prgdir = handler.prgdir
@@ -432,7 +432,7 @@ class MyPanel1 ( wx.Panel ):
 					    self.fillfield(item,item[2])
 				if cod == '2222':
 					self.thsfile = Src_api+txt
-					data = (cod, txt, '', '-1', '-1', '-', 'Src.API', '', '..\\Src\\API')
+					data = (cod, txt.rstrip('.py'), '', '-1', '-1', '-', 'Src.API', '', '..\\Src\\API')
 					self.fillfield(data, '')
 					self.PrgDir1.SetPath(Src_api)
 
@@ -472,15 +472,30 @@ class MyPanel1 ( wx.Panel ):
 		#print(data)
 		self.fld1.SetValue(str(data[0]))
 		self.fld2.SetValue(str(data[5]))
+		self.dbfuse = ''
 		#AI.Analiz.GetImport
 		if data[8] != '':
 			#print(MAP+data[8][2:]+SLASH+data[1]+'.py')
 			myimp = AI.Analiz.Anlzfil(MAP+data[8][2:]+SLASH+data[1]+'.py')
 			myimp.parsefil()
-			ii = myimp.getGUIfil()
-			iim = myimp.ishasimport()
-			iim2 = myimp.ishasfromim()
-			#print(ii,iim,iim2)
+			# ii = myimp.getGUIfil()
+			# iim = myimp.ishasimport()
+			# iim2 = myimp.ishasfromim()
+			# print(ii,iim,iim2)
+			ii3 = myimp.isDBimexist()
+			#print(ii3)
+			if ii3:
+				dbtxt1,dbtxt2 = myimp.isFiledbexist()
+				#print(dbtxt1,dbtxt2)
+				if dbtxt1:
+					dbf = myimp.findDBintxt(dbtxt1[0])
+				if dbtxt2:
+					dbf = myimp.findDBintxt(dbtxt2[0])
+			else:
+				dbf = ''
+			self.dbfuse = dbf
+			self.prgfld.SetValue(self.dbfuse)
+
 			self.thsfile = MAP+data[8][2:]+SLASH+data[1]+'.py'
 			self.thspath = MAP+data[8][2:]
 		    #print(self.thsfile,self.thspath)
@@ -488,6 +503,7 @@ class MyPanel1 ( wx.Panel ):
 		self.fld3.SetValue(Src_gui + '')
 		self.fld4.SetValue(str(data[3]))
 		self.fld6.SetValue(str(data[4]))
+
 
 		if data[8] != '':
 			#print(myimp.hasDesc())
@@ -497,15 +513,6 @@ class MyPanel1 ( wx.Panel ):
 				self.Desc.SetValue('')
 		else:
 			self.Desc.SetValue('')
-		# if data[10] == '' or data[10] == None:
-		# 	if cods != '':
-		# 		mydes = AI.Analiz.Anlzfil(self.thsfile)
-		# 		if mydes.hasDesc():
-		# 			self.Desc.SetValue(mydes.hasDesc())
-		# 	else:
-		# 		self.Desc.SetValue('')
-		# else:
-		# 	self.Desc.SetValue(data[10])
 
 
 	def conxmnu( self, event ):
@@ -666,9 +673,13 @@ class MyPanel1 ( wx.Panel ):
 				wx.MessageBox(_("You Forgot add main function! Please add it"))
 				return 1
 			if a and b and not c and not d:
-				Add2List()
-				self.updat(event)
-				return 1
+				if af.ishasimport("Src.GUI"):
+					wx.MessageBox(_("Your code had some lost part Please Check it! wx.Frame not exist in code"))
+					return 1
+				else:
+					Add2List()
+					self.updat(event)
+					return 1
 			if a and b and c and d:
 				Add2List()
 				self.updat(event)
@@ -769,7 +780,7 @@ class MyPanel1 ( wx.Panel ):
 		if wx.FindWindowByName(u'Database Develop') == None:
 			import DCC1.DBDev2 as DB
 			ifrm = wx.Frame(self, -1, style=wx.FRAME_FLOAT_ON_PARENT | wx.DEFAULT_FRAME_STYLE)
-			pnl = DB.MyPanel1(ifrm, [self.GetParent()])
+			pnl = DB.MyPanel1(ifrm, [self.GetParent(),self.dbfuse])
 			ifrm.SetSize((555, 500))
 			ifrm.SetTitle(u'Database use Program')
 			ifrm.Show()

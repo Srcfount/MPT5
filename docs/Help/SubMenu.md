@@ -30,8 +30,10 @@ after Create Sub Menu go to next step
 6. press Apply button
 
 after create you can see this
+
 ![](images/1/smnu3.jpg)
 ![](images/1/smnu4.jpg)
+
 after restart application menu will change to correct position  
 and Bold Name disappearing
 

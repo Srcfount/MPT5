@@ -60,7 +60,7 @@ How Delete a Toolbar
 1. Select Tool item that like to Delete it
 2. Pay attention to the number and group so that no mistake is made
 3. Also to name , icon and other information
-4. Program **NOT** delete here you must go to program list
+4. Program **NOT** delete here you must go to [program list](Programs.md)
 5. After all attentions press Delete button to delete tool from toolbar
 
 > Note: Separator can not remove from toolbar until restart application again  
@@ -90,7 +90,7 @@ If press Refresh Button list of toolbar refreshed
 
 Information Item
 ----------------
-If press Button application print data of  select tool in to stdout/stderr window
+If press Info Button application print data of  select tool in to stdout/stderr window
 
 
 Type of Toolbar

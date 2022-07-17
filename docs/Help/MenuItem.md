@@ -48,7 +48,7 @@ if you blank **No. 12** (name of program), application will select ``Demo.py`` f
 you can change this program for this menu item later but that must exist in this directory.  
 Icon Size is 16x16 and default Path is ``Res\Icons\Menu`` if you select other path application copy it in this path  
 if select Checkable or Radio Icon NOT useable for menu item better not use it    
-for select SubMenu refer to SubMenuCreate Document  
+for select SubMenu refer to [SubMenu](SubMenu.md) Create Document  
 ![](images/1/amni3.jpg)
 
 --------------------------------------------------------------------------------------------
@@ -80,7 +80,7 @@ Delete Menu Item
 
 1. Select Item you like to delete
 2. Note the item number as well as the menu bar
-3. Program will **NOT** Delete. All action is in List of Programs 
+3. Program will **NOT** Delete. All action is in [List of Programs](Programs.md)
 4. After press the button item will delete
 
 Add Separator
@@ -96,7 +96,7 @@ Add Separator
 
 Update List
 -----------
-Refreshes all menu items, if the list is open, close it and fill in all items again
+Refreshes all menu items, if the list is open, will close it and fill in all items again
 
 Information
 -----------

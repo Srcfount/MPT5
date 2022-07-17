@@ -760,14 +760,14 @@ class MyPanel1 ( wx.Panel ):
 			return dircod
 
 	def prglst( self, event ):
-		if wx.FindWindowByName(u'List of Program') == None:
+		if wx.FindWindowByName(u'Program Develop') == None:
 			#print(self.mydata)
 			if self.prgfld.GetValue() != '' and self.prgfld.GetValue() != '.py':
 				import DCC1.ProgDev2 as DP
 				ifrm = wx.Frame(self, -1, style=wx.FRAME_FLOAT_ON_PARENT | wx.DEFAULT_FRAME_STYLE)
 				pnl = DP.MyPanel1(ifrm,[self.GetParent(),self.prgfld.GetValue().replace('.py',''),self.mydata[5]])
 				ifrm.SetSize((555, 500))
-				ifrm.SetTitle(u'List of Program')
+				ifrm.SetTitle(u'Program Develop')
 				ifrm.Show()
 				#print( ifrm.TransferDataFromWindow() )
 
