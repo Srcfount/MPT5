@@ -175,6 +175,14 @@ class Anlzfil(object):
                 imprtlist.append((t,i))
         return imprtlist
 
+    def hasMLAimpis(self, txt=''):
+        with open(self.pyFile, 'r', encoding=u'utf-8') as f:
+            itxt = f.read()
+        whris1 = re.findall(r'import\s+Src\.MLA\..*.',itxt)
+        whris2 = re.findall(r'from\s+Src\.MLA\..*.',itxt)
+        if whris1 or whris2:
+            return whris1,whris2
+
 def GetPanelImport(filewopy):
     f = filewopy+'.py'
 

@@ -512,7 +512,7 @@ class MyPanel1 ( wx.Panel ):
 				if '.py' in pdfil :
 					mycod = Anlzfil(pdfil)
 					if not mycod.ishaspanel():
-						wx.MessageBox("Please use wx.Panel in source file")
+						wx.MessageBox(_("Please use wx.Panel in source file"))
 						return 1
 					#print(mycod.indexImpline())
 					ex = 0
@@ -557,8 +557,8 @@ class MyPanel1 ( wx.Panel ):
 						self.Pnl.SrcAlg.AddText("\n")
 						self.Pnl.SrcAlg.AddText(self.fldinit.GetValue())
 						self.Pnl.SrcAlg.AddText("\n")
-						wx.MessageBox("Please Add Program Statements to correct line of source file for Use database.\n"
-						              "And Then Save file to Apply change.Do Not forget Save File!")
+						wx.MessageBox(_("Please Add Program Statements to correct line of source file for Use database.\n"
+						              "And Then Save file to Apply change.Do Not forget Save File!"))
 
 				else:
 					print(pdfil)
@@ -580,7 +580,7 @@ class MyPanel1 ( wx.Panel ):
 			self.dlg.Destroy()
 			with open(sqlfpath+'.sql','w+',encoding='utf-8') as f:
 				f.write(self.fldsql.GetValue())
-			wx.MessageBox("SQL file successful create in Src\DBF\sqls path.")
+			wx.MessageBox(_("SQL file successful create in Src\DBF\sqls path."))
 
 		event.Skip()
 

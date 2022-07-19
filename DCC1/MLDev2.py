@@ -320,10 +320,10 @@ class MyPanel1 ( wx.Panel ):
 			pnl = self.PLP19[chos.GetSelection()]
 			pnl.Start()
 		else:
-			wx.MessageBox("Please Create a Machine Learning Panel and write your code in Start function ")
+			wx.MessageBox(_("Please Create a Machine Learning Panel and write your code in Start function "))
 
 	def conctdata(self, event):
-		wx.MessageBox("We will soon create this part for connect between data here")
+		wx.MessageBox(_("We will soon create this part for connect between data here"))
 
 	#def srcml( self, event ):
 		#event.Skip()
@@ -358,7 +358,34 @@ class MyPanel1 ( wx.Panel ):
 		event.Skip()
 
 	def delit( self, event ):
-		event.Skip()
+		myslct = self.TLC1.GetSelection()
+		thsmtd = self.TLC1.GetItemText(myslct, 0)
+		mymthd = self.TLC1.GetItemText(myslct, 1)
+		if mymthd == '????' or mymthd == '****':
+
+			if mymthd == '????':
+				thsfile = Src_mla+self.TLC1.GetItemText(myslct, 0)
+			if mymthd == '****':
+				thsfile = Src_mlp+self.TLC1.GetItemText(myslct, 0)
+			answer = wx.MessageBox(_("Do you like delete program [%s] from HDD" % thsfile), style=wx.YES_NO)
+			if answer == 2:
+				hndlid = 0
+				#print(self.thsfile)
+				if os.path.isfile(thsfile):
+					os.remove(thsfile)
+					wx.MessageBox(_("File Successfully Remove from HardDisk"))
+				else:
+					wx.MessageBox(_("File Open or dose not exist please close it or check Harddisk"))
+		else:
+			answer = wx.MessageBox(_("If you Delete Algorithm maybe some Panel Not work correctly! Do you like delete Algorithm [%s] from list" % thsmtd), style=wx.YES_NO)
+			if answer == 2:
+				self.setMDate.Table = u'MLAlgo'
+				self.setMDate.Delitem(" MLAlgo.MLcod = '%s' " % mymthd)
+				self.setMDate.Table = u'MLinfo'
+				self.setMDate.Delitem(" MLinfo.MLcod = '%s' " % mymthd)
+				wx.MessageBox(_("Algorithm successful delete from list "))
+		self.upd(event)
+
 
 	def prw( self, event ):
 		if len(self.PLP19) > 0:
@@ -366,7 +393,7 @@ class MyPanel1 ( wx.Panel ):
 			pnl = self.PLP19[chos.GetSelection()]
 			pnl.Test()
 		else:
-			wx.MessageBox("Please Create a Machine Learning Panel and write your code in Test function ")
+			wx.MessageBox(_("Please Create a Machine Learning Panel and write your code in Test function "))
 
 		event.Skip()
 
@@ -374,9 +401,9 @@ class MyPanel1 ( wx.Panel ):
 		self.ChsBok.DeleteAllPages()
 		self.PLP19 = []
 		j = 0
-		lstpane = self.getMData.MLPansFils(u' Join MLinfo on MLPane.MLPid = MLinfo.MLPid')
+		self.lstpane = self.getMData.MLPansFils(u' Join MLinfo on MLPane.MLPid = MLinfo.MLPid ')
 		Src_dir = self.getMData.GetImpCod('4444')[0][0]
-		for lp in lstpane:
+		for lp in self.lstpane:
 			#print(lp)
 			#i = importlib.import_module(u'GUI.MLPane.' + lp[1])
 			i = importlib.import_module(Src_dir+'.' + lp[1])
@@ -387,6 +414,10 @@ class MyPanel1 ( wx.Panel ):
 				fp = False
 			self.ChsBok.AddPage(self.PLP19[j], lp[3], fp)
 			j += 1
+
+		self.TLC1.DeleteAllItems()
+		self.filllist()
+		self.TLC1.Refresh()
 		event.Skip()
 
 	def aply( self, event ):
@@ -397,11 +428,11 @@ class MyPanel1 ( wx.Panel ):
 		else:
 			if myalg == '????':
 				ifil = self.TLC1.GetItemText(myslct, 0).replace('.py','')
-				print(ifil)
+				#print(ifil)
 				lebls = [u'Algorithm Name', u'Algorithm Code', u'Algorithm file']
 				data = [ifil]
 				algid, algnm, algcd = self.opengeneratewin(lebls,data)
-				print(algid, algnm, algcd)
+				#print(algid, algnm, algcd)
 				if algnm != u'' and algcd != u'' and algid != u'':
 					if int(algid) > 11000 and int(algid) < 60999:
 						self.setMDate.Table = u'MLinfo'
@@ -415,9 +446,8 @@ class MyPanel1 ( wx.Panel ):
 					wx.MessageBox(_(u'Some fields is empty or wrong ! try again!'))
 			if myalg == '****':
 				wx.MessageBox(_(u'Please Use <Generate> for create Panel'))
-
-
-		event.Skip()
+		self.upd(event)
+		#event.Skip()
 
 	def gnrt( self, event ):
 		myslct = self.TLC1.GetSelection()
@@ -425,48 +455,40 @@ class MyPanel1 ( wx.Panel ):
 		if myalg != '????' and myalg != '****':
 			wx.MessageBox(_(u'Algorithm already added '))
 		else:
-			if myalg == '????':
-				wx.MessageBox(_(u'Please Use <Apply> for add Algorithm file'))
-				# ifil = self.TLC1.GetItemText(myslct, 0).replace('.py','')
-				# print(ifil)
-				# lebls = [u'Algorithm Name', u'Algorithm Code', u'Algorithm file']
-				# data = [ifil]
-				# algid, algnm, algcd = self.opengeneratewin(lebls,data)
-				# print(algid, algnm, algcd)
-				# if algnm != u'' and algcd != u'' and algid != u'':
-				# 	if int(algid) > 11000 and int(algid) < 60999:
-				# 		self.setMDate.Table = u'MLinfo'
-				# 		self.setMDate.Additem(u' MLPid, MLname, MLcod', [int(algid), algnm, algcd])
-				# 		self.setMDate.Table = u'MLAlgo'
-				# 		self.setMDate.Additem(u' MLcod, MLAsrc', [algcd, ifil])
-				# 		wx.MessageBox(_(u'Your source Add to list Successfully.'))
-				# 	else:
-				# 		wx.MessageBox(_(u'Please attend to coding range!'))
-				# else:
-				# 	wx.MessageBox(_(u'Some fields is empty or wrong ! try again!'))
-
 
 			if myalg == '****':
+				af = Anlzfil(Src_mlp+self.TLC1.GetItemText(myslct, 0))
 				ifil = self.TLC1.GetItemText(myslct, 0).replace('.py','')
-				print(ifil)
-				lebls = [u'Par. Pane Name', u'Par. Pane code', u'Par. Pane file']
-				data = [ifil]
-				algid, algnm, algcd = self.opengeneratewin(lebls, data)
-				print(algid, algnm, algcd)
-				if algnm != u'' and algcd != u'' and algid != u'':
-					if int(algid) > 11000 and int(algid) < 60999:
-						print(u'to database')
-						self.setMDate.Table = u'MLinfo'
-						self.setMDate.Additem(u' MLPid, MLname, MLcod', [int(algid), algnm, algcd])
-						self.setMDate.Table = u'MLPane'
-						self.setMDate.Additem(u' MLPid, MLPfile', [algid, ifil])
-						wx.MessageBox(_(u'Your source Add to list Successfully.'))
-					else:
-						wx.MessageBox(_(u'Please attend to coding range!'))
-				else:
-					wx.MessageBox(_(u'Some fields is empty or wrong ! try again!'))
+				#print(ifil,af)
+				imlaim = af.hasMLAimpis()
+				if len(imlaim[0])>0 :
+					algmthd = imlaim[0][0].split(' ')[1].replace('Src.MLA.','')
 
-		event.Skip()
+
+				elif len(imlaim[1])>0:
+					algmthd = imlaim[1][0].split(' ')[1].replace('Src.MLA.','')
+
+				else:
+					algmthd = 0
+					wx.MessageBox(_("Which Algorithm at Src.MLA used for this panel? Please check your source code!"))
+					return 1
+				#print(algmthd)
+				if algmthd:
+					infocod = self.getMData.AllML(
+						" , MLAlgo where MLAlgo.MLAsrc = '%s' and MLAlgo.MLcod = MLinfo.MLcod" % algmthd)
+					#print(infocod)
+					if len(infocod) > 0:
+						self.setMDate.Table = u'MLPane'
+						self.setMDate.Additem(u' MLPid, MLPfile', [infocod[0][0], ifil])
+						wx.MessageBox(_(u'Your source Add to list of Panel Successfully.'))
+					else:
+						wx.MessageBox(_("Please first Add your Algorithm to list then add Panel"))
+
+			else:
+				wx.MessageBox(_(u'Please Use <Apply> for add Algorithm file'))
+
+		self.upd(event)
+		#event.Skip()
 
 	def opengeneratewin(self,lebls,data):
 		dlg = wx.Dialog(self, -1)
@@ -518,6 +540,18 @@ class MyPanel1 ( wx.Panel ):
 		event.Skip()
 
 	def delAl( self, event ):
+		chos = self.ChsBok.GetChoiceCtrl()
+		ipg = self.ChsBok.GetSelection()
+		chname = chos.GetString(ipg)
+		print(chname)
+		Pnlid = self.getMData.MLPanid(chname)[0][0]
+		print(Pnlid)
+		answer = wx.MessageBox(_("Do you like delete Panel [%s] from list" % chname), style=wx.YES_NO)
+		if answer == 2:
+			self.setMDate.Table = 'MLPane'
+			self.setMDate.Delitem(" MLPane.MLPid = %d "%Pnlid)
+			wx.MessageBox(" Panel delete from list , you can see your file in All MLA source file in HDD")
+			self.upd(event)
 		event.Skip()
 
 	def chgedpg( self, event ):
@@ -794,26 +828,6 @@ class MyPanel5 ( wx.Panel ):
 
 		Vsz1.Add( Hsz2, 1, wx.EXPAND, 5 )
 
-		# Hsz3 = wx.BoxSizer( wx.HORIZONTAL )
-		#
-		# self.lbl4 = wx.StaticText( self, wx.ID_ANY, u"MLA Algorithm Code", wx.DefaultPosition, wx.Size( 110,-1 ), wx.ALIGN_CENTER_HORIZONTAL )
-		# self.lbl4.Wrap( -1 )
-		#
-		# Hsz3.Add( self.lbl4, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
-		#
-		# self.fld4 = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 70,-1 ), 0 )
-		# Hsz3.Add( self.fld4, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
-		#
-		# self.lbl5 = wx.StaticText( self, wx.ID_ANY, u"MLA Algorithm File", wx.DefaultPosition, wx.Size( 95,-1 ), wx.ALIGN_CENTER_HORIZONTAL )
-		# self.lbl5.Wrap( -1 )
-		#
-		# Hsz3.Add( self.lbl5, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
-		#
-		# self.fld5 = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
-		# Hsz3.Add( self.fld5, 1, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
-		#
-		#
-		# Vsz1.Add( Hsz3, 1, wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
 		Hsz4 = wx.BoxSizer( wx.HORIZONTAL )
 
