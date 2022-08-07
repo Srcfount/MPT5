@@ -42,12 +42,24 @@ def ForMySqldb(database,user,pswrd,host="localhost"):
 	'''
 	import mysql.connector
 
-	mydb = mysql.connector.connect(
-		host=host,
-		user=user,
-		password=pswrd,
-		database=database
-	)
+	config = {
+		"host": host,
+		"port": 3306,
+		"database": database,
+		"user": user,
+		"password": pswrd,
+		"charset": "utf8",
+		"use_unicode": True,
+		"get_warnings": True,
+	}
+
+	mydb = mysql.connector.Connect(**config)
+	# mydb = mysql.connector.connect(
+	# 	host=host,
+	# 	user=user,
+	# 	password=pswrd,
+	# 	database=database
+	# )
 
 	return mydb
 
@@ -62,6 +74,7 @@ def ForPostgrSql(database,user,pswrd,host="localhost",port="5432"):
 	:return: Connection
 	'''
 	import psycopg2
+	print(database,user,pswrd,host,port)
 	mydb = psycopg2.connect(database=database, user=user, password=pswrd, host=host, port=port)
 
 	return  mydb

@@ -19,8 +19,9 @@ class SFDB(object):
 		:param dbpath:
 		:param kwargs: user pswrd host
 		'''
+		self.kwarg = kwargs
 		self.database = database
-		self.infacecon = self.Getinterface()
+		self.infacecon = self.Getinterface(**kwargs)
 		self.connect()
 
 	def Getinterface(self,**kwargs):
@@ -29,6 +30,7 @@ class SFDB(object):
 		:param kwargs: user, pswrd, host
 		:return: interface connection to database
 		'''
+		#print(kwargs,self.kwarg)
 		self.config = wx.GetApp().GetConfig()
 		infaceid = self.config.Read('DBtype')
 		myinface = Database_type[int(infaceid)]
@@ -68,20 +70,20 @@ class SFDB(object):
 	def execute(self, statments):
 		# with self.connect():
 		self.cursor.execute(statments)
-		return self.fetchall()
+		#return self.fetchall()
 
 	def execute1(self, statments, *data):
 		if len(data) > 0:
 			self.cursor.execute(statments, data[0])
-		self.commit()
-		return self.fetchall()
+		#self.commit()
+		#return self.fetchall()
 
 	def execone(self, statments, *data):
 		if data == None:
 			self.cursor.execute(statments)
 		else:
 			self.cursor.execute(statments, data[0])
-		return self.fetchone()
+		#return self.fetchone()
 
 	def executemany(self, statments, *data):
 		if data == None:
@@ -153,56 +155,127 @@ class SQLite(object):
 		sql = " delete from {t} ".format(t=self.tables)
 		return sql
 
+class MySQLs(object):
+	def __init__(self, tables, fields, values):
+		self.tables = tables
+		self.fields = fields
+		self.values = values
+
+	def create(self, **karg):
+		sql = 'CREATE TABLE {t} ({f} {p})'.format(t=str(self.tables), f=str(self.fields), p=str(self.values))
+		return sql
+
+	def insert(self, **karg):
+		sql = 'INSERT INTO ' + str(self.tables)
+		sql = sql + '(' + str(self.fields) + ')'
+
+		sql = sql + ' VALUES ' + '(' + '%s,' * (len(self.fields.split(',')) - 1) + '%s)'
+		# print sql
+		return sql
+
+	def select(self, *arg, **karg):
+		sql = ' SELECT ' + self.fields + ' FROM ' + self.tables
+		# print sql
+		return sql
+
+	def select1(self, *arg, **karg):
+		sql = ' SELECT DISTINCT' + self.fields + ' FROM ' + self.tables + ' WHERE ' + self.values
+		# print sql
+		return sql
+
+	def update(self, **karg):
+		sql = ' UPDATE ' + self.tables + ' SET ' + self.fields
+		# print sql
+		return sql
+
+	def update2(self, **karg):
+		sql = ' UPDATE ' + self.tables + ' SET ' + self.fields + ' WHERE ' + self.values
+		return sql
+
+	def delete(self, **karg):
+		sql = ' DELETE FROM ' + self.tables + ' WHERE ' + self.values
+		return sql
+
+	def delall(self, **karg):
+		# sql = ' delete from '+self.tables+' where '+self.values
+		sql = " DELETE FROM {t} ".format(t=self.tables)
+		return sql
+
 
 def MyDB_Path(database):
-	return SFDB(database)
+	if chkengin() == 2 or chkengin() == 3:
+		config = wx.GetApp().GetConfig()
+		uphstr = config.Read('DBtype.UPH').split(' ')
+		#print(uphstr.split(' '))
+		return SFDB(database,user=uphstr[0],pswrd=uphstr[1],host=uphstr[2])
+	else:
+		return SFDB(database)
 
-def MySrc_db_Path(database):
-	return SFDB(database)
+def MySrc_db_Path(database, user='',pswrd='',host=''):
+	return SFDB(database,user=user,pswrd=pswrd,host=host)
+
+def chkengin():
+	config = wx.GetApp().GetConfig()
+	infaceid = config.Read('DBtype')
+	return int(infaceid)
+
 
 def wxsqsel(database, tabels, fields='*', condition=''):
-	# global MAP
-	# print MAP
-	# print database,tabels,fields,condition
 
 	Mydb = MyDB_Path(database)
 	Mydb.connect()
-	sql = SQLite(tabels, fields, condition)
-	sql1 = sql.select(fields, tabels)
-
-	mylist = Mydb.execute(sql1)
+	if chkengin() == 1:
+		sql = SQLite(tabels, fields, condition)
+		sql1 = sql.select(fields, tabels)
+	if chkengin() > 1:
+		sql = MySQLs(tabels, fields, condition)
+		sql1 = sql.select(fields, tabels)
+	Mydb.execute(sql1)
+	mylist = Mydb.fetchone()
 	return mylist
 
 
 def wxsqsel1(database, tabels, fields='*', condition=''):
 	Mydb = MyDB_Path(database)
 	Mydb.connect()
-	sql = SQLite(tabels, fields, values=condition)
-	sql1 = sql.select1(fields, tabels, values=condition)
+	if chkengin() == 1:
+		sql = SQLite(tabels, fields, values=condition)
+		sql1 = sql.select1(fields, tabels, values=condition)
+	if chkengin() > 1:
+		sql = MySQLs(tabels, fields, values=condition)
+		sql1 = sql.select1(fields, tabels, values=condition)
+
 	# print sql1
-	mylist = Mydb.execute(sql1)
+	Mydb.execute(sql1)
+	mylist = Mydb.fetchall()
 	return mylist
 
 def wxsqsel2(database, tabels, fields='*'):
 	Mydb = MyDB_Path(database)
 	Mydb.connect()
 	# print sql1
-	mylist = Mydb.execute1(tabels,fields)
+	Mydb.execute1(tabels, fields)
+	mylist = Mydb.fetchall()
 	return mylist
 
 def wxsqltxt(database, text):
 	# global MAP
 	Mydb = MyDB_Path(database)
-	mylist = Mydb.execute(text)
+	Mydb.execute(text)
+	mylist = Mydb.fetchall()
 	return mylist
 
 
 def wxsqins(database, tabels, fields, data):
 	# global MAP
 	Mydb = MyDB_Path(database)
-	sql = SQLite(tabels, fields, values=data)
-	sql1 = sql.insert()
-	# print sql
+	if chkengin() == 1:
+		sql = SQLite(tabels, fields, values=data)
+		sql1 = sql.insert()
+		#print( sql1, data )
+	if chkengin() > 1:
+		sql = MySQLs(tabels, fields, values=data)
+		sql1 = sql.insert()
 	mylist = Mydb.execone(sql1, data)
 	Mydb.commit()
 	Mydb.close()
@@ -212,11 +285,31 @@ def wxsqins(database, tabels, fields, data):
 
 def wxsqins2(database, tabels, fields, data):
 	Mydb = MyDB_Path(database)
-	sql = SQLite(tabels, fields, values=data)
-	sql1 = sql.insert()
-	# print sql
+	if chkengin() == 1:
+		sql = SQLite(tabels, fields, values=data)
+		sql1 = sql.insert()
+	# print( sql1, data )
+	if chkengin() > 1:
+		sql = MySQLs(tabels, fields, values=data)
+		sql1 = sql.insert()
 	mylist = Mydb.executemany(sql1, data)
 	# Mydb.commit()
+	Mydb.close()
+	# print mylist
+	return mylist
+
+def wxsqins3(database, tabels, fields, data):
+	# global MAP
+	Mydb = MyDB_Path(database)
+	if chkengin() == 1:
+		sql = SQLite(tabels, fields, values=data)
+		sql1 = sql.insert()
+		#print( sql1, data )
+	if chkengin() > 1:
+		sql = MySQLs(tabels, fields, values=data)
+		sql1 = sql.insert()
+	mylist = Mydb.execute1(sql1, data)
+	Mydb.commit()
 	Mydb.close()
 	# print mylist
 	return mylist
@@ -225,8 +318,13 @@ def wxsqins2(database, tabels, fields, data):
 def wxsqlup(database, tabels, fields, data):
 	# global MAP
 	Mydb = MyDB_Path(database)
-	sql = SQLite(tabels, fields, values=data)
-	sql1 = sql.update()
+	if chkengin() == 1:
+		sql = SQLite(tabels, fields, values=data)
+		sql1 = sql.update()
+	if chkengin() > 1:
+		sql = MySQLs(tabels, fields, values=data)
+		sql1 = sql.update()
+
 	# print sql
 	# print sql1
 	mylist = Mydb.execone(sql1, data)
@@ -238,8 +336,13 @@ def wxsqlup(database, tabels, fields, data):
 
 def wxsqlup2(database, tabels, fields, data):
 	Mydb = MyDB_Path(database)
-	sql = SQLite(tabels, fields, values=data)
-	sql1 = sql.update2()
+	if chkengin() == 1:
+		sql = SQLite(tabels, fields, values=data)
+		sql1 = sql.update2()
+	if chkengin() > 1:
+		sql = MySQLs(tabels, fields, values=data)
+		sql1 = sql.update2()
+
 	mylist = Mydb.executemany(sql1, data)
 	# Mydb.commit()
 	Mydb.close()
@@ -250,8 +353,13 @@ def wxsqlup2(database, tabels, fields, data):
 def wxsqdel(database, tabels, data):
 	# global MAP
 	Mydb = MyDB_Path(database)
-	sql = SQLite(tabels, fields='', values=data)
-	sql1 = sql.delete()
+	if chkengin() == 1:
+		sql = SQLite(tabels, fields='', values=data)
+		sql1 = sql.delete()
+	if chkengin() > 1:
+		sql = MySQLs(tabels, fields='', values=data)
+		sql1 = sql.delete()
+
 	# print sql
 	# print sql1
 	mylist = Mydb.execute(sql1)
@@ -263,8 +371,12 @@ def wxsqdel(database, tabels, data):
 
 def wxsqdall(database, tabels):
 	Mydb = MyDB_Path(database)
-	sql = SQLite(tabels, fields='', values='')
-	sql1 = sql.delall()
+	if chkengin() == 1:
+		sql = SQLite(tabels, fields='', values='')
+		sql1 = sql.delall()
+	if chkengin() > 1:
+		sql = MySQLs(tabels, fields='', values='')
+		sql1 = sql.delall()
 	mylist = Mydb.execute(sql1)
 	# Mydb.commit()
 	Mydb.close()
@@ -273,6 +385,9 @@ def wxsqdall(database, tabels):
 
 
 def wxsqsnd(database, tabel, field1, field2, data):
+	'''
+	Select field1 from table where field2 = data
+	'''
 	# global MAP
 	Mydb = MyDB_Path(database)
 	mylist = Mydb.execute(

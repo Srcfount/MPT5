@@ -4,7 +4,7 @@
 
 Start from the beginning with your own and others' codes
 
-![](docs/Help/images/0/1.jpg)
+![](docs/Help/images/0/1b.jpg)
 
 Introduction
 ===========

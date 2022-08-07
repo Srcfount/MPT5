@@ -184,6 +184,11 @@ class MyPanel1 ( wx.Panel ):
                 else:
                     print("something error")
 
+        #print(self.config.Read(u'DBtype.UPH'))
+        if self.config.Read(u'DBtype.UPH') != '':
+            self.P1.AppendIn(u'DBtype', pg.StringProperty('User: Password: Host:', 'UPH', self.config.Read(u'DBtype.UPH')))
+
+
 
 
         MAP = os.getcwd()
@@ -267,6 +272,10 @@ class MyPanel1 ( wx.Panel ):
                 self.config.Write(itm,v[u'SBGColor']+','+str(self.SBGCol))
             elif itm == 'Font':
                 self.config.Write('Font', self.ifont)
+            #elif itm == 'DBtype':
+            #    print(itm, str(e[itm]))
+            #elif itm == 'DBtype.UPH':
+            #    print(itm, str(e[itm]))
             else:
                 self.config.Write(itm,str(e[itm]))
 
@@ -313,8 +322,6 @@ class MyPanel1 ( wx.Panel ):
             minwin[0].GetToolBar().SetBackgroundColour(wx.SystemSettings.GetColour(wcolor.m_type))
             minwin[0].Refresh()
 
-
-
         if p.GetName() == u'SBGColor':
             #print(v[u'SBGColor'])
             wcolor = p.GetValue()
@@ -324,6 +331,21 @@ class MyPanel1 ( wx.Panel ):
             #print(minwin[0].GetStatusBar().GetFieldsCount())
             minwin[0].GetStatusBar().SetBackgroundColour(wx.SystemSettings.GetColour(wcolor.m_type))
             minwin[0].Refresh()
+
+        if p.GetName() == u'DBtype':
+            dbtyp = p.GetValue()
+            #print(dbtyp, type(dbtyp))
+            if dbtyp == 2 or dbtyp == 3:
+                if self.P1.GetPropertyByName('DBtype.UPH'):
+                    #print('i found it')
+                    self.P1.GetPropertyByName('DBtype.UPH').Hide(False, pg.PG_DONT_RECURSE)
+                else:
+                    self.P1.AppendIn(u'DBtype',pg.StringProperty('User: Password: Host:','UPH',''))
+            else:
+                if self.P1.GetPropertyByName('DBtype.UPH'):
+                    self.P1.GetPropertyByName('DBtype.UPH').Hide(True, pg.PG_DONT_RECURSE)
+            #    self.P1.HideProperty(u'DBtype.UPH', True, pg.PG_DONT_RECURSE)
+        self.P1.RefreshGrid()
 
 
     def OnPropGridSelect(self, event):

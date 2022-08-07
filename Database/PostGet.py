@@ -122,6 +122,9 @@ class Post2:
     def Addrecord2(self,Field,Data):
         return ss.wxsqins2(self.DBF, self.Tabel, Field, Data)
 
+    def Addrecord3(self,Field,Data):
+        return ss.wxsqins3(self.DBF, self.Tabel, Field, Data)
+
     def Updaterecord(self,Field,Data):
         return ss.wxsqlup(self.DBF, self.Tabel, Field, Data)
 

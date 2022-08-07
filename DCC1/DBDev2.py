@@ -50,6 +50,8 @@ class MyPanel1 ( wx.Panel ):
 
 		self.dbfile = wx.FilePickerCtrl( self.P1, wx.ID_ANY, wx.EmptyString, _(u"Select Database file"), u"*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE|wx.FLP_OPEN|wx.FLP_SMALL )
 		Vsz2.Add( self.dbfile, 0, wx.ALL|wx.EXPAND, 5 )
+		if int(self.config.Read('DBtype')) != 1:
+			self.dbfile.Disable()
 
 		self.lbl1 = wx.StaticText( self.P1, wx.ID_ANY, _(u"List of Tabel:"), wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.lbl1.Wrap( -1 )
@@ -249,13 +251,15 @@ class MyPanel1 ( wx.Panel ):
 
 
 	def dbopn(self, event):
-		dbftype = Database_type[int(self.config.Read('DBtype'))]
-		self.dbfil = self.dbfile.GetPath()
-		self.idbfl2 = PG.Get2(self.dbfil, u'',u'')
-		self.dbdata = self.idbfl2.GetFromString('select * from sqlite_master')
-		self.DVC1.DeleteAllItems()
-		self.filllist()
-		self.chgmtd(None)
+
+		if int(self.config.Read('DBtype')) == 1:
+			dbftype = Database_type[int(self.config.Read('DBtype'))]
+			self.dbfil = self.dbfile.GetPath()
+			self.idbfl2 = PG.Get2(self.dbfil, u'',u'')
+			self.dbdata = self.idbfl2.GetFromString('select * from sqlite_master')
+			self.DVC1.DeleteAllItems()
+			self.filllist()
+			self.chgmtd(None)
 
 	def filllist(self):
 		Droot = self.DVC1.GetRootItem()

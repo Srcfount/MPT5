@@ -368,15 +368,16 @@ class MyPanel1 ( wx.Panel ):
 			idr = hdddir.replace('..', MAP)
 			if dircod == '2222':
 				for ifil in os.listdir(idr):
+					#print(ifil)
 					if '.py' in ifil:
-						if ifil.rstrip('.py') not in allprgnm and ifil != '__init__.py':
+						if ifil.replace('.py','') not in allprgnm and ifil != '__init__.py':
 							child2 = self.DVC1.AppendItem(self.root0, ifil)
-							self.DVC1.SetItemText(child2, 0, ifil)
+							self.DVC1.SetItemText(child2, 0, ifil.replace('.py',''))
 							self.DVC1.SetItemText(child2, 1, '2222')
 			else:
 				for ifil in os.listdir(idr):
 					if '.py' in ifil and ifil not in inlstimport:
-						if ifil.rstrip('.py') not in allprgnm and ifil != '__init__.py' and ifil != 'PAui.py' :
+						if ifil.replace('.py','') not in allprgnm and ifil != '__init__.py' and ifil != 'PAui.py' :
 							child2 = self.DVC1.AppendItem(self.root5, ifil)
 							self.DVC1.SetItemText(child2, 0, ifil)
 							self.DVC1.SetItemText(child2, 1, dircod[:2]+'??')
@@ -431,8 +432,8 @@ class MyPanel1 ( wx.Panel ):
 						#print(item)
 					    self.fillfield(item,item[2])
 				if cod == '2222':
-					self.thsfile = Src_api+txt
-					data = (cod, txt.rstrip('.py'), '', '-1', '-1', '-', 'Src.API', '', '..\\Src\\API')
+					self.thsfile = Src_api+txt+'.py'
+					data = (cod, txt, '', '-1', '-1', '-', 'Src.API', '', '..\\Src\\API')
 					self.fillfield(data, '')
 					self.PrgDir1.SetPath(Src_api)
 
