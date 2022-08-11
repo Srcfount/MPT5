@@ -48,10 +48,23 @@ class MyPanel1 ( wx.Panel ):
 
 		Vsz2.Add( self.lbl0, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
-		self.dbfile = wx.FilePickerCtrl( self.P1, wx.ID_ANY, wx.EmptyString, _(u"Select Database file"), u"*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE|wx.FLP_OPEN|wx.FLP_SMALL )
-		Vsz2.Add( self.dbfile, 0, wx.ALL|wx.EXPAND, 5 )
-		if int(self.config.Read('DBtype')) != 1:
-			self.dbfile.Disable()
+		if int(self.config.Read('DBtype')) == 1:
+			self.dbfile = wx.FilePickerCtrl( self.P1, wx.ID_ANY, wx.EmptyString, _(u"Select Database file"), u"*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE|wx.FLP_OPEN|wx.FLP_SMALL )
+			Vsz2.Add( self.dbfile, 0, wx.ALL|wx.EXPAND, 5 )
+
+		if int(self.config.Read('DBtype')) == 2:
+			self.idbfl2 = PG.Get2(u'', u'', u'')
+			dbChoices = [db[0] for db in self.idbfl2.GetFromString(" SHOW DATABASES; ") ]
+			self.dbBox1 = wx.Choice(self.P1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, dbChoices, 0)
+			Vsz2.Add(self.dbBox1, 0, wx.ALL | wx.EXPAND, 5)
+
+		if int(self.config.Read('DBtype')) == 3:
+			self.idbfl2 = PG.Get2(u'', u'', u'')
+			dbChoices = [db[0] for db in self.idbfl2.GetFromString(" SELECT datname FROM pg_database; ") ]
+			self.dbBox1 = wx.Choice(self.P1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, dbChoices, 0)
+			Vsz2.Add(self.dbBox1, 0, wx.ALL | wx.EXPAND, 5)
+
+
 
 		self.lbl1 = wx.StaticText( self.P1, wx.ID_ANY, _(u"List of Tabel:"), wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.lbl1.Wrap( -1 )
@@ -211,7 +224,10 @@ class MyPanel1 ( wx.Panel ):
 		self.fromHere()
 
 		# Connect Events
-		self.dbfile.Bind(wx.EVT_FILEPICKER_CHANGED, self.dbopn)
+		if int(self.config.Read('DBtype')) == 1:
+			self.dbfile.Bind(wx.EVT_FILEPICKER_CHANGED, self.dbopn)
+		if int(self.config.Read('DBtype')) == 2 or int(self.config.Read('DBtype')) == 3:
+			self.dbBox1.Bind( wx.EVT_CHOICE, self.usedb )
 		self.DVC1.Bind(wx.dataview.EVT_TREELIST_ITEM_CHECKED, self.chkit)
 		self.btn1.Bind( wx.EVT_BUTTON, self.insit )
 		self.btn2.Bind( wx.EVT_BUTTON, self.updit )
@@ -251,7 +267,6 @@ class MyPanel1 ( wx.Panel ):
 
 
 	def dbopn(self, event):
-
 		if int(self.config.Read('DBtype')) == 1:
 			dbftype = Database_type[int(self.config.Read('DBtype'))]
 			self.dbfil = self.dbfile.GetPath()
@@ -260,6 +275,29 @@ class MyPanel1 ( wx.Panel ):
 			self.DVC1.DeleteAllItems()
 			self.filllist()
 			self.chgmtd(None)
+
+	def usedb(self, event):
+		thsdbuse = self.dbBox1.GetStringSelection()
+		self.idbfl2 = PG.Get2(thsdbuse, u'', u'')
+		if int(self.config.Read('DBtype')) == 2:
+			self.idbfl2.GetCommandStr(thsdbuse,' USE %s; '%thsdbuse )
+			tbles = self.idbfl2.GetFromString(' SHOW FULL TABLES; ')
+
+		if int(self.config.Read('DBtype')) == 3:
+			#self.idbfl2 = PG.Get2.GetCommandStr(thsdbuse,"SELECT * FROM pg_catalog.pg_tables WHERE schemaname != 'pg_catalog' AND  schemaname != 'information_schema';" )
+			stinfsql = " SELECT tablename, schemaname FROM pg_catalog.pg_tables WHERE schemaname != 'pg_catalog' AND schemaname != 'information_schema'; "
+			tabel = self.idbfl2.GetFromString(stinfsql)
+
+			print(self.idbfl2 , tabel)
+			tbles = tabel
+
+			#tbles = self.idbfl2.GetFromString(' \dt ')
+
+		print(tbles)
+		self.dbdata = tbles
+		self.DVC1.DeleteAllItems()
+		self.filllist2()
+
 
 	def filllist(self):
 		Droot = self.DVC1.GetRootItem()
@@ -273,6 +311,26 @@ class MyPanel1 ( wx.Panel ):
 				ifld = self.DVC1.AppendItem(tbl, fld[0])
 				self.DVC1.SetItemText(ifld, 0, fld[0])
 				self.DVC1.SetItemText(ifld, 1, fld[1])
+
+	def filllist2(self):
+		Droot = self.DVC1.GetRootItem()
+		self.troot = self.DVC1.AppendItem(Droot, "Table")
+		for tb in self.dbdata:
+			tbl = self.DVC1.AppendItem(self.troot, tb[0])
+			self.DVC1.SetItemText(tbl, 0, tb[0])
+			self.DVC1.SetItemText(tbl, 1, tb[1])
+			if int(self.config.Read('DBtype')) == 2:
+				for col in self.idbfl2.GetFromString(" DESC %s" %tb[0]):
+					ifld = self.DVC1.AppendItem(tbl, col[0])
+					self.DVC1.SetItemText(ifld, 0, col[0])
+					self.DVC1.SetItemText(ifld, 1, col[1])
+			if int(self.config.Read('DBtype')) == 3:
+				for col in self.idbfl2.GetFromString(" SELECT column_name, data_type FROM information_schema.columns WHERE TABLE_NAME = '%s' " %tb[0]):
+					ifld = self.DVC1.AppendItem(tbl, col[0])
+					self.DVC1.SetItemText(ifld, 0, col[0])
+					self.DVC1.SetItemText(ifld, 1, col[1])
+
+			#for fld in self.Tfilds[tb]:
 
 	def chkit(self, event):
 		self.gtslt = self.DVC1.GetSelections()

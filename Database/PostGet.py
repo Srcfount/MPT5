@@ -99,8 +99,11 @@ class Get2:
 
     def GetFromString2(self, string, fields):
         cur = ss.SFDB(self.DBF)
-
         return cur.cursor.execute(string,fields)
+
+    def GetCommandStr(self, database , string):
+        cur = ss.MyDB_Path(database)
+        cur.execute(string)
 
     def __del__(self):
         pass
