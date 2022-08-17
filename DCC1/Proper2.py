@@ -264,6 +264,9 @@ class MyPanel1 ( wx.Panel ):
         e = self.pgm.GetPropertyValues()
         #print(e)
         self.config = wx.GetApp().GetConfig()
+        if e['DBtype'] != 1 and e['DBtype.UPH'] == '':
+            wx.MessageBox(" info of User Password and Host forgot. Please Enter information ")
+            return 1
         for itm in e:
             if itm == 'TBGColor':
                 #print(e[itm])
