@@ -16,6 +16,7 @@ import os
 import sys
 import platform
 import Database.MenuSet2 as MS
+import GUI.BG2
 from Config.Init import *
 import Res.Allicons as icon
 
@@ -139,7 +140,7 @@ class MyPanel1 ( wx.Panel ):
                    u"Main Window properties":[(u'String',u'Label of Window',u'Winname',u'Show label of Main window',self.config.Read(u'Winname')),
                                               (u'Size',u'Window Size',u'WinSize',u'Set Main Window Size start',Winsize),
                                               (u'Bool',u"Back Ground Active",u"BGActive",u"UseCheckbox",eval(self.config.Read('BGActive'))),
-                                              (u"Image",u"Background",u"Background",u"If Active BackGround Use this file",self.config.Read('Background')),
+                                              #(u"Image",u"Background",u"Background",u"If Active BackGround Use this file",self.config.Read('Background')),
                                               #(u"Enum",u"Type of Menu",u"Menu",u"",[u'Normal',u'Flat'],[1,2],int(self.config.Read("Menu"))),
                                               (u"Enum",u"Type of Toolbar",u"Toolbar",u"",[u'Normal',u'Aui'],[1,2],int(self.config.Read("Toolbar"))),
                                               (u"SysColor",u"Toolbar Background",u"TBGColor",u"Toolbar Background colour set",self.TBGCol),
@@ -185,8 +186,17 @@ class MyPanel1 ( wx.Panel ):
                     print("something error")
 
         #print(self.config.Read(u'DBtype.UPH'))
-        if self.config.Read(u'DBtype.UPH') != '':
-            self.P1.AppendIn(u'DBtype', pg.StringProperty('User: Password: Host:', 'UPH', self.config.Read(u'DBtype.UPH')))
+        if self.config.Read(u'DBtype.Usr') != '':
+            #self.P1.AppendIn(u'DBtype', pg.StringProperty('User: Password: Host:', 'UPH', self.config.Read(u'DBtype.UPH')))
+            self.P1.AppendIn(u'DBtype',pg.StringProperty('User: ', 'Usr', self.config.Read(u'DBtype.Usr')))
+            pwd = self.P1.AppendIn(u'DBtype',pg.StringProperty('Password: ', 'Pwd', self.config.Read(u'DBtype.Pwd')))
+            pwd.SetAttribute('Password', True)
+            self.P1.AppendIn(u'DBtype',pg.StringProperty('Host: ', 'Hst', self.config.Read(u'DBtype.Hst')))
+            #self.P1.AppendIn(u'DBtype',pg.StringProperty('Port: ', 'UPH', self.config.Read(u'DBtype.UPH')))
+
+        if self.config.Read(u'BGActive.WinBG') != '':
+            self.P1.AppendIn(u'BGActive', pg.ImageFileProperty("BackGround","WinBG",self.config.Read('BGActive.WinBG') ))
+
 
 
 
@@ -264,9 +274,11 @@ class MyPanel1 ( wx.Panel ):
         e = self.pgm.GetPropertyValues()
         #print(e)
         self.config = wx.GetApp().GetConfig()
-        if e['DBtype'] != 1 and e['DBtype.UPH'] == '':
+        if e['DBtype'] != 1 and e['DBtype.Usr'] == '' and e['DBtype.Pwd'] == '':
             wx.MessageBox(" info of User Password and Host forgot. Please Enter information ")
             return 1
+        if not e['BGActive']:
+            self.config.Write('BGActive.WinBG', '' )
         for itm in e:
             if itm == 'TBGColor':
                 #print(e[itm])
@@ -292,11 +304,35 @@ class MyPanel1 ( wx.Panel ):
         p = event.GetProperty()
         v = self.pgm.GetPropertyValues(as_strings=True)
         #print('change',p.GetValue(),p.GetName(),p.GetLabel(),p.GetDisplayedString())
-        if p.GetName() == 'Background':
-            bmpwin = wx.GetTopLevelWindows()
-            if 'bmpwin' in dir(bmpwin[0]):
-                bmpwin[0].bmpwin.BGfile = p.GetValue()
-                bmpwin[0].bmpwin.ChangeBackGround()
+        if p.GetName() == 'BGActive':
+            if p.GetValue():
+                #print(p.GetValue())
+                if not self.P1.GetPropertyByName('BGActive.WinBG'):
+                    self.P1.AppendIn("BGActive", pg.ImageFileProperty("BackGround","WinBG",self.config.Read('WinBG')))
+                else:
+                    self.P1.GetPropertyByName("BGActive.WinBG").Hide(False, pg.PG_DONT_RECURSE)
+                    bmpwin = wx.GetTopLevelWindows()
+                    if 'bmpwin' in dir(bmpwin[0]):
+                        bmpwin[0].bmpwin.Show()
+
+            else:
+                if self.P1.GetPropertyByName("BGActive.WinBG"):
+                    self.P1.GetPropertyByName("BGActive.WinBG").Hide(True, pg.PG_DONT_RECURSE)
+                    #print("Delete background")
+                    bmpwin = wx.GetTopLevelWindows()
+                    if 'bmpwin' in dir(bmpwin[0]):
+                        bmpwin[0].bmpwin.Hide()
+
+        #if p.GetName() == 'Background':
+        if p.GetName() == 'BGActive.WinBG':
+            if p.GetValue() != '':
+                bmpwin = wx.GetTopLevelWindows()
+                if 'bmpwin' in dir(bmpwin[0]):
+                    bmpwin[0].bmpwin.BGfile = p.GetValue()
+                    bmpwin[0].bmpwin.ChangeBackGround()
+                else:
+                    wx.MessageBox("Please Apply your chnage if you like see Background")
+
         if p.GetName() == u'Font':
             #print(v[u'Font'])
             wfont = p.GetValue()
@@ -339,15 +375,37 @@ class MyPanel1 ( wx.Panel ):
             dbtyp = p.GetValue()
             #print(dbtyp, type(dbtyp))
             if dbtyp == 2 or dbtyp == 3:
-                if self.P1.GetPropertyByName('DBtype.UPH'):
+                #if self.P1.GetPropertyByName('DBtype.UPH'):
                     #print('i found it')
-                    self.P1.GetPropertyByName('DBtype.UPH').Hide(False, pg.PG_DONT_RECURSE)
+                    #self.P1.GetPropertyByName('DBtype.UPH').Hide(False, pg.PG_DONT_RECURSE)
+                if not self.P1.GetPropertyByName('DBtype.Usr'):
+                    self.P1.AppendIn(u'DBtype', pg.StringProperty('User: ', 'Usr', ''))
                 else:
-                    self.P1.AppendIn(u'DBtype',pg.StringProperty('User: Password: Host:','UPH',''))
+                    self.P1.GetPropertyByName('DBtype.Usr').Hide(False, pg.PG_DONT_RECURSE)
+
+                if not self.P1.GetPropertyByName('DBtype.Pwd'):
+                    pwd = self.P1.AppendIn(u'DBtype', pg.StringProperty('Password: ', 'Pwd', ''))
+                    pwd.SetAttribute('Password', True)
+                else:
+                    pwd = self.P1.GetPropertyByName('DBtype.Pwd').Hide(False, pg.PG_DONT_RECURSE)
+
+
+                if not self.P1.GetPropertyByName('DBtype.Hst'):
+                    self.P1.AppendIn(u'DBtype', pg.StringProperty('Host: ', 'Hst', ''))
+                else:
+                    self.P1.GetPropertyByName('DBtype.Hst').Hide(False, pg.PG_DONT_RECURSE)
+
             else:
-                if self.P1.GetPropertyByName('DBtype.UPH'):
-                    self.P1.GetPropertyByName('DBtype.UPH').Hide(True, pg.PG_DONT_RECURSE)
+                #if self.P1.GetPropertyByName('DBtype.UPH'):
+                    #self.P1.GetPropertyByName('DBtype.UPH').Hide(True, pg.PG_DONT_RECURSE)
+                if self.P1.GetPropertyByName('DBtype.Usr'):
+                    self.P1.GetPropertyByName('DBtype.Usr').Hide(True, pg.PG_DONT_RECURSE)
+                if self.P1.GetPropertyByName('DBtype.Pwd'):
+                    self.P1.GetPropertyByName('DBtype.Pwd').Hide(True, pg.PG_DONT_RECURSE)
+                if self.P1.GetPropertyByName('DBtype.Hst'):
+                    self.P1.GetPropertyByName('DBtype.Hst').Hide(True, pg.PG_DONT_RECURSE)
             #    self.P1.HideProperty(u'DBtype.UPH', True, pg.PG_DONT_RECURSE)
+
         self.P1.RefreshGrid()
 
 

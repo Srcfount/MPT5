@@ -15,6 +15,9 @@ import wx.stc as stc
 
 from Config.Init import *
 
+import os
+import sys
+
 import keyword
 
 _ = wx.GetTranslation
@@ -231,7 +234,8 @@ class MyMenuBar1 ( wx.MenuBar ):
 		wx.MenuBar.__init__ ( self, style = 0 )
 
 		mymnu = {_(u"File"): [(61,_(u'New'),u'',self.newsrc),(62,_(u'Open...'),u'',self.opnsrc),(63,u'',u'',u''),(64,_(u'Save'),u'',self.savsrc),
-		                   (65,_(u'Save As...'),u'',self.savasit),(66,u'',u'',u''),(67,_(u'Close'),u'',self.closit)],
+		                   (65,_(u'Save As...'),u'',self.savasit),(66,u'',u'',u''),(67,u'IDLE editor',u'',self.idlebat),
+		                      (68,u'',u'',u''),(69,_(u'Close'),u'',self.closit)],
 		         _(u"Edit"): [(71,_(u'Cut'),u'',self.cutit),(72,_(u'Copy'),u'',self.copyit),(73,_(u'Paste'),u'',self.pastit),
 		                   (74,u'',u'',u''),(75,_(u'Select All'),u'',self.slctal)] }
 		if extmnu == u'Pro':
@@ -505,8 +509,12 @@ class MyMenuBar1 ( wx.MenuBar ):
 	def getCurntLineNumber(self):
 		print(self.SrcTxt.gtcurLine())
 
+	def idlebat(self, event):
+		for pth in sys.path:
+			if 'lib' in pth[-3:]:
+				os.system(pth + "\\idlelib\\" + "idle.bat")
 
-	# def toML(self, event):
+# def toML(self, event):
 	# 	print(self.pnl.pyFile)
 	# 	ifil = self.pnl.pyFile.split('\\')[-1].replace(u'.py',u'')
 	# 	print(ifil)

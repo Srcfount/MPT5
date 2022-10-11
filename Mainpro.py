@@ -5,6 +5,7 @@
 
 
 from Allimp import *
+import locale
 
 from Config.Init import *
 import GUI.window2 as window2
@@ -73,6 +74,7 @@ def main(argv):
             app = mainApp()
     else:
         app = mainApp(redirect=True)
+        locale.setlocale(locale.LC_ALL, '')
     app.MainLoop()
 
 

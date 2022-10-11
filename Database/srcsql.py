@@ -205,9 +205,11 @@ class MySQLs(object):
 def MyDB_Path(database):
 	if chkengin() == 2 or chkengin() == 3:
 		config = wx.GetApp().GetConfig()
-		uphstr = config.Read('DBtype.UPH').split(' ')
+		iusr = config.Read('DBtype.Usr')
+		ipwd = config.Read('DBtype.Pwd')
+		ihst = config.Read('DBtype.Hst')
 		#print(uphstr.split(' '))
-		return SFDB(database,user=uphstr[0],pswrd=uphstr[1],host=uphstr[2])
+		return SFDB(database,user=iusr,pswrd=ipwd,host=ihst)
 	else:
 		return SFDB(database)
 

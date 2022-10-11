@@ -713,43 +713,51 @@ class MyPanel1 ( wx.Panel ):
 
 			if not a and not b and not c and d:
 			#elif af.ishaspanel():
+
 				if af.ishaspanel() == 'MyPanel1':
-					dlg = MyDialog1(self)
-					dlg.ShowModal()
-
-					if dlg.filname:
-						newname = dlg.filname
-						dircode = self.getMData.GetDirCod2(dlg.pathfil)[0][0]
+					if cod[:2] == '55':
+						newname = txt.replace('.py', '')
+						dircode = self.thsdcod  # '5555'
+						patfil = Src_aui  # self.thspath
 						lstcod = self.getMData.getHndid(dircode)
-						patfil = dlg.pathfil
-						newcod = int(dircode[1]) * 1000 + 10000 + len(lstcod) # + 1 * 10 + int(dircode[-1])
-						newnom = int(dircode[1]) * 1000 + len(lstcod) #+ 1 * 10 + int(dircode[-1])
-						#print(dircode,lstcod)
-						mygnrt = Genrate(patfil.replace('..', MAP) + SLASH + newname + '.py')
-						mygnrt.createFrm(self.thsfile)
-
-					elif dlg.box1.GetValue():
-						newname = txt.replace('.py','')
-						dircode = self.thsdcod #'5555'
-						patfil = self.thspath
-						lstcod = self.getMData.getHndid(dircode)
-						newcod = int(dircode[0]) * 10000 + len(lstcod) #+ 1
-						newnom = int(dircode[0]) * 100 + len(lstcod) #+ 1
-						#print('Do 5555',dlg.box1.GetValue())
-					elif dlg.ensrf:   #Cancel MyDialog
-						return 1
+						newcod = int(dircode[0]) * 10000 + len(lstcod)  # + 1
+						newnom = int(dircode[0]) * 100 + len(lstcod)  # + 1
+						print('Do 5555', patfil, newname, dircode, lstcod, newcod, newnom)
 					else:
-						newname = txt[0].upper()+txt[int(len(txt)/2)].upper()
-						dircode = self.getMData.GetDirCod2(dlg.pathfil)[0][0]
-						lstcod = self.getMData.getHndid(dircode)
-						patfil = dlg.pathfil
-						newcod = int(dircode[1]) * 1000 + 10000 + len(lstcod) #+ 1
-						newnom = int(dircode[1]) * 1000 + len(lstcod) #+ 1
-						#print('Do this 6666')
-						mygnrt = Genrate(patfil.replace('..', MAP) + SLASH + newname + '.py')
-						mygnrt.createFrm(self.thsfile)
+						dlg = MyDialog1(self)
+						dlg.ShowModal()
+						if dlg.filname:
+							newname = dlg.filname
+							dircode = self.getMData.GetDirCod2(dlg.pathfil)[0][0]
+							lstcod = self.getMData.getHndid(dircode)
+							patfil = dlg.pathfil
+							newcod = int(dircode[1]) * 1000 + 10000 + len(lstcod) # + 1 * 10 + int(dircode[-1])
+							newnom = int(dircode[1]) * 1000 + len(lstcod) #+ 1 * 10 + int(dircode[-1])
+							#print(dircode,lstcod)
+							mygnrt = Genrate(patfil.replace('..', MAP) + SLASH + newname + '.py')
+							mygnrt.createFrm(self.thsfile)
 
-					dlg.Destroy()
+					# elif dlg.box1.GetValue():
+					# 	newname = txt.replace('.py','')
+					# 	dircode = self.thsdcod #'5555'
+					# 	patfil = self.thspath
+					# 	lstcod = self.getMData.getHndid(dircode)
+					# 	newcod = int(dircode[0]) * 10000 + len(lstcod) #+ 1
+					# 	newnom = int(dircode[0]) * 100 + len(lstcod) #+ 1
+					# 	#print('Do 5555',dlg.box1.GetValue())
+						elif dlg.ensrf:   #Cancel MyDialog
+							return 1
+						else:
+							newname = txt[0].upper()+txt[int(len(txt)/2)].upper()
+							dircode = self.getMData.GetDirCod2(dlg.pathfil)[0][0]
+							lstcod = self.getMData.getHndid(dircode)
+							patfil = dlg.pathfil
+							newcod = int(dircode[1]) * 1000 + 10000 + len(lstcod) #+ 1
+							newnom = int(dircode[1]) * 1000 + len(lstcod) #+ 1
+							#print('Do this 6666')
+							mygnrt = Genrate(patfil.replace('..', MAP) + SLASH + newname + '.py')
+							mygnrt.createFrm(self.thsfile)
+						dlg.Destroy()
 					#print(newcod,newname,dircode,newnom,patfil)
 					data = [newcod, newname, dircode, '-1', -1, newnom]
 					self.setMDate.Table = 'handler'
@@ -821,10 +829,10 @@ class MyDialog1 ( wx.Dialog ):
 
 		H1 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.box1 = wx.CheckBox(self, wx.ID_ANY, _(u"Create for Aui Pane"), wx.DefaultPosition, wx.DefaultSize, 0)
-		H1.Add(self.box1, 0, wx.ALL, 5)
+		#self.box1 = wx.CheckBox(self, wx.ID_ANY, _(u"Create for Aui Pane"), wx.DefaultPosition, wx.DefaultSize, 0)
+		#H1.Add(self.box1, 0, wx.ALL, 5)
 
-		V1.Add( H1, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
+		#V1.Add( H1, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
 		H2 = wx.BoxSizer( wx.HORIZONTAL )
 
@@ -872,7 +880,7 @@ class MyDialog1 ( wx.Dialog ):
 		self.Centre( wx.BOTH )
 
 		# Connect Events
-		self.box1.Bind( wx.EVT_CHECKBOX, self.foraui )
+		#self.box1.Bind( wx.EVT_CHECKBOX, self.foraui )
 		self.btn1.Bind( wx.EVT_BUTTON, self.cncl )
 		self.btn2.Bind( wx.EVT_BUTTON, self.gtit )
 
@@ -881,14 +889,14 @@ class MyDialog1 ( wx.Dialog ):
 
 
 	# Virtual event handlers, overide them in your derived class
-	def foraui( self, event ):
-		if self.box1.GetValue():
-			self.fld1.Disable()
-			self.chs1.Disable()
-		else:
-			self.fld1.Enable()
-			self.chs1.Enable()
-		event.Skip()
+	# def foraui( self, event ):
+	# 	if self.box1.GetValue():
+	# 		self.fld1.Disable()
+	# 		self.chs1.Disable()
+	# 	else:
+	# 		self.fld1.Enable()
+	# 		self.chs1.Enable()
+	# 	event.Skip()
 
 	def cncl( self, event ):
 		self.ensrf = True

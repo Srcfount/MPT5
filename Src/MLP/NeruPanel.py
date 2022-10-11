@@ -12,6 +12,8 @@ import wx.xrc
 
 import os
 
+import AI.ML.ConMatrix as CM
+
 import Src.MLA.NeruNet as NN
 from scipy.io import loadmat
 import numpy as np
@@ -43,6 +45,8 @@ class P19 ( wx.Panel ):
 
 		Hsz2 = wx.BoxSizer( wx.HORIZONTAL )
 		# you can add object in this BoxSizer
+		self.btn = wx.Button(self, wx.ID_ANY, u'Accrecy Matrix', wx.DefaultPosition, wx.DefaultSize, 0)
+		Hsz2.Add(self.btn, 0, wx.ALL, 5)
 
 
 		Vsp19.Add( Hsz2, 0, wx.EXPAND, 5 )
@@ -70,6 +74,7 @@ class P19 ( wx.Panel ):
 
 		# Connect Events
 		self.Bind( wx.EVT_INIT_DIALOG, self.Start )
+		self.Bind( wx.EVT_BUTTON, self.Accrecy ,self.btn)
 
 	def __del__( self ):
 		pass
@@ -96,4 +101,14 @@ class P19 ( wx.Panel ):
 
 	def Test( self ):
 		print('work it')
+
+	def Accrecy(self, event):
+		matrix = [[205,10,1,46],[6,199,0,32],[9,17,223,34],[21,8,3,186]]
+		print(matrix)
+		frm = wx.Frame(self, -1, style=wx.FRAME_FLOAT_ON_PARENT | wx.DEFAULT_FRAME_STYLE)
+		pnl = CM.MyPanel2(frm, matrix, ['Cat','Dog','Bird','Human'])
+		frm.SetLabel('Confusion Matrix')
+		frm.SetSize((430,300))
+		frm.Show()
+		pass
 

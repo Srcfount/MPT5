@@ -6,6 +6,7 @@
 import wx
 import wx.lib.gizmos as gizmos  # Formerly wx.gizmos in Classic
 import time
+from datetime import datetime
 
 class MyPanel1(wx.Panel):
 	def __init__(self, parent, id, pos, size, style):
@@ -21,6 +22,8 @@ class MyPanel1(wx.Panel):
 		                           gizmos.LED_ALIGN_CENTER)  # | gizmos.LED_DRAW_FADED)
 		led.SetForegroundColour('black')
 		led.SetBackgroundColour('white')
+
+		datetime.strftime()
 
 		#VSiz.Add(led, 1,wx.ALL,5)
 		self.clock = led

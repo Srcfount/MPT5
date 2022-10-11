@@ -19,6 +19,8 @@ main_direct = ['AI', 'Config', 'Database', 'DCC1', 'GUI', 'GUI\\Temp', 'GUI\\API
                'Utility\\Free','Utility\\Account','Utility\\Uploads','Utility\\Downloads'
                ]
 
+local_direct = ['Locale', 'Locale\\en', 'Locale\\fa', 'Locale\\fr', 'Locale\\gr', 'Locale\\sp', 'Locale\\tr']
+
 main_file = {
 	'AI': ['OpnSrc.py', 'Generats.py', 'DBgen.py', 'Analiz.py'],
     'Config': ['Init.py'],
@@ -67,6 +69,11 @@ def generate_path(mydir):
 					f.write('')
 					print('.', end='')
 
+	for dir in local_direct:
+		if not os.path.isdir(dir):
+			os.mkdir(dir)
+			print('.', end='')
+
 	for dir in main_file:
 		for fil in main_file[dir]:
 			if not os.path.isfile(mydir+dir+'\\'+fil):
@@ -97,7 +104,7 @@ def generate_path(mydir):
 
 
 def main(argv):
-	print(argv)
+	#print(argv)
 	arg_help = """syntax is :{0} <option> <directory> \n 
 	    Options: 
 	        Create = Make a new empty project 
@@ -106,41 +113,67 @@ def main(argv):
 	        {0} Create c:\Temp5\myProject\ 
 	        {0} Update c:\Temp5\myProject\  \n """.format(argv[0])
 
-	if len(argv) < 2:
+	if len(argv) < 3:
 		print(arg_help)
+		exit()
 	else:
 		if 'Create' in argv:
 			if argv[2] != '' or argv[2] != None:
 				mydir = argv[2]
+			else:
+				print(" Please set Path to create a project")
+				exit()
+		elif 'Update' in argv:
+			if argv[2] != '' or argv[2] != None:
+				mydir = argv[2]
+			else:
+				print(" Please set Path to create a project")
+				exit()
 
-		print(argv[1])
+		#print(argv[1])
 
-	url = "https://github.com/Srcfount/MPT5/archive/refs/heads/master.zip"
-	filobj = requests.get(url)
-	with open("c:\\Temp5\\MPT5.zip",'wb') as f:
-		f.write(filobj.content)
-	shutil.unpack_archive('c:\\Temp5\\MPT5.zip','c:\\Temp5','zip')
-	print(os.getcwd())
-	os.chdir('c:\\Temp5')
-	shutil.move('MPT5-master','MPT5')
+	if not os.path.isdir("c:\\Temp5"):
+		os.mkdir("c:\\Temp5\\")
 
+	if not os.path.isfile("c:\\Temp5\\MPT5.zip"):
+		print('Please wait...')
+		url = "https://github.com/Srcfount/MPT5/archive/refs/heads/master.zip"
+		filobj = requests.get(url)
+		with open("c:\\Temp5\\MPT5.zip",'wb') as f:
+			f.write(filobj.content)
+		shutil.unpack_archive('c:\\Temp5\\MPT5.zip','c:\\Temp5','zip')
+		#print(os.getcwd())
+		os.chdir('c:\\Temp5\\')
+		if not os.path.isdir('c:\\Temp5\\MPT5'):
+			shutil.move('MPT5-master','MPT5')
 
+	if argv[1] == 'Create':
+		if mydir[-1] != '\\':
+			print(arg_help)
+			print('Write a correct directory format')
+			exit()
+		elif mydir == '':
+			print(arg_help)
+			print('Exit setup. you not entered correct syntax')
+			exit()
+		else:
+			generate_path(mydir)
+			update.main()
+	elif argv[1] == 'Update':
+		if mydir[-1] != '\\':
+			print(arg_help)
+			print('Write a correct directory format')
+			exit()
+		elif mydir == '':
+			print(arg_help)
+			print('Exit setup. you not entered correct syntax')
+			exit()
+		else:
+			update.main()
+
+	os.chdir(mydir)
+	print("Please change path to %s and execute this command: \n >> python -m Mainpro \n or: \n >> python mainpro.py " %mydir)
 	exit()
-	#mydir = input("Please write directory to like install program:[sample: c:\Temp5\] >> ")
-	# url="https://github.com/Srcfount/MPT5/archive/refs/heads/master.zip"
-	# filobj = requests.get(url)
-	# with open('', 'wb') as f:
-	#	f.write(filobj.content)
-	#if mydir == '':
-	#	print('Exit setup. you not entered anything')
-	#	exit()
-	#if mydir[-1] != '\\':
-	#	print('Write a correct directory format')
-	#	exit()
-
-
-
-	update.main()
 
 
 if __name__ == '__main__':

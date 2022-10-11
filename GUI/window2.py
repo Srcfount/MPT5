@@ -57,7 +57,8 @@ class MainWin(wx.Frame):
 
         # If like Back Gorund or Aui Center =============================
         if eval(self.config.Read('BGActive')):
-            self.BGrnd(self.config.Read('Background'))
+            #self.BGrnd(self.config.Read('Background'))
+            self.BGrnd(self.config.Read('BGActive.WinBG'))
         # If like use login =============================================
         if os.path.isfile(Src_aui+"login_pane.py"):
             import Src.AUI.login_pane as Lg
