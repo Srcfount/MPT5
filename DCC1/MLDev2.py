@@ -270,7 +270,7 @@ class MyPanel1 ( wx.Panel ):
 						self.rootm = self.TLC1.AppendItem(Mroot, algcod[cod])
 						for mtd in mylst:
 							self.mlmtd = self.TLC1.AppendItem(self.rootm, u'Some Method')
-							self.TLC1.SetItemText(self.mlmtd, 0, mtd[1])
+							self.TLC1.SetItemText(self.mlmtd, 0, str(mtd[0])+' '+mtd[1])
 							self.TLC1.SetItemText(self.mlmtd, 1, mtd[2])
 
 		else:
@@ -463,7 +463,6 @@ class MyPanel1 ( wx.Panel ):
 				imlaim = af.hasMLAimpis()
 				if len(imlaim[0])>0 :
 					algmthd = imlaim[0][0].split(' ')[1].replace('Src.MLA.','')
-
 
 				elif len(imlaim[1])>0:
 					algmthd = imlaim[1][0].split(' ')[1].replace('Src.MLA.','')

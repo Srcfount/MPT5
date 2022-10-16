@@ -177,9 +177,24 @@ class Anlzfil(object):
 
     def hasMLAimpis(self, txt=''):
         with open(self.pyFile, 'r', encoding=u'utf-8') as f:
-            itxt = f.read()
-        whris1 = re.findall(r'import\s+Src\.MLA\..*.',itxt)
-        whris2 = re.findall(r'from\s+Src\.MLA\..*.',itxt)
+            itxt = f.readlines()
+        whris1 = whris2 = []
+
+        for linn in itxt:
+            if linn[:6] == 'import':
+                #print(re.findall('Src\.MLA\..*.', linn),linn)
+                if re.findall('Src\.MLA\..*.', linn):
+                    whris1.append(linn)
+
+            if linn[:4] == 'from':
+                #print(re.findall('Src\.MLA\..*.', linn), linn)
+                if re.findall('Src\.MLA\..*.', linn):
+                    whris2.append(linn)
+
+        #whris1 = re.search(r'^[import]\s+Src\.MLA\..*.',itxt)
+        #whris1 = re.match(r'import\s+Src\.MLA\..*.', itxt)
+        #whris2 = re.search(r'^[from]\s+Src\.MLA\..*.',itxt)
+        #print(whris2,whris1)
         if whris1 or whris2:
             return whris1,whris2
 

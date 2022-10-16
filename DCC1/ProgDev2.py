@@ -695,7 +695,8 @@ class MyPanel1 ( wx.Panel ):
 			if a and b and c and not d:
 				if af.ishasimport("Src.GUI"):
 					mygnrt = Genrate2(self.thsfile)
-					mygnrt.gnratLine(False, True, True, True, af.ishasframe())
+					#mygnrt.gnratLine(False, True, True, True, Framename=af.ishasframe())
+					mygnrt.gnratLine(False,False,False,False, Framname=af.ishasframe())
 					mygnrt.appendFile()
 					lstcod = self.getMData.getHndid(self.thsdcod)
 					newcod = int(self.thsdcod[0]) * 10000 + (int(self.thsdcod[1]) * 1000) + len(lstcod)  # +1

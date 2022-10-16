@@ -344,7 +344,6 @@ class MyPanel1 ( wx.Panel ):
 		return lyer, data
 
 
-
 	def slctitm( self, event ):
 		gtslc = self.TLC.GetSelection()
 		pgtxt = self.TLC.GetItemText(gtslc, 0)
@@ -373,6 +372,7 @@ class MyPanel1 ( wx.Panel ):
 					chld.SetValue(ivlu)
 
 		event.Skip()
+
 	def countitm(self, slctitm):
 		iitm = self.TLC.GetFirstItem()
 		i = 0
@@ -386,6 +386,14 @@ class MyPanel1 ( wx.Panel ):
 
 	def getpgdata(self, curpg, pgtext):
 		itxt = ''
+		if not self.isinput:
+			if self.infld.GetValue() != '':
+				itxt = itxt + "input_shape =" + self.infld.GetValue() + ' , '
+				self.isinput = True
+			else:
+				wx.MessageBox("Do not forget fill input size")
+				return ''
+
 		for chld in curpg.GetChildren():
 			if chld.GetClassName() == 'wxStaticText':
 				itxt = itxt + chld.GetLabel()
@@ -401,17 +409,17 @@ class MyPanel1 ( wx.Panel ):
 				else:
 					itxt = itxt + chld.GetValue() + ' , '
 
-		if not self.isinput:
-			if pgtext == 'Conv2D' or pgtext == 'VGG16':
-				if self.infld.GetValue() != '':
-					itxt = itxt + "input_shape =" + self.infld.GetValue() + ' , '
-					self.isinput = True
-				else:
-					wx.MessageBox("Do not forget fill input size")
-					return ''
-			else:
-				wx.MessageBox(" Only Conv2D can add input size")
-				return ''
+		# if not self.isinput:
+		# 	if pgtext == 'Conv2D' or pgtext == 'VGG16':
+		# 		if self.infld.GetValue() != '':
+		# 			itxt = itxt + "input_shape =" + self.infld.GetValue() + ' , '
+		# 			self.isinput = True
+		# 		else:
+		# 			wx.MessageBox("Do not forget fill input size")
+		# 			return ''
+		# 	else:
+		# 		wx.MessageBox(" Only Conv2D can add input size")
+		# 		return ''
 
 
 		if pgtext == 'Flatten':

@@ -8,7 +8,7 @@ import shutil
 import sqlite3
 import update
 
-main_direct = ['AI', 'Config', 'Database', 'DCC1', 'GUI', 'GUI\\Temp', 'GUI\\API', 'GUI\\AuiPanel', 'GUI\\Main',
+main_direct = ['AI', 'AI\\ML','Config', 'Database', 'DCC1', 'GUI', 'GUI\\Temp', 'GUI\\API', 'GUI\\AuiPanel', 'GUI\\Main',
                #'Locale', 'Locale\\en', 'Locale\\fa', 'Locale\\fr', 'Locale\\gr', 'Locale\\sp', 'Locale\\tr',
                'Logs', 'Res', 'Res\\Fonts', 'Res\\Icons', 'Res\\Icons\\Menu', 'Res\\Icons\\Toolbar',
                'Res\\Icons\\16x16', 'Res\\Icons\\32x32', 'Res\\Images', 'Res\\Pics', 'Res\\Splash',
@@ -22,6 +22,7 @@ local_direct = ['Locale', 'Locale\\en', 'Locale\\fa', 'Locale\\fr', 'Locale\\gr'
 
 main_file = {
 	'AI': ['OpnSrc.py', 'Generats.py', 'DBgen.py', 'Analiz.py'],
+	'AI\\ML':['ConMatrix.py','SLPanel.py'],
     'Config': ['Init.py'],
     'Database': ['wxsq.py', 'PostGet2.py', 'PostGet.py', 'MenuSet2.py','srcsql.py','dbinterface.py'],
 	'DCC1': ['Proper2.py', 'MenuDev2.py', 'DBDev2.py', 'ToolBar2.py', 'ProgDev2.py', 'MLDev2.py', 'ListPro2.py', 'AuiPan2.py'],
