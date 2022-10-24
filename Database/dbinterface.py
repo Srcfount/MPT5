@@ -74,18 +74,19 @@ def ForPostgrSql(database,user,pswrd,host="localhost",port="5432"):
 	:return: Connection
 	'''
 	import psycopg2
-	print(database,user,pswrd,host,port)
+	#print(database,user,pswrd,host,port)
 	mydb = psycopg2.connect(database=database, user=user, password=pswrd, host=host, port=port)
 
 	return  mydb
 
-def ForOraclSqldb(database,user,userpwd,host="localhost"):
+def ForOraclSqldb(database,user,userpwd,host="localhost",port='1521'):
 	'''
 
 	:param database:
 	:param user:
 	:param userpwd:
 	:param host: localhost
+	:param port: 1521
 	:return: Connection
 	'''
 	import cx_Oracle
@@ -105,8 +106,9 @@ def ForOraclSqldb(database,user,userpwd,host="localhost"):
     '''
 
 	# Establish the database connection
+
 	#mydb = cx_Oracle.connect(user=user, password=userpwd,dsn=host+'/'+database)
-	with cx_Oracle.connect(user=user, password=userpwd,dsn=host+'/'+database) as mydb:
+	with cx_Oracle.connect(user=user, password=userpwd,dsn=host+':'+str(port)+'/'+database) as mydb:
 
 		return mydb
 	#return mydb

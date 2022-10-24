@@ -133,21 +133,21 @@ class MyPanel1 ( wx.Panel ):
             ifont = wx.Font()
 
 
-        conflst = {u"General properties":[(u'Enum',u"Language", u"Language",u"",language,lan,int(self.config.Read("Language")) ),
-                                          (u"Image",u"Splash",u"Splash",u"Use this file for Splash",self.config.Read('Splash') ),
-                                          (u"Enum",u"Database type",u"DBtype",u"",DBtype,DBt,int(self.config.Read('DBtype')) )
+        conflst = {u"General properties":[(u'Enum',_(u"Language"), u"Language",u"",language,lan,int(self.config.Read("Language")) ),
+                                          (u"Image",_(u"Splash"),u"Splash",_(u"Use this file for Splash"),self.config.Read('Splash') ),
+                                          (u"Enum",_(u"Database type"),u"DBtype",u"",DBtype,DBt,int(self.config.Read('DBtype')) )
                                           ],
-                   u"Main Window properties":[(u'String',u'Label of Window',u'Winname',u'Show label of Main window',self.config.Read(u'Winname')),
-                                              (u'Size',u'Window Size',u'WinSize',u'Set Main Window Size start',Winsize),
-                                              (u'Bool',u"Back Ground Active",u"BGActive",u"UseCheckbox",eval(self.config.Read('BGActive'))),
+                   u"Main Window properties":[(u'String',_(u'Label of Window'),u'Winname',_(u'Show label of Main window'),self.config.Read(u'Winname')),
+                                              (u'Size',_(u'Window Size'),u'WinSize',_(u'Set Main Window Size start'),Winsize),
+                                              (u'Bool',_(u"Back Ground Active"),u"BGActive",u"UseCheckbox",eval(self.config.Read('BGActive'))),
                                               #(u"Image",u"Background",u"Background",u"If Active BackGround Use this file",self.config.Read('Background')),
                                               #(u"Enum",u"Type of Menu",u"Menu",u"",[u'Normal',u'Flat'],[1,2],int(self.config.Read("Menu"))),
-                                              (u"Enum",u"Type of Toolbar",u"Toolbar",u"",[u'Normal',u'Aui'],[1,2],int(self.config.Read("Toolbar"))),
-                                              (u"SysColor",u"Toolbar Background",u"TBGColor",u"Toolbar Background colour set",self.TBGCol),
-                                              (u"MChoice",u"Start Panes",u"Panes",u"Start this panes in Main Window",LAuiP,PansLst),
-                                              (u"Font",u"Main Window Font",u"Font",u"",ifont),
-                                              (u"MChoice",u"Show in Status ",u"Status",u"",Statu,StatLst),
-                                              (u"SysColor",u"Status Background Color",u"SBGColor",u"Status background colour set",self.SBGCol)]
+                                              (u"Enum",_(u"Type of Toolbar"),u"Toolbar",u"",[u'Normal',u'Aui'],[1,2],int(self.config.Read("Toolbar"))),
+                                              (u"SysColor",_(u"Toolbar Background"),u"TBGColor",_(u"Toolbar Background colour set"),self.TBGCol),
+                                              (u"MChoice",_(u"Start Panes"),u"Panes",_(u"Start this panes in Main Window"),LAuiP,PansLst),
+                                              (u"Font",_(u"Main Window Font"),u"Font",u"",ifont),
+                                              (u"MChoice",_(u"Show in Status "),u"Status",u"",Statu,StatLst),
+                                              (u"SysColor",_(u"Status Background Color"),u"SBGColor",_(u"Status background colour set"),self.SBGCol)]
         }
 
         self.P1 = self.pgm.AddPage( u"General Properties Page", wx.Bitmap(icon.setting_tools.GetBitmap()) );
@@ -240,10 +240,10 @@ class MyPanel1 ( wx.Panel ):
 
         Hsz1 = wx.BoxSizer( wx.HORIZONTAL )
 
-        self.btn1 = wx.Button( self, wx.ID_ANY, u"Cancle", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.btn1 = wx.Button( self, wx.ID_ANY, _(u"Cancle"), wx.DefaultPosition, wx.DefaultSize, 0 )
         Hsz1.Add( self.btn1, 0, wx.ALL, 5 )
 
-        self.btn2 = wx.Button( self, wx.ID_ANY, u"Apply", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.btn2 = wx.Button( self, wx.ID_ANY, _(u"Apply"), wx.DefaultPosition, wx.DefaultSize, 0 )
         Hsz1.Add( self.btn2, 0, wx.ALL, 5 )
 
 
@@ -275,7 +275,7 @@ class MyPanel1 ( wx.Panel ):
         #print(e)
         self.config = wx.GetApp().GetConfig()
         if e['DBtype'] != 1 and e['DBtype.Usr'] == '' and e['DBtype.Pwd'] == '':
-            wx.MessageBox(" info of User Password and Host forgot. Please Enter information ")
+            wx.MessageBox(_(" info of User Password and Host forgot. Please Enter information "))
             return 1
         if not e['BGActive']:
             self.config.Write('BGActive.WinBG', '' )
@@ -287,15 +287,22 @@ class MyPanel1 ( wx.Panel ):
                 self.config.Write(itm,v[u'SBGColor']+','+str(self.SBGCol))
             elif itm == 'Font':
                 self.config.Write('Font', self.ifont)
-            #elif itm == 'DBtype':
-            #    print(itm, str(e[itm]))
+            elif itm == 'DBtype':
+                if e[itm] == 1:
+                    self.config.Write(itm, str(e[itm]))
+                    self.config.Write('DBtype.Usr', '')
+                    self.config.Write('DBtype.Pwd', '')
+                    self.config.Write('DBtype.Hst', '')
+                else:
+                    self.config.Write(itm, str(e[itm]))
+
             #elif itm == 'DBtype.UPH':
             #    print(itm, str(e[itm]))
             else:
                 self.config.Write(itm,str(e[itm]))
 
         self.config.Flush()
-        wx.MessageBox("Config file changed. You must Start application again to see the change")
+        wx.MessageBox(_("Config file changed. You must Start application again to see the change"))
         q = self.GetParent()
         q.Close()
 
@@ -331,7 +338,7 @@ class MyPanel1 ( wx.Panel ):
                     bmpwin[0].bmpwin.BGfile = p.GetValue()
                     bmpwin[0].bmpwin.ChangeBackGround()
                 else:
-                    wx.MessageBox("Please Apply your chnage if you like see Background")
+                    wx.MessageBox(_("Please Apply your chnage if you like see Background"))
 
         if p.GetName() == u'Font':
             #print(v[u'Font'])
@@ -374,7 +381,7 @@ class MyPanel1 ( wx.Panel ):
         if p.GetName() == u'DBtype':
             dbtyp = p.GetValue()
             #print(dbtyp, type(dbtyp))
-            if dbtyp == 2 or dbtyp == 3:
+            if dbtyp in [2,3,4]: #>= 2 or dbtyp <= 5:
                 #if self.P1.GetPropertyByName('DBtype.UPH'):
                     #print('i found it')
                     #self.P1.GetPropertyByName('DBtype.UPH').Hide(False, pg.PG_DONT_RECURSE)

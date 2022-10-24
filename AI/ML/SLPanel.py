@@ -388,7 +388,8 @@ class MyPanel1 ( wx.Panel ):
 		itxt = ''
 		if not self.isinput:
 			if self.infld.GetValue() != '':
-				itxt = itxt + "input_shape =" + self.infld.GetValue() + ' , '
+				#itxt = itxt + "input_shape =" + self.infld.GetValue() + ' , '
+				linitxt = "keras.Input( shape = "+self.infld.GetValue()+" )"
 				self.isinput = True
 			else:
 				wx.MessageBox("Do not forget fill input size")

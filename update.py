@@ -11,7 +11,7 @@ main_direct = ['AI', 'AI\\ML', 'Config', 'Database', 'DCC1', 'GUI', 'GUI\\Temp',
 
 main_file = {
 	'AI': ['OpnSrc.py', 'Generats.py', 'DBgen.py', 'Analiz.py'],
-	'AI\\ML': ['ConMatrix.py'],
+	'AI\\ML': ['ConMatrix.py','SLPanel.py'],
     'Config': ['Init.py'],
     'Database': ['wxsq.py', 'PostGet2.py', 'PostGet.py', 'MenuSet2.py','srcsql.py','dbinterface.py'],
 	'DCC1': ['Proper2.py', 'MenuDev2.py', 'DBDev2.py', 'ToolBar2.py', 'ProgDev2.py', 'MLDev2.py', 'ListPro2.py', 'AuiPan2.py'],

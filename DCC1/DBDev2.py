@@ -33,6 +33,15 @@ class MyPanel1 ( wx.Panel ):
 		wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
 
 		self.config = wx.GetApp().GetConfig()
+		if int(self.config.Read('DBtype')) == 2:
+			self.TDBE = 'mysql'
+		elif int(self.config.Read('DBtype')) == 3:
+			self.TDBE = 'post'
+		elif int(self.config.Read('DBtype')) == 4:
+			self.TDBE = 'orcl'
+		else:
+			self.TDBE = 'sqlite'
+
 
 		Vsz1 = wx.BoxSizer( wx.VERTICAL )
 		self.FTF = For_This_Frame
@@ -48,19 +57,25 @@ class MyPanel1 ( wx.Panel ):
 
 		Vsz2.Add( self.lbl0, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
-		if int(self.config.Read('DBtype')) == 1:
+		if self.TDBE == 'sqlite':
 			self.dbfile = wx.FilePickerCtrl( self.P1, wx.ID_ANY, wx.EmptyString, _(u"Select Database file"), u"*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE|wx.FLP_OPEN|wx.FLP_SMALL )
 			Vsz2.Add( self.dbfile, 0, wx.ALL|wx.EXPAND, 5 )
 
-		if int(self.config.Read('DBtype')) == 2:
+		if self.TDBE == 'mysql':
 			self.idbfl2 = PG.Get2(u'', u'', u'')
 			dbChoices = [db[0] for db in self.idbfl2.GetFromString(" SHOW DATABASES; ") ]
 			self.dbBox1 = wx.Choice(self.P1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, dbChoices, 0)
 			Vsz2.Add(self.dbBox1, 0, wx.ALL | wx.EXPAND, 5)
 
-		if int(self.config.Read('DBtype')) == 3:
+		if self.TDBE == 'post':
 			self.idbfl2 = PG.Get2(u'', u'', u'')
 			dbChoices = [db[0] for db in self.idbfl2.GetFromString(" SELECT datname FROM pg_database; ") ]
+			self.dbBox1 = wx.Choice(self.P1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, dbChoices, 0)
+			Vsz2.Add(self.dbBox1, 0, wx.ALL | wx.EXPAND, 5)
+
+		if self.TDBE == 'orcl':
+			self.idbfl2 = PG.Get2(u'', u'', u'')
+			dbChoices = [db[0] for db in self.idbfl2.GetFromString("  ") ]
 			self.dbBox1 = wx.Choice(self.P1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, dbChoices, 0)
 			Vsz2.Add(self.dbBox1, 0, wx.ALL | wx.EXPAND, 5)
 
@@ -224,9 +239,9 @@ class MyPanel1 ( wx.Panel ):
 		self.fromHere()
 
 		# Connect Events
-		if int(self.config.Read('DBtype')) == 1:
+		if self.TDBE == 'sqlite':
 			self.dbfile.Bind(wx.EVT_FILEPICKER_CHANGED, self.dbopn)
-		if int(self.config.Read('DBtype')) == 2 or int(self.config.Read('DBtype')) == 3:
+		if self.TDBE == 'mysql' or self.TDBE == 'post':
 			self.dbBox1.Bind( wx.EVT_CHOICE, self.usedb )
 		self.DVC1.Bind(wx.dataview.EVT_TREELIST_ITEM_CHECKED, self.chkit)
 		self.btn1.Bind( wx.EVT_BUTTON, self.insit )
@@ -254,9 +269,9 @@ class MyPanel1 ( wx.Panel ):
 
 			lbl0 = self.lbl0.GetLabel()
 			nlbl = lbl0 + ' from ' + frmname
-			#print(frmname,self.dbfil)
+			#print(frmname)
 			self.lbl0.SetLabel(nlbl)
-			if self.FTF[1] != '':
+			if self.FTF[1] != '' and self.TDBE == 'sqlite':
 				self.dbfil = self.FTF[1]
 				self.dbfile.SetPath(self.dbfil)
 				self.idbfl2 = PG.Get2(self.dbfil, u'', u'')
@@ -264,10 +279,15 @@ class MyPanel1 ( wx.Panel ):
 				self.DVC1.DeleteAllItems()
 				self.filllist()
 				self.chgmtd(None)
+			if self.FTF[1] != '' and self.TDBE in ['mysql','post']:
+				self.dbfil = self.FTF[1]
+				self.dbBox1.SetStringSelection(self.dbfil)
+				self.usedb(None)
+
 
 
 	def dbopn(self, event):
-		if int(self.config.Read('DBtype')) == 1:
+		if self.TDBE == 'sqlite':
 			dbftype = Database_type[int(self.config.Read('DBtype'))]
 			self.dbfil = self.dbfile.GetPath()
 			self.idbfl2 = PG.Get2(self.dbfil, u'',u'')
@@ -279,24 +299,25 @@ class MyPanel1 ( wx.Panel ):
 	def usedb(self, event):
 		thsdbuse = self.dbBox1.GetStringSelection()
 		self.idbfl2 = PG.Get2(thsdbuse, u'', u'')
-		if int(self.config.Read('DBtype')) == 2:
+		if self.TDBE == 'mysql':
 			self.idbfl2.GetCommandStr(thsdbuse,' USE %s; '%thsdbuse )
 			tbles = self.idbfl2.GetFromString(' SHOW FULL TABLES; ')
 
-		if int(self.config.Read('DBtype')) == 3:
+		if self.TDBE == 'post':
 			#self.idbfl2 = PG.Get2.GetCommandStr(thsdbuse,"SELECT * FROM pg_catalog.pg_tables WHERE schemaname != 'pg_catalog' AND  schemaname != 'information_schema';" )
 			stinfsql = " SELECT tablename, schemaname FROM pg_catalog.pg_tables WHERE schemaname != 'pg_catalog' AND schemaname != 'information_schema'; "
 			tabel = self.idbfl2.GetFromString(stinfsql)
 
-			print(self.idbfl2 , tabel)
+			#print(self.idbfl2 , tabel)
 			tbles = tabel
 
 			#tbles = self.idbfl2.GetFromString(' \dt ')
 
-		print(tbles)
+		#print(tbles)
 		self.dbdata = tbles
 		self.DVC1.DeleteAllItems()
 		self.filllist2()
+		self.chgmtd(None)
 
 
 	def filllist(self):
@@ -313,22 +334,29 @@ class MyPanel1 ( wx.Panel ):
 				self.DVC1.SetItemText(ifld, 1, fld[1])
 
 	def filllist2(self):
+		self.Tfilds = {}
 		Droot = self.DVC1.GetRootItem()
 		self.troot = self.DVC1.AppendItem(Droot, "Table")
 		for tb in self.dbdata:
 			tbl = self.DVC1.AppendItem(self.troot, tb[0])
 			self.DVC1.SetItemText(tbl, 0, tb[0])
 			self.DVC1.SetItemText(tbl, 1, tb[1])
-			if int(self.config.Read('DBtype')) == 2:
+			if self.TDBE == 'mysql':
+				fldlst = []
 				for col in self.idbfl2.GetFromString(" DESC %s" %tb[0]):
 					ifld = self.DVC1.AppendItem(tbl, col[0])
 					self.DVC1.SetItemText(ifld, 0, col[0])
 					self.DVC1.SetItemText(ifld, 1, col[1])
-			if int(self.config.Read('DBtype')) == 3:
+					fldlst.append((col[0],col[1]))
+				self.Tfilds[tb[0]] = fldlst
+			if self.TDBE == 'post':
+				fldlst = []
 				for col in self.idbfl2.GetFromString(" SELECT column_name, data_type FROM information_schema.columns WHERE TABLE_NAME = '%s' " %tb[0]):
 					ifld = self.DVC1.AppendItem(tbl, col[0])
 					self.DVC1.SetItemText(ifld, 0, col[0])
 					self.DVC1.SetItemText(ifld, 1, col[1])
+					fldlst.append((col[0], col[1]))
+				self.Tfilds[tb[0]] = fldlst
 
 			#for fld in self.Tfilds[tb]:
 
@@ -383,7 +411,7 @@ class MyPanel1 ( wx.Panel ):
 		txt = u''
 		for tbl in sqlsnts.keys():
 			txt += '\n'
-			txt += u'\tself.MySet.Tabel = %s \n'%tbl
+			txt += u"\tself.MySet.Tabel = '%s' \n"%tbl
 			fild = u''
 			for fld in sqlsnts.get(tbl):
 				fild += fld + ','
@@ -413,7 +441,7 @@ class MyPanel1 ( wx.Panel ):
 		txt = u''
 		for tbl in sqlsnts.keys():
 			txt += '\n'
-			txt += u'\tself.MySet.Tabel = %s \n' % tbl
+			txt += u"\tself.MySet.Tabel = '%s' \n" % tbl
 			fild = u''
 			contor = 0
 			for fld in sqlsnts.get(tbl):
@@ -451,7 +479,7 @@ class MyPanel1 ( wx.Panel ):
 		txt = u''
 		for tbl in sqlsnts.keys():
 			txt += '\n'
-			txt += u'\tself.MySet.Tabel = %s \n' % tbl
+			txt += u"\tself.MySet.Tabel = '%s' \n" % tbl
 
 			txt += u'\t#self.KeyData = #can put need data here\n'
 			txt += u'\tself.MySet.Deleterecord( " ' #+ fild.rstrip(',')
@@ -526,7 +554,7 @@ class MyPanel1 ( wx.Panel ):
 				thsfld = self.idata[0].keys()
 
 		else:
-			self.gtslt = self.DVC1.GetSelections()
+
 			if self.DVC1.GetItemText(self.gtslt[0], 1) == '' and self.DVC1.GetItemText(self.gtslt[0], 0) not in ['Table','Indices']:
 				myfild = self.DVC1.GetItemText(self.gtslt[0], 0)
 				#print(self.ChkTicks())
@@ -535,7 +563,6 @@ class MyPanel1 ( wx.Panel ):
 					thsfld = [t+'.'+F for t in self.ChkTicks() for F in self.ChkTicks()[t]]
 					ftxt = ' ,'.join(thsfld)
 					Ttxt = ' ,'.join(thstbl)
-
 					#print(ftxt,thsfld,thstbl)
 					self.idbfl = PG.Get2(self.dbfil, u'', u'')
 					self.idata = self.idbfl.GetFromString(u'select %s from %s' %(ftxt,Ttxt))
@@ -548,8 +575,16 @@ class MyPanel1 ( wx.Panel ):
 					#self.idbfl = PG2.Get(self.dbfil, dbtype)
 					self.idata = self.idbfl.GetFromString(u' select * from %s' % myfild)
 			else:
-				self.idata = []
-				thsfld = []
+				if self.TDBE == 'mysql' or self.TDBE == 'post':
+					itbl = self.DVC1.GetItemText(self.gtslt[0], 0)
+					self.idata = self.idbfl2.GetFromString(u" select * from %s" %itbl )
+					#print(self.Tfilds,self.idata)
+					for fld in self.Tfilds:
+						if itbl == fld:
+							thsfld = [str(f[0]) for f in self.Tfilds[fld]]
+				else:
+					self.idata = []
+					thsfld = []
 		#print(thsfld,self.idata)
 		if len(thsfld) > 0 and len(self.idata) > 0 :
 			frm = wx.Dialog(self, -1)
@@ -650,7 +685,11 @@ class MyPanel1 ( wx.Panel ):
 		#inittxt = "## Add this lines to import part of program \nimport Database.PostGet as PG\n"
 		inittxt = ''
 		inittxt2 = "\t\t## Please Add this line in Panel __init__ function\n"
-		dbf = self.dbfil
+		if self.TDBE == 'sqlite':
+			dbf = self.dbfil
+		else:
+			dbf = self.dbBox1.GetStringSelection()
+
 		if self.table != '':
 			table = self.table
 		else:
@@ -676,6 +715,16 @@ class MyPanel1 ( wx.Panel ):
 			                      +f"\t\tself.MyGet = PG.Get2('{dbf}','{data}','{file}')\n".format(dbf,data,file))
 		else:
 			print('What method is')
+		if self.TDBE == 'mysql':
+			#if self.chs1.GetStringSelection() == 'set':
+			#	self.fldinit.SetValue(self.fldinit.GetValue()+f"\t\tself.MySet.GetCommandStr('{dbf}','USE {dbf};')\n".format(dbf,dbf))
+			if self.chs1.GetStringSelection() == 'get':
+				self.fldinit.SetValue(self.fldinit.GetValue() + f"\t\tself.MyGet.GetCommandStr('{dbf}','USE {dbf};')\n".format(dbf, dbf))
+			elif self.chs1.GetStringSelection() == 'both':
+				self.fldinit.SetValue(
+					self.fldinit.GetValue() + #f"\t\tself.MySet.GetCommandStr('{dbf}','USE {dbf};')\n".format(dbf, dbf)+
+				f"\t\tself.MyGet.GetCommandStr('{dbf}','USE {dbf};')\n".format(dbf, dbf))
+
 
 
 	def prgstm( self, event ):

@@ -163,6 +163,13 @@ class Anlzfil(object):
             dbfile = whris1[0].replace("'",'').replace(',','')
             #print(dbfile)
             return dbfile
+        else:
+            whris1 = re.findall(r'\(\'.*.\',',txt)
+            #print(whris1)
+            if whris1:
+                dbfile = whris1[0].replace("'",'').replace(',','').replace('(','')
+                #print(dbfile)
+                return dbfile
 
     def indexImpline(self):
         with open(self.pyFile, 'r', encoding=u'utf-8') as f:
