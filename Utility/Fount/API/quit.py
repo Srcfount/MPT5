@@ -8,17 +8,19 @@ def size():
 
 def main (panel=None):
     #print 'out'
-    q= wx.GetActiveWindow()
-    p= wx.GetApp()
+    q = wx.GetActiveWindow()
+    p = wx.GetApp()
     
     if str(q) == 'None':
         p.Exit()
-        wx.App_CleanUp()
+
     else:
         #print q.m_mgr
+        if 'timer' in dir(q):
+            q.timer.Stop()
         q.m_mgr.UnInit()
         q.Destroy()
-        wx.App_CleanUp()
+
     
 if __name__ == '__main__':
     main (None)

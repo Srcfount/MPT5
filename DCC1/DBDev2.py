@@ -29,8 +29,8 @@ _ = wx.GetTranslation
 
 class MyPanel1 ( wx.Panel ):
 
-	def __init__( self, parent,For_This_Frame=[], id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 500,450 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
-		wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
+	def __init__(self, parent, For_This_Frame=[], id=wx.ID_ANY, pos=wx.DefaultPosition, size=wx.Size(500, 450), style=wx.TAB_TRAVERSAL, name=wx.EmptyString):
+		wx.Panel.__init__(self, parent, id=id, pos=pos, size=size, style=style, name=name)
 
 		self.config = wx.GetApp().GetConfig()
 		if int(self.config.Read('DBtype')) == 2:
@@ -43,17 +43,17 @@ class MyPanel1 ( wx.Panel ):
 			self.TDBE = 'sqlite'
 
 
-		Vsz1 = wx.BoxSizer( wx.VERTICAL )
+		Vsz1 = wx.BoxSizer(wx.VERTICAL)
 		self.FTF = For_This_Frame
 
-		self.Splt1 = wx.SplitterWindow( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.SP_3D|wx.SP_LIVE_UPDATE|wx.SP_NO_XP_THEME|wx.SP_THIN_SASH )
-		self.Splt1.Bind( wx.EVT_IDLE, self.Splt1OnIdle )
+		self.Splt1 = wx.SplitterWindow( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.SP_3D| wx.SP_LIVE_UPDATE| wx.SP_NO_XP_THEME| wx.SP_THIN_SASH)
+		self.Splt1.Bind(wx.EVT_IDLE, self.Splt1OnIdle)
 
-		self.P1 = wx.Panel( self.Splt1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		Vsz2 = wx.BoxSizer( wx.VERTICAL )
+		self.P1 = wx.Panel( self.Splt1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
+		Vsz2 = wx.BoxSizer(wx.VERTICAL)
 
-		self.lbl0 = wx.StaticText( self.P1, wx.ID_ANY, _(u"Select database"), wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.lbl0.Wrap( -1 )
+		self.lbl0 = wx.StaticText( self.P1, wx.ID_ANY, _(u"Select database"), wx.DefaultPosition, wx.DefaultSize, 0)
+		self.lbl0.Wrap(-1)
 
 		Vsz2.Add( self.lbl0, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
@@ -299,6 +299,7 @@ class MyPanel1 ( wx.Panel ):
 	def usedb(self, event):
 		thsdbuse = self.dbBox1.GetStringSelection()
 		self.idbfl2 = PG.Get2(thsdbuse, u'', u'')
+		tbles = ''
 		if self.TDBE == 'mysql':
 			self.idbfl2.GetCommandStr(thsdbuse,' USE %s; '%thsdbuse )
 			tbles = self.idbfl2.GetFromString(' SHOW FULL TABLES; ')
@@ -307,10 +308,8 @@ class MyPanel1 ( wx.Panel ):
 			#self.idbfl2 = PG.Get2.GetCommandStr(thsdbuse,"SELECT * FROM pg_catalog.pg_tables WHERE schemaname != 'pg_catalog' AND  schemaname != 'information_schema';" )
 			stinfsql = " SELECT tablename, schemaname FROM pg_catalog.pg_tables WHERE schemaname != 'pg_catalog' AND schemaname != 'information_schema'; "
 			tabel = self.idbfl2.GetFromString(stinfsql)
-
 			#print(self.idbfl2 , tabel)
 			tbles = tabel
-
 			#tbles = self.idbfl2.GetFromString(' \dt ')
 
 		#print(tbles)
@@ -436,6 +435,8 @@ class MyPanel1 ( wx.Panel ):
 		frm.ShowModal()
 		if pnl.acept:
 			choic = pnl.chs2.GetStringSelection()
+		else:
+			choic = ''
 
 		frm.Destroy()
 		txt = u''
@@ -474,6 +475,8 @@ class MyPanel1 ( wx.Panel ):
 		frm.ShowModal()
 		if pnl.acept:
 			choic = pnl.chs2.GetStringSelection()
+		else:
+			choic = ''
 
 		frm.Destroy()
 		txt = u''
@@ -554,7 +557,7 @@ class MyPanel1 ( wx.Panel ):
 				thsfld = self.idata[0].keys()
 
 		else:
-
+			thsfld = []
 			if self.DVC1.GetItemText(self.gtslt[0], 1) == '' and self.DVC1.GetItemText(self.gtslt[0], 0) not in ['Table','Indices']:
 				myfild = self.DVC1.GetItemText(self.gtslt[0], 0)
 				#print(self.ChkTicks())
@@ -674,6 +677,8 @@ class MyPanel1 ( wx.Panel ):
 			                         style=wx.FD_SAVE | wx.FD_CHANGE_DIR | wx.FD_OVERWRITE_PROMPT)
 			if self.dlg.ShowModal() == wx.ID_OK:
 				sqlfpath = self.dlg.GetPaths()[0]
+			else:
+				return 1
 			self.dlg.Destroy()
 			with open(sqlfpath+'.sql','w+',encoding='utf-8') as f:
 				f.write(self.fldsql.GetValue())
@@ -682,6 +687,7 @@ class MyPanel1 ( wx.Panel ):
 		event.Skip()
 
 	def chgmtd( self, event ):
+		dbf = Src_dbf + ''
 		#inittxt = "## Add this lines to import part of program \nimport Database.PostGet as PG\n"
 		inittxt = ''
 		inittxt2 = "\t\t## Please Add this line in Panel __init__ function\n"

@@ -76,15 +76,16 @@ class Get2:
     def __init__(self, DBF, Data, file):
         self.DBF = DBF
         self.Data = Data
+        self.file = file
 
         if file != '':
-            sqlfile = DATABASE_PATH + 'sqls' + SLASH + file
+            sqlfile = Src_dbf + 'sqls' + SLASH + file
             #sqlfile = Src_dbf + 'sqls' + SLASH + file
             self.SQLtxt = self.openSql(sqlfile)
 
     def openSql(self, sqlfile):
         with open(sqlfile) as f:
-            alltxt = f.readlines()
+            alltxt = f.read()
         #print(alltxt)
         return alltxt[0]
 

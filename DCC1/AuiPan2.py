@@ -499,7 +499,7 @@ class MyPanel1 ( wx.Panel ):
 			if self.prgfld.GetValue() == '':
 				hndlid = 50000 + int(Data1[0])
 				import shutil
-				shutil.copyfile(GUI_PATH+'Temp\\tempane.py',Src_aui+Data1[2]+'.py')
+				shutil.copyfile(GUI_PATH+'Temp'+SLASH+'tempane.py',Src_aui+Data1[2]+'.py')
 			else:
 				hndlid, hndldir = self.MyMenu.getHndlr(self.prgfld.GetValue().replace('.py',''))[0]
 				if hndlid == '' or hndlid == None:
@@ -606,7 +606,7 @@ class MyPanel1 ( wx.Panel ):
 				ifrm.SetSize((555, 500))
 				ifrm.SetTitle(u'Program Develop')
 				ifrm.Show()
-			    #print(ifrm.TransferDataFromWindow())
+				#print(ifrm.TransferDataFromWindow())
 		else:
 			wx.MessageBox(_("Double Program: Please Close Program Develop then Do this item"))
 			pass
@@ -794,48 +794,50 @@ class MyPanel2 ( wx.Panel ):
 ##
 #################################################################################
 class SizeProperty(pg.PGProperty):
-    """ Demonstrates a property with few children.
+	""" Demonstrates a property with few children.
     """
-    def __init__(self, label, name = pg.PG_LABEL, value=wx.Size(0, 0)):
-        pg.PGProperty.__init__(self, label, name)
+	def __init__(self, label, name = pg.PG_LABEL, value=wx.Size(0, 0)):
+		pg.PGProperty.__init__(self, label, name)
 
-        value = self._ConvertValue(value)
+		value = self._ConvertValue(value)
 
-        self.AddPrivateChild( pg.IntProperty("Width", value=value.x) )
-        self.AddPrivateChild( pg.IntProperty("Height", value=value.y) )
+		self.AddPrivateChild( pg.IntProperty("Width", value=value.x) )
+		self.AddPrivateChild( pg.IntProperty("Height", value=value.y) )
 
-        self.m_value = value
-        #print(self.m_value)
+		self.m_value = value
+		#print(self.m_value)
 
-    def GetClassName(self):
-        return self.__class__.__name__
+	def GetClassName(self):
+		return self.__class__.__name__
 
-    def DoGetEditorClass(self):
-        return pg.PropertyGridInterface.GetEditorByName("TextCtrl")
+	def DoGetEditorClass(self):
+		return pg.PropertyGridInterface.GetEditorByName("TextCtrl")
 
-    def RefreshChildren(self):
-        size = self.m_value
-        self.Item(0).SetValue( size.x )
-        self.Item(1).SetValue( size.y )
+	def RefreshChildren(self):
+		size = self.m_value
+		self.Item(0).SetValue( size.x )
+		self.Item(1).SetValue( size.y )
 
-    def _ConvertValue(self, value):
-        """ Utility convert arbitrary value to a real wx.Size.
+	def _ConvertValue(self, value):
+		""" Utility convert arbitrary value to a real wx.Size.
+
         """
-        import collections
-        if isinstance(value, collections.Sequence) or hasattr(value, '__getitem__'):
-            value = wx.Size(*value)
-        return value
+		import collections
+		if isinstance(value, collections.Sequence) or hasattr(value, '__getitem__'):
+			value = wx.Size(*value)
+		return value
 
-    def ChildChanged(self, thisValue, childIndex, childValue):
-        size = self._ConvertValue(self.m_value)
-        if childIndex == 0:
-            size.x = childValue
-        elif childIndex == 1:
-            size.y = childValue
-        else:
-            raise AssertionError
+	def ChildChanged(self, thisValue, childIndex, childValue):
+		size = self._ConvertValue(self.m_value)
+		if childIndex == 0:
+			size.x = childValue
+		elif childIndex == 1:
+			size.y = childValue
+		else:
+			raise AssertionError
 
-        return size
+		return size
+
 
 ###########################################################################
 ## Class MyPanel3
