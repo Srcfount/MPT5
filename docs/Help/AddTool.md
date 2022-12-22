@@ -86,7 +86,19 @@ you can see the ID code like this '>>>'
 How Extract a Download Package
 ------------------------------
 When download or get a package, copy it in ``Utility\Downloads`` path  
-if Refresh list with Refresh button you can see your file in list  
-Select file and press Extract Check and Show File button in right panel  
-in the Unpacked downloaded Programs you can see your result action  
+if Refresh list with Refresh button you can see your file in list 
 
+![](images/6/atpdpk6-1.jpg)
+
+1. Select a Download file
+2. press Extract, Check and Show File
+3. In Message you see what files extract,Also Path, Code and Size
+4. In Unpacked downloaded programs you can find programs
+5. All Info of exteracted files is in this file
+
+> All extract files code start with 61 and you can find in  
+> Utility\Fount path But if you like to Use it in Application  
+> you must do down action 
+
+How Copy and Use Extracted Program
+----------------------------------

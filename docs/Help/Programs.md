@@ -93,7 +93,7 @@ then program add to part No.4 and show import file
 > and program not run correct 
 > also all GUI file is in **Src\GUI** path put your file in this path  
 > The **Src\API** path is for other import file that not have panel 
-> and only for comput or define your class and ...
+> and only for compute or define your class and ...
 
 if your code have a statement like this:
 ````python
@@ -105,16 +105,15 @@ class MyPanel1 ( wx.Panel ):
 and not and other part in code when you press Generate code this window dialog shown
 for choise your Path and type :
 
-![](images/5/aprg3df-1.jpg)
+![](images/5/aprg3df1-1.jpg)
 
-1. If you check this Box you can add source to Src\AUI path and will have a Pane
-2. If you like a Frame for this Panel write name of this program here
-3. select path of program you like to add it
-4. If press Ok button Generate a file to your choise path
+1. If you like a Frame for this Panel write name of this program here
+2. select path of program you like to add it
+3. If press Ok button Generate a file to your choise path
 
-> Note: Please not use space charecter in your name file  
+> Note: Please not use space character in your name file  
 > the Path is link to menubar then Please first define you Menubar or Toolbar  
-> you can **NOT** add other menuitem in other menubar to this Path then please attend to your choise
+> you can **NOT** add other menu item in other menubar to this Path then please attend to your choice
 
 for help about add program from AddTool go [Here](AddTool.md)
 
@@ -135,8 +134,8 @@ you can see more help about editor [here](Editor.md)
 How to Delete a program
 -----------------------
 
-if press delete button program delete from handler list in database
-if file in unlisted handler program (No.5) and you delete it file remove from hard disk
+. if press delete button program delete from handler list in database  
+. if file in unlisted handler program (No.5) and you delete it file remove from hard disk
 
 How to preview a program
 ------------------------
@@ -168,7 +167,7 @@ for example:
 
 ![](images/5/aply2-1.jpg)
 
-3. Choise you program in list
+3. Choice you program in list
 4. press Apply button
 
 > Attended to Directory that in correct path
@@ -190,6 +189,37 @@ Generate it for use
 In Other python file NOT in Handler list you can find this files
 that is ended ID's code with '??'
 
+if your file in Src\AUI path:
 
+![](images/5/aui5a-1.jpg)
 
+1. you see '55??' code in ID column
+2. if press generate button program automatic add to list
+
+![](images/5/aui5b-1.jpg)
+
+if your file in Src\API path you can see program in ``All program in Src\API Path``
+
+> may be you can run program with preview button
+> but this is not certain
+
+If your program do not have GUI and main function in it you
+can see it in ``One page program All-in-One``
+
+![](images/5/allin6a.jpg)
+
+> in main function you must use panel=None as argument 
+
+if your program in GUI and like to make New Program for it:
+
+![](images/5/gnprg7a-1.jpg)
+
+1. Select a program that ID number is 77??
+2. press Generate button
+3. write your abbr name you like 
+4. choice your path that program create in it then press ok button
+
+> before create program be sure the correct path choice  
+> if ``class MyPanel1 ( wx.Panel )`` **NOT** in file, you can not generate it 
+> you can Edit new generate file , But Do it very carefully without change main function
 
