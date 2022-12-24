@@ -1,5 +1,8 @@
 How Use Database in Programs
 ============================
+
+Window Databse Develop
+----------------------
 In this window you can see how add code to program and access to database  
 Also you can brows Table of Database and schema of each Table
 you can export data to csv and excel file and use it in other part
@@ -9,13 +12,13 @@ you can export data to csv and excel file and use it in other part
 if your database type is SQlite in setting:
 
 ![](images/4/setdb1.jpg)
-1. choise database file
+1. choice database file
 2. list of Tables
 3. Insert to Table that select (Show in Program Statements)
 4. Update Table that select (Show in Program Statements)
 5. Delete Table that select (Show in Program Statements)
 6. Join two or more Table that select (Show in SQL Statements)
-7. Browes Table
+7. Browse Table
 8. apply to program
 9. generate a SQL file
 
@@ -57,6 +60,8 @@ How use Database in programs
 
 > please attention to arrow when you open database from program
 
+more detail about program [Here](Programs.md)
+
 if press Update button:
 
 ![](images/4/db4prg2-1.jpg)
@@ -85,12 +90,78 @@ How to Join two or More Table
 4. Choise Key of Field for Join
 5. press Ok Apply to Create Statement SQL
 6. You can see SQL Here
-7. This button save your statement to SQL file in Path Src\DBF\sqls
+7. This button open your other SQL save file in Path Src\DBF\sqls
+8. will Generate or Save SQL file into Src\DBF\sqls path 
+
+> Note:  In Browse Table if you create or open join SQL seen the result
+> but if that empty only seen selected Table  
+> In Three Select Table you must attention to key field, the  first Table is a base Table
 
 
+How get or set Data to Database
+-------------------------------
 
+If you attended to lines you can see this :
 
+In import part 
 
+```python
+import Database.PostGet as PG
+```
 
+in __init__ function of Panel:
+if sqlite:
+```python
+self.MySet = PG.Post2('Your\Path\of\Database','','','')
+self.MyGet = PG.Get2('Your\Path\of\Database','','')
+```
+if MySql , Postgresql , ...:
+```python
+self.MySet = PG.Post2('YorDatabase','','','')
+self.MyGet = PG.Get2('YorDatabase','','')
+self.MyGet.GetCommandStr('YorDatabase','USE YorDatabase;')
+```
 
+for Insert add text under function is:
+```python
+self.MySet.Tabel = 'SelectTable' 
+#AllData = [ Data0, Data1] #You can add data to put here
+self.MySet.Addrecord( " field1,field2,... ", AllData )
+```
+> Note: When you select Fields in application will automatically add fields to text suggested
 
+for Update add text under function is:
+```python
+self.MySet.Tabel = 'SelectTable' 
+#AllData = [ Data0] #You can add data to put here
+#self.KeyData = #can put need data here
+self.MySet.Updaterecord( " field=?  Where keyfield = %s " %self.KeyData , AllData )
+```
+
+for Delete add text under function is:
+```python
+self.MySet.Tabel = 'SelectTable' 
+#self.KeyData = #can put need data here
+self.MySet.Deleterecord( " keyfield = %s " %self.KeyData ) 
+```
+
+for Query you can Use this text in function:
+```python
+AllData = self.MyGet.GetFromString("Select * from YourTable")
+```
+
+if to use SQL file please way this step:
+
+the first use
+
+```python
+self.MyGet = PG.Get2('Your\Database\Path\DBfile.db','','SQLfile.sql')
+```
+
+then 
+
+```python
+sqlfiledata = self.MyGet.GetFromDbf()
+```
+
+for use the editor go [here](Editor.md)

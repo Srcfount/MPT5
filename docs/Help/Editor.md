@@ -10,12 +10,13 @@ and only use this program for see  your code
 2. menu to open save and edit file
 3. Editor area for write code this lines are default
 
-![](images/9/m1edtr2.jpg)
-1. New     : show the default form, if you change anything you must save it
-2. Open... : open an exist file in your hard file must be a python file fromat
-3. Save    : save your work if the title have a '*' in name text remove it
-4. Save As : save the this source to new name file 
-5. Close   : Exit editor
+![](images/9/m1edtr2a.jpg)
+1. New        : show the default form, if you change anything you must save it
+2. Open...    : open an exist file in your hard file must be a python file fromat
+3. Save       : save your work if the title have a '*' in name text remove it
+4. Save As    : save the this source to new name file 
+5. IDLE editor: you can use python idle editor 
+6. Close      : Exit editor
 
 ![](images/9/m2edtr2.jpg)
 1. Cut        : cut a selected part of source
