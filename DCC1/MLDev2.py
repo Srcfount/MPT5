@@ -97,7 +97,7 @@ class MyPanel1 ( wx.Panel ):
 		self.SlcDta = wx.Button(self.P1, wx.ID_ANY, _(u"Select Data"), wx.DefaultPosition, wx.DefaultSize, 0)
 		Hsz2.Add(self.SlcDta, 1, wx.ALL, 5)
 
-		self.ConDta = wx.Button(self.P1, wx.ID_ANY, _(u"Conect Data"), wx.DefaultPosition, wx.DefaultSize, 0)
+		self.ConDta = wx.Button(self.P1, wx.ID_ANY, _(u"Connect Data"), wx.DefaultPosition, wx.DefaultSize, 0)
 		Hsz2.Add(self.ConDta, 1, wx.ALL, 5)
 
 		Vsz2.Add( Hsz2, 0, wx.EXPAND, 5 )
@@ -278,13 +278,13 @@ class MyPanel1 ( wx.Panel ):
 			Mroot = self.TLC1.GetRootItem()
 			lstalgo = [ A[1] for A in self.getMData.MLAlgoFils()]
 			lstpans = [P[1] for P in self.lstpane]
-			for mla in lstmla:
-				if mla.replace('.py','') not in lstalgo and mla[0] != '_':
+			for mla in lstmla :
+				if mla.replace('.py','') not in lstalgo and mla[0] != '_' and '.py' in mla:
 					self.mlafil = self.TLC1.AppendItem(Mroot, u'MLA files')
 					self.TLC1.SetItemText(self.mlafil, 0, mla)
 					self.TLC1.SetItemText(self.mlafil, 1, '????')
 			for mlp in lstmlp:
-				if mlp.replace('.py','') not in lstpans and mlp[0] != '_':
+				if mlp.replace('.py','') not in lstpans and mlp[0] != '_' and '.py' in mlp:
 					self.mlpfil = self.TLC1.AppendItem(Mroot, u'MLP files')
 					self.TLC1.SetItemText(self.mlpfil, 0, mlp)
 					self.TLC1.SetItemText(self.mlpfil, 1, '****')
@@ -830,7 +830,7 @@ class MyPanel5 ( wx.Panel ):
 
 		Hsz4 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.btn1 = wx.Button( self, wx.ID_ANY, _(u"Cancle"), wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.btn1 = wx.Button( self, wx.ID_ANY, _(u"Cancel"), wx.DefaultPosition, wx.DefaultSize, 0 )
 		Hsz4.Add( self.btn1, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
 		self.btn2 = wx.Button( self, wx.ID_ANY, _(u"Apply"), wx.DefaultPosition, wx.DefaultSize, 0 )
