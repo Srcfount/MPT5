@@ -649,8 +649,8 @@ class MyPanel1 ( wx.Panel ):
 				lstcod = self.getMData.getHndid(self.thsdcod)
 				# print(lstcod)
 				# newcod = (int(self.thsdcod[0]) * 10000) + (int(self.thsdcod[1]) * 1000) + len(lstcod) #+ 1
-				newcod = int(self.thsdcod[0]) * 10 + len(lstcod)
-				newnom = int(self.thsdcod[0]) * 10 + len(lstcod)  # + 1
+				newcod = int(self.thsdcod[0]) * 10 + len(lstcod)  + 1
+				newnom = int(self.thsdcod[0]) * 10 + len(lstcod)  + 1
 				data = [newcod, txt.replace('.py', ''), self.thsdcod, '-1', -1, newnom]
 				self.setMDate.Table = 'handler'
 				self.setMDate.Additem(" handlerid, prgname, prgdir, paramtr, public, prgno", data)
