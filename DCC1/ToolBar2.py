@@ -322,7 +322,8 @@ class MyPanel1 ( wx.Panel ):
 		broot = self.TTC1.AppendItem(root1, u'Tool Bar')
 
 		self.altol = self.MyMenu.GetAllTB("left join handler on toolbar.handlerid = handler.handlerid \
-	                                       left join access on toolbar.acclvlid = access.acclvlid"
+	                                       left join access on toolbar.acclvlid = access.acclvlid \
+										  where access.userid = 1 "
 		                                  )
 		dictool = self.regrouptoolbar(self.altol)
 
