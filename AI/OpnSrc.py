@@ -86,8 +86,8 @@ class PythonSTC(stc.StyledTextCtrl):
         #self.SetEOLMode(stc.STC_EDGE_NONE)
         #self.SetUseAntiAliasing(True)
         self.SetMarginType(1, stc.STC_MARGIN_NUMBER)
-        #self.SetMarginMask(1, 0)
-        #self.SetMarginWidth(1, 40)
+        #self.SetMarginMask(1, 1)
+        self.SetMarginWidth(1, 30)
 
         # Global default styles for all languages
         self.StyleSetSpec(stc.STC_STYLE_DEFAULT, "face:%(helv)s,size:%(size)d" % faces)
