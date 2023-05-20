@@ -25,6 +25,26 @@ and if you like use from other package like SQLalchemy Please send us request
 
 Installation
 ------------
+Please type in shell this command
+
+```shell
+pip install Temp5
+```
+
+after install you can see in Scripts TEMP5.py file
+you can use it to make a directory and app in hard disk by
+```shell
+python TEMP5.py Create c:\New_Dir\Your_Project_Path\
+```
+after install change directory to your project and type
+```shell
+python -m Mainpro
+```
+or 
+```shell
+python Mainpro.py
+```
+
 
 
 Appearance of the application

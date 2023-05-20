@@ -102,3 +102,24 @@ if Refresh list with Refresh button you can see your file in list
 
 How Copy and Use Extracted Program
 ----------------------------------
+make menu item or toolbar icon for program 
+copy package to utility\download directory then:
+
+![](images/6/atpupk7_1.jpg)
+
+1. Select infopack(*.sfn) file 
+2. change path into src directory and place your menu item or toolbar path defined  
+3. press apply button to copy all files to selected path
+
+![](images/6/atpupk7_2.jpg)
+you see this message
+
+![](images/6/atpupk7_3.jpg)
+you can delete or clear file from Unpacked path and archived it
+we copy archive pack into Utility\account path
+
+>Press Refresh button for action and refresh list
+
+![](images/6/atpupk7_4.jpg)
+In Program Develop you can find new program in Other file NOT handler  
+you can generate edit and ... for use it in your application  

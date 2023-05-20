@@ -323,24 +323,24 @@ class MyPanel1 ( wx.Panel ):
 
 
 	def fillnull(self):
-	    self.titr.SetLabel(_(u'MenuBar: '))
-	    self.fld1.SetValue('')
-	    self.fld2.SetValue('')
-	    self.fld3.SetValue('')
-	    self.iconfile.SetPath('')
-	    #self.icon1.SetBitmap(wx.Bitmap(ICONS_PATH + u"image.png", wx.BITMAP_TYPE_ANY))
-	    self.icon1.SetBitmap(icon.image.GetBitmap())
-	    self.fld4.SetValue('')
-	    self.fld6.SetValue('')
-	    self.rdio1.SetValue(1)
-	    self.rdio2.SetValue(0)
-	    self.rdio3.SetValue(0)
-	    self.rdio4.SetValue(0)
-	    self.chk1.SetValue(0)
-	    self.ControlHide(0,0)
-	    #self.chk2.SetValue(0)
-	    self.prgfld.SetValue('')
-	    self.lbl9.SetLabel(_('Directory: '))
+		self.titr.SetLabel(_(u'MenuBar: '))
+		self.fld1.SetValue('')
+		self.fld2.SetValue('')
+		self.fld3.SetValue('')
+		self.iconfile.SetPath('')
+		#self.icon1.SetBitmap(wx.Bitmap(ICONS_PATH + u"image.png", wx.BITMAP_TYPE_ANY))
+		self.icon1.SetBitmap(icon.image.GetBitmap())
+		self.fld4.SetValue('')
+		self.fld6.SetValue('')
+		self.rdio1.SetValue(1)
+		self.rdio2.SetValue(0)
+		self.rdio3.SetValue(0)
+		self.rdio4.SetValue(0)
+		self.chk1.SetValue(0)
+		self.ControlHide(0,0)
+		#self.chk2.SetValue(0)
+		self.prgfld.SetValue('')
+		self.lbl9.SetLabel(_('Directory: '))
 
 	# Virtual event handlers, overide them in your derived class
 	def slctmnu( self, event ):
@@ -432,7 +432,7 @@ class MyPanel1 ( wx.Panel ):
 			self.disableall(0)
 			#self.bardata = data = self.MyMenu.AmenuBar(Access=u'' ,ext=u'and mbarid = %d' %code)[0]
 			self.bardata = data = self.MyMenu.AllBar( ext=u'left join access on menubar.acclvlid = access.acclvlid\
-			                                          where  mbarid = %d order by menubar.mbarid' % code)[0]
+													  where  mbarid = %d order by menubar.mbarid' % code)[0]
 			#print(data)
 			self.titr.SetLabel(_(u'MenuBar: ')+data[1])
 			self.fld1.SetValue(str(data[0]))
@@ -554,7 +554,7 @@ class MyPanel1 ( wx.Panel ):
 
 		self.DoMenu.Table = u'extended'
 		self.DoMenu.Upditem(u'status = ?, icon = ?, shortcut = ? , help = ?  where extid = "%s" ' % self.bardata[4],
-		                      [U[5], U[3].replace(ICONS_MENU, ''), U[4], U[5]])
+							  [U[5], U[3].replace(ICONS_MENU, ''), U[4], U[5]])
 
 		self.DoMenu.Table = u'access'
 		self.DoMenu.Upditem(u'acclvl = ? , disenable = ?  where acclvlid = "%s" ' % self.bardata[11], [U[8], U[7]])
@@ -572,25 +572,25 @@ class MyPanel1 ( wx.Panel ):
 		#print('del it',self.itmcod)
 		if int(self.itmcod) > 1000:
 			myitmdel = self.MyMenu.getmItem(int(self.itmcod))[0]
-		    #print(myitmdel)
+			#print(myitmdel)
 			if myitmdel[3] == 'S' and self.MyMenu.gBarItm(int(myitmdel[1])) != []:
 				wx.MessageBox(_('Please remove the sub menu item first!'))
 			else:
-			    self.DoMenu.Table = u'mitem'
-			    self.DoMenu.Delitem(u'mitem.itemid = %d' % myitmdel[1])
+				self.DoMenu.Table = u'mitem'
+				self.DoMenu.Delitem(u'mitem.itemid = %d' % myitmdel[1])
 
-			    self.DoMenu.Table = u'extended'
-			    self.DoMenu.Delitem(u'extended.extid = "%s"' % myitmdel[4])
+				self.DoMenu.Table = u'extended'
+				self.DoMenu.Delitem(u'extended.extid = "%s"' % myitmdel[4])
 
-			    self.DoMenu.Table = u'access'
-			    self.DoMenu.Delitem(u'access.acclvlid = "%s"' % myitmdel[11])
+				self.DoMenu.Table = u'access'
+				self.DoMenu.Delitem(u'access.acclvlid = "%s"' % myitmdel[11])
 
-			    self.delmenu()
+				self.delmenu()
 
-			    self.DVC1.DeleteAllItems()
-			    self.fillList()
-			    self.Refresh()
-			    self.Layout()
+				self.DVC1.DeleteAllItems()
+				self.fillList()
+				self.Refresh()
+				self.Layout()
 		else:
 			wx.MessageBox(_("Please use Delete Menu Bar with right click on mouse"))
 
@@ -723,10 +723,10 @@ class MyPanel1 ( wx.Panel ):
 
 
 	def chkshrtcut(self,Data):
-	    if Data[4] != '':
-		    return Data[2] + '\t' + Data[4]
-	    else:
-		    return Data[2]
+		if Data[4] != '':
+			return Data[2] + '\t' + Data[4]
+		else:
+			return Data[2]
 
 	def Add2Menu(self, D):
 		mw = self.FindWindowByName('main')
@@ -946,9 +946,9 @@ class MyPanel1 ( wx.Panel ):
 
 	def Nbar(self, event):
 		title = _("Note: To avoid duplicate code, pay attention to the correct format  [991] [99az] \
-	            The automatic code generation button helps you to create and generate new code [...] \
-	            To create a new directory, just type its name at the end of the path after the slash \
-	            You can use the same directories for multiple menu bars.")
+				The automatic code generation button helps you to create and generate new code [...] \
+				To create a new directory, just type its name at the end of the path after the slash \
+				You can use the same directories for multiple menu bars.")
 		self.Frm = wx.Dialog(self)
 		self.Pnl = MyPanel3(self.Frm, ['', '', '', '', [(u'', u'', u'', u'')]], _('Create'), title)
 		self.Frm.SetSize((500, 225))
@@ -962,9 +962,9 @@ class MyPanel1 ( wx.Panel ):
 
 	def Cbar(self, event):
 		title = _("Note: To avoid duplicate code, pay attention to the correct format  [991] [99az] \
-	        The automatic code generation button helps you to create and generate new code [...] \
-	        To create a new directory, just type its name at the end of the path after the slash \
-		    You can use the same directories for the several menu bar . ")
+			The automatic code generation button helps you to create and generate new code [...] \
+			To create a new directory, just type its name at the end of the path after the slash \
+			You can use the same directories for the several menu bar . ")
 		ps = self.DVC1.GetSelections()
 
 		self.itmcod = self.DVC1.GetItemText(ps[0], 0)
@@ -989,8 +989,8 @@ class MyPanel1 ( wx.Panel ):
 
 	def Dbar(self, event):
 		title = _(" Note : that by deleting the menu bar, all the items below it will also be removed \
-	              Only the programs attached to the items will not be removed and the code will remain \
-	              You can assign them to other items or create a new item . ")
+				  Only the programs attached to the items will not be removed and the code will remain \
+				  You can assign them to other items or create a new item . ")
 		ps = self.DVC1.GetSelections()
 		self.itmcod = self.DVC1.GetItemText(ps[0], 0)
 		self.itmnam = self.DVC1.GetItemText(ps[0], 1)
@@ -1026,297 +1026,313 @@ class MyPanel1 ( wx.Panel ):
 
 class MyPanel3 ( wx.Panel ):
 
-    def __init__( self, parent,Data,Buttom ,title,id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 500,235 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
-        wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
+	def __init__( self, parent,Data,Buttom ,title,id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 500,235 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
+		wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
 
-        self.Data = Data
-        self.Buttom = Buttom
-        self.GetMenu = MS.GetData(u'Menu2.db',u'')
-        self.SetMenu = MS.SetData(u'',u'',u'')
-        self.Action = False
-        self.box1val = 1
-        self.box2val = 'FFFF'
-        self.oldbar = self.Data[0]
-        if not Src_prg[0].isupper():
-	        self.Src_Prg = Src_prg[0].upper()+Src_prg[1:]
-	        pass
-        else:
-	        self.Src_Prg = Src_prg
+		self.Data = Data
+		self.Buttom = Buttom
+		self.GetMenu = MS.GetData(u'Menu2.db',u'')
+		self.SetMenu = MS.SetData(u'',u'',u'')
+		self.Action = False
+		self.box1val = 1
+		self.box2val = 'FFFF'
+		self.oldbar = self.Data[0]
+		if not Src_prg[0].isupper():
+			self.Src_Prg = Src_prg[0].upper()+Src_prg[1:]
+			pass
+		else:
+			self.Src_Prg = Src_prg
 
-        #print(Src_prg[0].isupper(),MAP)
-        if Buttom == _('Create'):
-	        self.idirct = ''
-	        Defultdir = self.Src_Prg + self.idirct
-        else:
-	        self.idirct = self.GetMenu.GetDirCod(self.Data[3])[0][0].split('\\')[-1]
-	        Defultdir = self.Src_Prg + self.idirct
-        if not Defultdir[0].isupper():
-	        Defultdir = Defultdir[0].upper()+Defultdir[1:]
+		#print(Src_prg[0].isupper(),MAP)
+		if Buttom == _('Create'):
+			self.idirct = ''
+			Defultdir = self.Src_Prg + self.idirct
+		else:
+			self.idirct = self.GetMenu.GetDirCod(self.Data[3])[0][0].split('\\')[-1]
+			Defultdir = self.Src_Prg + self.idirct
+		if not Defultdir[0].isupper():
+			Defultdir = Defultdir[0].upper()+Defultdir[1:]
 
-        Vsz1 = wx.BoxSizer(wx.VERTICAL)
+		Vsz1 = wx.BoxSizer(wx.VERTICAL)
 
-        Vst = wx.BoxSizer(wx.VERTICAL)
+		Vst = wx.BoxSizer(wx.VERTICAL)
 
-        self.title = wx.StaticText(self, wx.ID_ANY, title, wx.DefaultPosition, wx.DefaultSize,0)
-        self.title.Wrap(1)
-        Vst.Add(self.title, 1, wx.ALL | wx.EXPAND, 5)
+		self.title = wx.StaticText(self, wx.ID_ANY, title, wx.DefaultPosition, wx.DefaultSize,0)
+		self.title.Wrap(1)
+		Vst.Add(self.title, 1, wx.ALL | wx.EXPAND, 5)
 
-        Vsz1.Add(Vst, 1, wx.EXPAND, 5)
+		Vsz1.Add(Vst, 1, wx.EXPAND, 5)
 
-        Hsz1 = wx.BoxSizer(wx.HORIZONTAL)
+		Hsz1 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.txt1 = wx.StaticText(self, wx.ID_ANY, _(u"Bar name"), wx.DefaultPosition, wx.DefaultSize, 0)
-        self.txt1.Wrap(-1)
+		self.txt1 = wx.StaticText(self, wx.ID_ANY, _(u"Bar name"), wx.DefaultPosition, wx.DefaultSize, 0)
+		self.txt1.Wrap(-1)
 
-        Hsz1.Add(self.txt1, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+		Hsz1.Add(self.txt1, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
 
-        self.fld1 = wx.TextCtrl(self, wx.ID_ANY, self.Data[0], wx.DefaultPosition, wx.DefaultSize, 0)
-        Hsz1.Add(self.fld1, 1, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+		self.fld1 = wx.TextCtrl(self, wx.ID_ANY, self.Data[0], wx.DefaultPosition, wx.DefaultSize, 0)
+		Hsz1.Add(self.fld1, 1, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
 
-        self.txt2 = wx.StaticText(self, wx.ID_ANY, _(u"ID"), wx.DefaultPosition, wx.DefaultSize, 0)
-        self.txt2.Wrap(-1)
+		self.txt2 = wx.StaticText(self, wx.ID_ANY, _(u"ID"), wx.DefaultPosition, wx.DefaultSize, 0)
+		self.txt2.Wrap(-1)
 
-        Hsz1.Add(self.txt2, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+		Hsz1.Add(self.txt2, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
 
-        self.fld2 = wx.TextCtrl(self, wx.ID_ANY, self.Data[1], wx.DefaultPosition, wx.Size(50, -1), 0)
-        Hsz1.Add(self.fld2, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+		self.fld2 = wx.TextCtrl(self, wx.ID_ANY, self.Data[1], wx.DefaultPosition, wx.Size(50, -1), 0)
+		Hsz1.Add(self.fld2, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
 
-        self.txt3 = wx.StaticText(self, wx.ID_ANY, _(u"Access"), wx.DefaultPosition, wx.DefaultSize, 0)
-        self.txt3.Wrap(-1)
+		self.txt3 = wx.StaticText(self, wx.ID_ANY, _(u"Access"), wx.DefaultPosition, wx.DefaultSize, 0)
+		self.txt3.Wrap(-1)
 
-        Hsz1.Add(self.txt3, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+		Hsz1.Add(self.txt3, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
 
-        self.fld3 = wx.TextCtrl(self, wx.ID_ANY, self.Data[2], wx.DefaultPosition, wx.Size(50, -1), 0)
-        Hsz1.Add(self.fld3, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+		self.fld3 = wx.TextCtrl(self, wx.ID_ANY, self.Data[2], wx.DefaultPosition, wx.Size(50, -1), 0)
+		Hsz1.Add(self.fld3, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
 
-        self.atobtn = wx.Button(self, wx.ID_ANY, u"...", wx.DefaultPosition, wx.DefaultSize, wx.BU_EXACTFIT)
-        Hsz1.Add(self.atobtn, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
-        self.atobtn.SetToolTip(_(u"Automatic code generate"))
+		self.atobtn = wx.Button(self, wx.ID_ANY, u"...", wx.DefaultPosition, wx.DefaultSize, wx.BU_EXACTFIT)
+		Hsz1.Add(self.atobtn, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+		self.atobtn.SetToolTip(_(u"Automatic code generate"))
 
-        Vsz1.Add(Hsz1, 0, wx.EXPAND, 5)
+		Vsz1.Add(Hsz1, 0, wx.EXPAND, 5)
 
-        Hsz2 = wx.BoxSizer(wx.HORIZONTAL)
+		Hsz2 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.txt4 = wx.StaticText(self, wx.ID_ANY, _(u"Directory"), wx.DefaultPosition, wx.DefaultSize, 0)
-        self.txt4.Wrap(-1)
+		self.txt4 = wx.StaticText(self, wx.ID_ANY, _(u"Directory"), wx.DefaultPosition, wx.DefaultSize, 0)
+		self.txt4.Wrap(-1)
 
-        Hsz2.Add(self.txt4, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+		Hsz2.Add(self.txt4, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
 
-        #defultdir = Src_prg[0].upper()+Src_prg[1:]+self.idirct
-        self.dirct = wx.DirPickerCtrl(self, wx.ID_ANY, Defultdir , _(u"Select a folder"), wx.DefaultPosition,
-                                      wx.DefaultSize, wx.DIRP_DEFAULT_STYLE | wx.DIRP_SMALL)
-        Hsz2.Add(self.dirct, 1, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+		#defultdir = Src_prg[0].upper()+Src_prg[1:]+self.idirct
+		self.dirct = wx.DirPickerCtrl(self, wx.ID_ANY, Defultdir , _(u"Select a folder"), wx.DefaultPosition,
+									  wx.DefaultSize, wx.DIRP_DEFAULT_STYLE | wx.DIRP_SMALL)
+		Hsz2.Add(self.dirct, 1, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
 
-        Vsz1.Add(Hsz2, 0, wx.EXPAND, 5)
+		Vsz1.Add(Hsz2, 0, wx.EXPAND, 5)
 
-        #Hsz3 = wx.BoxSizer(wx.HORIZONTAL)
+		#Hsz3 = wx.BoxSizer(wx.HORIZONTAL)
 
-        #self.box1 = wx.CheckBox(self, wx.ID_ANY, _(u"Disable"), wx.DefaultPosition, wx.DefaultSize, 0)
-        #Hsz3.Add(self.box1, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+		#self.box1 = wx.CheckBox(self, wx.ID_ANY, _(u"Disable"), wx.DefaultPosition, wx.DefaultSize, 0)
+		#Hsz3.Add(self.box1, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
 
-        #self.box2 = wx.CheckBox(self, wx.ID_ANY, _(u"Hiden"), wx.DefaultPosition, wx.DefaultSize, 0)
-        #Hsz3.Add(self.box2, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+		#self.box2 = wx.CheckBox(self, wx.ID_ANY, _(u"Hiden"), wx.DefaultPosition, wx.DefaultSize, 0)
+		#Hsz3.Add(self.box2, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
 
-        # if self.Data[4][0][2] == '0000':
-        #     self.box2.SetValue(True)
-        # if self.Data[4][0][3] == 0:
-        #     self.box1.SetValue(True)
+		# if self.Data[4][0][2] == '0000':
+		#     self.box2.SetValue(True)
+		# if self.Data[4][0][3] == 0:
+		#     self.box1.SetValue(True)
 
-        #Vsz1.Add(Hsz3, 0, wx.ALIGN_CENTER_HORIZONTAL, 5)
+		#Vsz1.Add(Hsz3, 0, wx.ALIGN_CENTER_HORIZONTAL, 5)
 
-        Hsz4 = wx.BoxSizer(wx.HORIZONTAL)
+		Hsz4 = wx.BoxSizer(wx.HORIZONTAL)
 
-        Hsz4.Add((0, 0), 1, wx.EXPAND, 5)
+		Hsz4.Add((0, 0), 1, wx.EXPAND, 5)
 
-        self.btn1 = wx.Button(self, wx.ID_ANY, _(u"Cancel"), wx.DefaultPosition, wx.DefaultSize, 0)
-        Hsz4.Add(self.btn1, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+		self.btn1 = wx.Button(self, wx.ID_ANY, _(u"Cancel"), wx.DefaultPosition, wx.DefaultSize, 0)
+		Hsz4.Add(self.btn1, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
 
-        self.btn2 = wx.Button(self, wx.ID_ANY, Buttom, wx.DefaultPosition, wx.DefaultSize, 0)
-        Hsz4.Add(self.btn2, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+		self.btn2 = wx.Button(self, wx.ID_ANY, Buttom, wx.DefaultPosition, wx.DefaultSize, 0)
+		Hsz4.Add(self.btn2, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
 
-        Vsz1.Add(Hsz4, 0, wx.EXPAND, 5)
+		Vsz1.Add(Hsz4, 0, wx.EXPAND, 5)
 
-        self.SetSizer(Vsz1)
-        self.Layout()
+		self.SetSizer(Vsz1)
+		self.Layout()
 
-        # Parameter Init
-        self.iSrc_prg = self.GetMenu.GetImpCod('1000')[0][0]
-        self.iSrc_dir = self.GetMenu.GetDirCod('1000')[0][0]
+		# Parameter Init
+		self.iSrc_prg = self.GetMenu.GetImpCod('1000')[0][0]
+		self.iSrc_dir = self.GetMenu.GetDirCod('1000')[0][0]
 
-        # Connect Events
-        self.atobtn.Bind( wx.EVT_BUTTON, self.atocod )
-        self.dirct.Bind(wx.EVT_DIRPICKER_CHANGED, self.bardir)
-        #self.box1.Bind(wx.EVT_CHECKBOX, self.disbar)
-        #self.box2.Bind(wx.EVT_CHECKBOX, self.hidbar)
-        self.btn1.Bind(wx.EVT_BUTTON, self.cancl)
-        self.btn2.Bind(wx.EVT_BUTTON, self.doit)
+		# Connect Events
+		self.atobtn.Bind( wx.EVT_BUTTON, self.atocod )
+		self.dirct.Bind(wx.EVT_DIRPICKER_CHANGED, self.bardir)
+		#self.box1.Bind(wx.EVT_CHECKBOX, self.disbar)
+		#self.box2.Bind(wx.EVT_CHECKBOX, self.hidbar)
+		self.btn1.Bind(wx.EVT_BUTTON, self.cancl)
+		self.btn2.Bind(wx.EVT_BUTTON, self.doit)
 
-    def __del__(self):
-        pass
+	def __del__(self):
+		pass
 
-        # Virtual event handlers, overide them in your derived class
+		# Virtual event handlers, overide them in your derived class
 
-    def atocod(self, event):
-        if self.Buttom == _('Create'):
-            allbar = self.GetMenu.AllBar('where mbarid < 9999')
-            #print(allbar)
-            if allbar != [] :
-                #print(allbar[-1][0]+100)
-                alphabt = '_abcdefghijklmnopqrstuvwxyz'
-                lnumstr = str(allbar[-1][0]+100)[0]
-                rnumstr = str(allbar[-1][0]+100)[-1]
-                self.fld2.SetValue(str(allbar[-1][0]+100))
-                self.fld3.SetValue(lnumstr+rnumstr+alphabt[int(lnumstr)]+alphabt[int(rnumstr)])
-            else:
+	def atocod(self, event):
+		if self.Buttom == _('Create'):
+			allbar = self.GetMenu.AllBar('where mbarid < 9999')
+			#print(allbar)
+			if allbar != [] :
+				#print(allbar[-1][0]+100)
+				alphabt = '_abcdefghijklmnopqrstuvwxyz'
+				lnumstr = str(allbar[-1][0]+100)[0]
+				rnumstr = str(allbar[-1][0]+100)[-1]
+				self.fld2.SetValue(str(allbar[-1][0]+100))
+				self.fld3.SetValue(lnumstr+rnumstr+alphabt[int(lnumstr)]+alphabt[int(rnumstr)])
+			else:
 
-                self.fld2.SetValue(str(101))
-                self.fld3.SetValue('11aa')
+				self.fld2.SetValue(str(101))
+				self.fld3.SetValue('11aa')
 
-    def bardir(self, event):
-	    mydir = event.GetEventObject().GetPath()
-	    #mydir.replace(Src_prg,u"Src.prg.")
-	    #self.newdir = mydir.replace(Src_prg,u"Src.prg.")
-	    self.newdir = mydir.replace(self.Src_Prg, self.iSrc_prg)
-	    self.hdddir = mydir.replace(self.Src_Prg, self.iSrc_dir)
-	    #print(self.newdir,self.hdddir)
+	def bardir(self, event):
+		mydir = event.GetEventObject().GetPath()
+		#mydir.replace(Src_prg,u"Src.prg.")
+		#self.newdir = mydir.replace(Src_prg,u"Src.prg.")
+		self.newdir = mydir.replace(self.Src_Prg, self.iSrc_prg)
+		self.hdddir = mydir.replace(self.Src_Prg, self.iSrc_dir)
+		#print(self.newdir,self.hdddir)
 
-    def finddir(self, data):
-	    #print(data)
-	    aldir = self.GetMenu.AllGuiDir()
-	    for dr in aldir:
-		    if data in dr:
-			    #print(dr)
-			    return dr[1]
-	    return ''
+	def finddir(self, data):
+		#print(data)
+		aldir = self.GetMenu.AllGuiDir()
+		for dr in aldir:
+			if data in dr:
+				#print(dr)
+				return dr[1]
+		return ''
 
-    # def disbar(self, event):
-    #     if event.GetEventObject().GetValue():
-    #         self.box1val = 0
-    #     else:
-    #         self.box1val = 1
-    #     #print(self.box1val)
+	# def disbar(self, event):
+	#     if event.GetEventObject().GetValue():
+	#         self.box1val = 0
+	#     else:
+	#         self.box1val = 1
+	#     #print(self.box1val)
 	#
-    # def hidbar(self, event):
-    #     if event.GetEventObject().GetValue():
-    #         self.box2val = '0000'
-    #     else:
-    #         self.box2val = 'FFFF'
-    #     #print(self.box2val)
+	# def hidbar(self, event):
+	#     if event.GetEventObject().GetValue():
+	#         self.box2val = '0000'
+	#     else:
+	#         self.box2val = 'FFFF'
+	#     #print(self.box2val)
 
-    def cancl(self, event):
-        self.Action = False
-        q = self.GetParent()
-        q.Close()
+	def cancl(self, event):
+		self.Action = False
+		q = self.GetParent()
+		q.Close()
 
-    def doit(self, event):
-	    mw = self.FindWindowByName('main')
-	    if mw.GetMenuBar() != None:
-		    mb = mw.GetMenuBar()
-		    pass
-	    else:
-		    mb = mw.NewMenu()
-		    pass
+	def doit(self, event):
+		mw = self.FindWindowByName('main')
+		if mw.GetMenuBar() != None:
+			mb = mw.GetMenuBar()
+			pass
+		else:
+			mb = mw.NewMenu()
+			pass
 
-	    if event.GetEventObject().GetLabel() == _('Create'):
-		    data1 = self.fld1.GetValue()
-		    data2 = self.fld2.GetValue()
-		    data3 = self.fld3.GetValue()
-		    mydir = self.dirct.GetPath()
-		    #self.newdir = mydir.replace(Src_prg, u"Src.prg.")
-		    #self.hdddir = mydir.replace(Src_prg, u'..\\Src\\prg\\')
-		    #self.newdir = mydir.replace(Src_prg, self.iSrc_prg)
-		    #self.hdddir = mydir.replace(Src_prg[0].upper()+Src_prg[1:], self.iSrc_dir)
+		if event.GetEventObject().GetLabel() == _('Create'):
+			data1 = self.fld1.GetValue()
+			data2 = self.fld2.GetValue()
+			data3 = self.fld3.GetValue()
+			mydir = self.dirct.GetPath()
 
-		    if self.finddir(self.hdddir) != '':
-			    dircod = self.finddir(self.hdddir)
-			    #dircod = self.GetMenu.GetDirCod(self.newdir)
-			    #print(dircod)
-			    pass
-		    else:
-			    dircod = '1'+str(data2)   #+'1'
-			    self.SetMenu.Table = u'Guidir'
-			    self.SetMenu.Additem(u' Dir, prgdir, hdddir', (self.newdir,dircod,self.hdddir))
-			    if not os.path.isdir(mydir):
-				    os.mkdir(mydir)
-			    os.chdir(mydir)
-			    #print(mydir)
-			    if not os.path.isfile(mydir+SLASH+u'__init__.py'):
-				    with open(u'__init__.py',u'w+') as f:
-					    f.write('')
-
-		    #print(mydir)
-		    if not os.path.isfile(mydir+SLASH+u'Demo.py'):
-			    GenrDemo(mydir)
-		    if not os.path.isfile(Src_gui+u"SamPnl.py"):
-			    shutil.copy(GUI_PATH+'API'+SLASH+'SamPnl.py',Src_gui)
-
-		    self.SetMenu.Table = u'menubar'
-		    self.SetMenu.Additem(u'mbarid , mbarname , mbardir ,  acclvlid ', (data2,data1,dircod,data3))
-		    data4 = self.box1val
-		    data5 = self.box2val
-		    self.SetMenu.Table = u'access'
-		    self.SetMenu.Additem(u'acclvlid , userid , acclvl , disenable ',(data3, 1, data5, data4))
-		    if len(self.GetMenu.getHndlr('Demo',' and handler.prgdir = %d ' %int(dircod))) == 0:
-			    self.SetMenu.Table = u'handler'
-			    self.SetMenu.Additem(u' handlerid, prgname, prgdir, paramtr, public, prgno',
-			                         (10000+int(dircod[1:3])*100,'Demo',dircod, '-1',-1,1000*int(dircod[1])))
-			    pass
-		    mb.Append(wx.Menu(),data1)
+			#self.newdir = mydir.replace(Src_prg, u"Src.prg.")
+			#self.hdddir = mydir.replace(Src_prg, u'..\\Src\\prg\\')
+			#print(mydir)
 
 
-	    elif event.GetEventObject().GetLabel() == _('Change'):
-		    data1 = self.fld1.GetValue()
-		    mydir = self.dirct.GetPath()
-		    #self.newdir = mydir.replace(Src_prg,u"Src.prg.")
-		    #self.hdddir = mydir.replace(Src_prg, u'..\\Src\\prg\\')
-		    self.newdir = mydir.replace(self.Src_Prg, self.iSrc_prg)
-		    self.hdddir = mydir.replace(self.Src_Prg, self.iSrc_dir)
-		    if self.finddir(self.hdddir) != '':
-			    #dircod = self.GetMenu.GetDirCod(self.hdddir)
-			    dircod = self.finddir(self.hdddir)
-			    #print(dircod)
-			    pass
-		    else:
-			    dircod = str(data2) + '1'
-			    self.SetMenu.Table = u'Guidir'
-			    self.SetMenu.Additem(u' Dir, prgdir, hdddir', (self.newdir, dircod, self.hdddir))
-			    os.mkdir(mydir)
-			    os.chdir(mydir)
-			    with open(u'__init__.py', u'w+') as f:
-				    f.write('')
-
-		    self.SetMenu.Table = u'menubar'
-		    self.SetMenu.Upditem(u'mbarname = ? , mbardir = ?  where mbarid = %s ' % self.Data[1],(data1,dircod))
-		    data4 = self.box1val
-		    data5 = self.box2val
-		    #print(data5,data4)
-		    self.SetMenu.Table = u'access'
-		    self.SetMenu.Upditem(u'acclvl = ? , disenable = ? where acclvlid = "%s" ' % self.Data[2],(data5, int(data4)))
-		    mb.SetMenuLabel(mb.FindMenu(self.oldbar),data1)
+			if mydir == Src_prg:
+				mydir = Src_prg+data1
+				self.newdir = mydir.replace(Src_prg, self.iSrc_prg)
+				self.hdddir = mydir.replace(Src_prg[0].upper() + Src_prg[1:], self.iSrc_dir)
+			else:
+				self.newdir = mydir.replace(Src_prg, self.iSrc_prg)
+				self.hdddir = mydir.replace(Src_prg[0].upper() + Src_prg[1:], self.iSrc_dir)
+			#print(mydir)
+			#print(self.newdir, self.hdddir)
 
 
-	    elif event.GetEventObject().GetLabel() == _('Delete'):
-		    self.SetMenu.Table = u'menubar'
-		    self.SetMenu.Delitem(u" menubar.mbarid = %s" % self.Data[1] )
-		    self.SetMenu.Table = u'access'
-		    self.SetMenu.Delitem(u" access.acclvlid = '%s' "% self.Data[2])
-		    if len(self.GetMenu.gSubItm(int(str(self.Data[1])[:2]))) != 0:
-			    for itm in self.GetMenu.gSubItm(int(str(self.Data[1])[:2])):
-				    self.SetMenu.Table = u'mitem'
-				    self.SetMenu.Delitem(u" mitem.itemid = %s " % itm[1])
-				    self.SetMenu.Table = u'extended'
-				    self.SetMenu.Delitem(u" extended.extid = '%s' " % itm[2])
-				    self.SetMenu.Table = u'access'
-				    self.SetMenu.Delitem(u" access.acclvlid = '%s' " % itm[3])
+			if self.finddir(self.hdddir) != '':
+				dircod = self.finddir(self.hdddir)
+				#dircod = self.GetMenu.GetDirCod(self.newdir)
+				#print(dircod)
+				pass
+			else:
+				dircod = '1'+str(data2)   #+'1'
+				self.SetMenu.Table = u'Guidir'
+				self.SetMenu.Additem(u' Dir, prgdir, hdddir', (self.newdir,dircod,self.hdddir))
+				if not os.path.isdir(mydir):
+					os.mkdir(mydir)
+				os.chdir(mydir)
+				#print(mydir)
+				if not os.path.isfile(mydir+SLASH+u'__init__.py'):
+					with open(u'__init__.py',u'w+') as f:
+						f.write('')
 
-		    mb.Remove(mb.FindMenu(self.Data[0]))
+			#print(mydir)
+			if not os.path.isfile(mydir+SLASH+u'Demo.py'):
+				GenrDemo(mydir)
+			if not os.path.isfile(Src_gui+u"SamPnl.py"):
+				shutil.copy(GUI_PATH+'API'+SLASH+'SamPnl.py',Src_gui)
 
-	    else:
-		    event.Skip()
+			if not data2 or not data3:
+				wx.MessageBox("Please fill id and access code")
+				return -1
 
-	    self.Action = True
-	    q = self.GetParent()
-	    q.Close()
+			self.SetMenu.Table = u'menubar'
+			self.SetMenu.Additem(u'mbarid , mbarname , mbardir ,  acclvlid ', (data2,data1,dircod,data3))
+			data4 = self.box1val
+			data5 = self.box2val
+			self.SetMenu.Table = u'access'
+			self.SetMenu.Additem(u'acclvlid , userid , acclvl , disenable ',(data3, 1, data5, data4))
+			if len(self.GetMenu.getHndlr('Demo',' and handler.prgdir = %d ' %int(dircod))) == 0:
+				self.SetMenu.Table = u'handler'
+				self.SetMenu.Additem(u' handlerid, prgname, prgdir, paramtr, public, prgno',
+									 (10000+int(dircod[1:3])*100,'Demo',dircod, '-1',-1,1000*int(dircod[1])))
+				pass
+			mb.Append(wx.Menu(),data1)
+
+
+		elif event.GetEventObject().GetLabel() == _('Change'):
+			data1 = self.fld1.GetValue()
+			mydir = self.dirct.GetPath()
+			#self.newdir = mydir.replace(Src_prg,u"Src.prg.")
+			#self.hdddir = mydir.replace(Src_prg, u'..\\Src\\prg\\')
+			self.newdir = mydir.replace(self.Src_Prg, self.iSrc_prg)
+			self.hdddir = mydir.replace(self.Src_Prg, self.iSrc_dir)
+			if self.finddir(self.hdddir) != '':
+				#dircod = self.GetMenu.GetDirCod(self.hdddir)
+				dircod = self.finddir(self.hdddir)
+				#print(dircod)
+				pass
+			else:
+				dircod = str(data2) + '1'
+				self.SetMenu.Table = u'Guidir'
+				self.SetMenu.Additem(u' Dir, prgdir, hdddir', (self.newdir, dircod, self.hdddir))
+				os.mkdir(mydir)
+				os.chdir(mydir)
+				with open(u'__init__.py', u'w+') as f:
+					f.write('')
+
+			self.SetMenu.Table = u'menubar'
+			self.SetMenu.Upditem(u'mbarname = ? , mbardir = ?  where mbarid = %s ' % self.Data[1],(data1,dircod))
+			data4 = self.box1val
+			data5 = self.box2val
+			#print(data5,data4)
+			self.SetMenu.Table = u'access'
+			self.SetMenu.Upditem(u'acclvl = ? , disenable = ? where acclvlid = "%s" ' % self.Data[2],(data5, int(data4)))
+			mb.SetMenuLabel(mb.FindMenu(self.oldbar),data1)
+
+
+		elif event.GetEventObject().GetLabel() == _('Delete'):
+			self.SetMenu.Table = u'menubar'
+			self.SetMenu.Delitem(u" menubar.mbarid = %s" % self.Data[1] )
+			self.SetMenu.Table = u'access'
+			self.SetMenu.Delitem(u" access.acclvlid = '%s' "% self.Data[2])
+			if len(self.GetMenu.gSubItm(int(str(self.Data[1])[:2]))) != 0:
+				for itm in self.GetMenu.gSubItm(int(str(self.Data[1])[:2])):
+					self.SetMenu.Table = u'mitem'
+					self.SetMenu.Delitem(u" mitem.itemid = %s " % itm[1])
+					self.SetMenu.Table = u'extended'
+					self.SetMenu.Delitem(u" extended.extid = '%s' " % itm[2])
+					self.SetMenu.Table = u'access'
+					self.SetMenu.Delitem(u" access.acclvlid = '%s' " % itm[3])
+
+			mb.Remove(mb.FindMenu(self.Data[0]))
+
+		else:
+			event.Skip()
+
+		self.Action = True
+		q = self.GetParent()
+		q.Close()
 
 ###########################################################################
 ## Class MyPanel4
