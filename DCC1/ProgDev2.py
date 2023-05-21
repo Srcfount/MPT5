@@ -765,6 +765,8 @@ class MyPanel1 ( wx.Panel ):
 					self.setMDate.Additem(" handlerid, prgname, prgdir, paramtr, public, prgno", data)
 					#CheckDes(newcod)
 					self.updat(event)
+				else:
+					print("MyPanel1 not exist or have not space between '1' and '(' ")
 			if not a and not b and not c and not d:
 			#else:
 				wx.MessageBox(_("Please move your file to API directory or use correct form! "))

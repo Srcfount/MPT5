@@ -15,15 +15,12 @@ class MyPanel1(wx.Panel):
 
 		self.parent = parent
 
-
 		#VSiz = wx.BoxSizer(wx.VERTICAL)
 		# You must write your source here
 		led = gizmos.LEDNumberCtrl(self, -1, (0, 0), (250, 50),
 		                           gizmos.LED_ALIGN_CENTER)  # | gizmos.LED_DRAW_FADED)
 		led.SetForegroundColour('black')
 		led.SetBackgroundColour('white')
-
-		datetime.strftime()
 
 		#VSiz.Add(led, 1,wx.ALL,5)
 		self.clock = led
