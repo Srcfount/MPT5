@@ -74,36 +74,47 @@ New Program (How to add)
 Design Database
 ---------------
 
- * Select your engein type
- * SQL Language
- * How Use in source
+ * Select your engein type in [setting](docs/Help/Setting.md) part 3
+ * Creating a table and using it according to the [database](docs/Help/Databases.md) guide
+
 
 Add from another source code
 ----------------------------
 
-* Upload and Create Package
-* Downloads and Unpack
-* "Fount" Directory
+* Upload and Create Package in [AddTool](docs/Help/AddTool.md)
+* Downloads and Unpack in [AddTool](docs/Help/AddTool.md)
+
 
 Machine Learning
 ----------------
 
-1. Design a Panel
-2. Add Algorithm
-3. Connect to Data
-4. Perview Computing
+1. Design a Panel in [Machine Learning Design](docs/Help/ML.md)
+2. Add Algorithm in [Machine Learning Design](docs/Help/ML.md)
+3. Connect to Data in [Machine Learning Design](docs/Help/ML.md)
+4. Perview Computing in [Machine Learning Design](docs/Help/ML.md)
 
 Example
 =======
 In below you can see some of Example application that you can create by MPT5
 
-
-
+* [Quit program](example/Quit/Help.md)
+* [Calculator]()
+* [Calendar1]()
+* [Calendar2]()
+* [Clock]()
+* [Webcam]()
 
 Overview
 ========
+This project is a multiple environment with the ability to develop and change, allowing you to test different algorithms in open source
+At the same time, you can easily and quickly change the graphic design of the program and use different languages in it
+The algorithm part is independent and receiving its results does not affect the principle of the program, so you can choose the best model for your data.
+Overall, a suitable program for testing and training and testing machine learning models
 
 Contact to us
 ==========
+If you like more info about this project or like to change or have a problem send to this address:  
+srcfount14@gmail.com
+
 
 
