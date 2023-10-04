@@ -6,6 +6,7 @@
 import sys
 import os
 import shutil
+from . import ISO639_2 as ISO
 
 #### Main Application Path = MAP , Os name and Slash of OS
 MAP = os.getcwd()
@@ -31,6 +32,23 @@ def _displayHook(obj):
     """
     if obj is not None:
         print(repr(obj))
+
+
+def OpenListLan():
+    lstdir = os.listdir(LOCALE_PATH)
+    listlan = {}
+    i = 1
+
+    for cd in lstdir:
+        if os.path.isfile(LOCALE_PATH+cd+SLASH+"MPT5"+cd+".mo"):
+            #print("True file")
+            #print(ISO.ISO639_2[cd])
+            listlan[i] = ISO.ISO639_2[cd]
+            i += 1
+        #else:
+            #print("No language")
+    #print(listlan)
+    return listlan
 
 #### Path of Program source for use inside of program
 DATABASE_PATH = os.path.join(MAP,opj(u'Database')+SLASH)
@@ -76,7 +94,10 @@ Src_Dir = {'PRG':6111,'API':6122,'MLA':6133,'MLP':6144,'AUI':6155,'DBF':6166,'GU
 Src_Pth = {Src_prg:'PRG',Src_api:'API',Src_mla:'MLA',Src_mlp:'MLP',Src_aui:'AUI',Src_dbf:'DBF',Src_gui:'GUI'}
 
 ####  List of language to use in application
-LANGUAGE_LIST = {1:"English",2:"Farsi",3:"French",4:"German",5:"Spanish",6:"Turkish"}
+LANGUAGE_LIST = OpenListLan()
+#LANGUAGE_LIST = {1:"Arabic",2:"Armenian",3:"English",4:"Farsi",5:"French",6:"German",7:"Spanish"}
+
+#### List of Database type engine
 Database_type = {1:"sqlite",2:"mysql",3:"postgresql",4:"oracle",5:"sqlserver"}
 
 #### other function to use in application
@@ -122,6 +143,8 @@ def OpenListML():
     #print(MLlst,MLAlg)
     return MLlst,MLAlg
 
+
+
 def CopyIcon(iconfile,thssrc=''):
     if thssrc == 'Menu':
         shutil.copy(iconfile, ICONS_MENU)
@@ -129,3 +152,6 @@ def CopyIcon(iconfile,thssrc=''):
         shutil.copy(iconfile, ICONS_TOOL)
     else:
         shutil.copy(iconfile, ICONS_PATH)
+
+
+LANGUAGE_LIST2 = OpenListLan()

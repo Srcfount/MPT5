@@ -43,24 +43,28 @@ class mainApp(wx.App):
         return config
 
     def UpdateLanguage(self, lang):
-        supportedLangs = {"English": wx.LANGUAGE_ENGLISH,
-                          "Farsi": wx.LANGUAGE_FARSI,
-                          "French": wx.LANGUAGE_FRENCH,
-                          "German": wx.LANGUAGE_GERMAN,
-                          "Spanish": wx.LANGUAGE_SPANISH,
-                          "Turkish": wx.LANGUAGE_TURKISH,
-                          }
+
+        supportedLangs = {
+            "Arabic":wx.LANGUAGE_ARABIC,
+            "Armenian":wx.LANGUAGE_ARMENIAN,
+            "English": wx.LANGUAGE_ENGLISH,
+            "Farsi": wx.LANGUAGE_FARSI,
+            "French": wx.LANGUAGE_FRENCH,
+            "German": wx.LANGUAGE_GERMAN,
+            "Spanish": wx.LANGUAGE_SPANISH,
+            #"Turkish": wx.LANGUAGE_TURKISH,
+            }
         if self.locale:
             assert sys.getrefcount(self.locale) <= 2
             del self.locale
         if supportedLangs[lang]:
             self.locale = wx.Locale(supportedLangs[lang])
             if self.locale.IsOk():
-                self.locale.AddCatalog("Temp5fa")
+                self.locale.AddCatalog("MPT5fa")
                 # self.locale.AddCatalog("Temp5fr")
-                self.locale.AddCatalog("Temp5de")
+                self.locale.AddCatalog("MPT5de")
                 # self.locale.AddCatalog("Temp5sp")
-                self.locale.AddCatalog("Temp5tr")
+                self.locale.AddCatalog("MPT5tr")
             else:
                 self.locale = None
         else:
