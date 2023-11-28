@@ -2,6 +2,8 @@
 # ISO639 python dict 
 # oficial list in http://www.loc.gov/standards/iso639-2/php/code_list.php
 
+import wx
+
 ISO639_2 = {
 	'ab': 'Abkhaz',
 	'aa': 'Afar',
@@ -188,3 +190,17 @@ ISO639_2 = {
 	'za': 'Zhuang, Chuang',
 	'zu': 'Zulu',
 }
+
+supportedLangs = {
+	"Abkhaz":wx.LANGUAGE_ABKHAZIAN,
+	
+
+            "Arabic":wx.LANGUAGE_ARABIC,
+            "Armenian":wx.LANGUAGE_ARMENIAN,
+            "English": wx.LANGUAGE_ENGLISH,
+            "Farsi": wx.LANGUAGE_FARSI,
+            "French": wx.LANGUAGE_FRENCH,
+            "German": wx.LANGUAGE_GERMAN,
+            "Spanish": wx.LANGUAGE_SPANISH,
+            #"Turkish": wx.LANGUAGE_TURKISH,
+            }

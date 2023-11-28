@@ -24,7 +24,7 @@ local_direct = ['Locale', 'Locale\\en', 'Locale\\fa', 'Locale\\fr', 'Locale\\gr'
 main_file = {
 	'AI': ['OpnSrc.py', 'Generats.py', 'DBgen.py', 'Analiz.py'],
 	'AI\\ML':['ConMatrix.py','SLPanel.py'],
-    'Config': ['Init.py'],
+    'Config': ['Init.py','ISO639_2.py'],
     'Database': ['wxsq.py', 'PostGet2.py', 'PostGet.py', 'MenuSet2.py','srcsql.py','dbinterface.py'],
 	'DCC1': ['Proper2.py', 'MenuDev2.py', 'DBDev2.py', 'ToolBar2.py', 'ProgDev2.py', 'MLDev2.py', 'ListPro2.py', 'AuiPan2.py'],
 	'GUI': ['window2.py', 'Start.py', 'proman.py', 'MainTool.py', 'MainMenu2.py', 'BG2.py'],
