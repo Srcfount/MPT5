@@ -193,14 +193,12 @@ ISO639_2 = {
 
 supportedLangs = {
 	"Abkhaz":wx.LANGUAGE_ABKHAZIAN,
-	
-
-            "Arabic":wx.LANGUAGE_ARABIC,
-            "Armenian":wx.LANGUAGE_ARMENIAN,
-            "English": wx.LANGUAGE_ENGLISH,
-            "Farsi": wx.LANGUAGE_FARSI,
-            "French": wx.LANGUAGE_FRENCH,
-            "German": wx.LANGUAGE_GERMAN,
-            "Spanish": wx.LANGUAGE_SPANISH,
+	"Arabic":wx.LANGUAGE_ARABIC,
+    "Armenian":wx.LANGUAGE_ARMENIAN,
+    "English": wx.LANGUAGE_ENGLISH,
+    "Farsi": wx.LANGUAGE_FARSI,
+    "French": wx.LANGUAGE_FRENCH,
+    "German": wx.LANGUAGE_GERMAN,
+    "Spanish": wx.LANGUAGE_SPANISH,
             #"Turkish": wx.LANGUAGE_TURKISH,
-            }
+    }

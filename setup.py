@@ -9,7 +9,7 @@ import sqlite3
 import update
 
 main_direct = ['AI', 'AI\\ML','Config', 'Database', 'DCC1', 'GUI', 'GUI\\Temp', 'GUI\\API', 'GUI\\AuiPanel', 'GUI\\Main',
-               #'Locale', 'Locale\\en', 'Locale\\fa', 'Locale\\fr', 'Locale\\gr', 'Locale\\sp', 'Locale\\tr',
+
                'Logs', 'Res', 'Res\\Fonts', 'Res\\Icons', 'Res\\Icons\\Menu', 'Res\\Icons\\Toolbar',
                'Res\\Icons\\16x16', 'Res\\Icons\\32x32', 'Res\\Images', 'Res\\Pics', 'Res\\Splash',
                'Src', 'Src\\API', 'Src\\AUI', 'Src\\DBF', 'Src\\DBF\\sqls', 'Src\\GUI', 'Src\\MLA', 'Src\\MLP', 'Src\\PRG',
@@ -37,7 +37,7 @@ main_file = {
 creat_file = {
 	'Config': ['MLmethod.ini', 'option.ini', 'system1.ini'],
 	'Database': ['Menu2.db'],
-	#'Locale':[''],{'en':'','fa':'','fr':,'','gr':'','sp':'','tr':''},
+	'Locale\\en':['MPT5en.po','MPT5en.mo'], #{'en':'','fa':'','fr':,'','gr':'','sp':'','tr':''},
 	'..': ['Mainpro.py','update.py','requirements.txt','Allimp.py']
 }
 
@@ -91,6 +91,7 @@ def main(argv):
 				with open(mydir+dir+'\\'+fil,'w') as f:
 					f.write('')
 					print('.', end='')
+
 
 	for Dir in creat_file:
 	   for file in creat_file[Dir]:
